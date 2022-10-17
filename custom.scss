@@ -1,0 +1,43 @@
+/*-- scss:defaults --*/
+
+// fonts
+$font-family-sans-serif: "Palatino Linotype", "Book Antiqua", Palatino,
+  FreeSerif, serif !default;
+
+// colors
+// riceblue is #00205b
+// ricegray is #7c7e7f
+// serif colors
+// $body-bg: #f0f1eb !default;
+// $body-color: #000 !default;
+// $link-color: #51483d !default;
+// $selection-bg: #26351c;
+
+// simple colors
+$body-bg: #fff !default;
+// $body-color: #000 !default;
+$body-color: #606263 !default;
+$link-color: #00008b !default;
+$selection-bg: rgba(0, 0, 0, 0.99);
+
+
+// headings
+$presentation-heading-font: "Palatino Linotype", "Book Antiqua", Palatino,
+  FreeSerif, serif !default;
+$presentation-heading-color: #00205b !default;
+// #383d3d
+// $presentation-heading-line-height: 1.2;
+
+// font sizes
+// $font-size-root: 1em
+$presentation-h1-font-size:	1.5em;  // title page font size
+$presentation-h2-font-size: 1.25em;  // individual slide title font size
+// $presentation-h3-font-size:	2.0em;
+// $presentation-h4-font-size:	2.0em;
+// $body-font-size: 2.0em;
+
+/*-- scss:rules --*/
+
+// .reveal a {
+//   line-height: 1.3em;
+// }
