@@ -1,6 +1,6 @@
 ---
 title: 'Introduction'
-author: "<br>Kevin Crotty<br>BUSI 448"
+author: "<br>Kevin Crotty<br>BUSI 448: Investments"
 format: 
     revealjs:
         incremental: true
@@ -23,4 +23,65 @@ jupyter: python3
 
 - Finance
 - Python
+
+## Why Study Investments?
+
+A very intellectually interesting field.
+
+A potentially lucrative field.
+
+Every one of us will (or maybe have already) faced savings problems where we need an understanding of investments.
+
+Rice University faces this problem.  
+
+## Why Python?
+
+Python is open-source, so you'll be able to use it without cost down the road in your careers.
+
+Python allows us to study data and models that would be cumbersome to evaluate in Excel.
+
+## This Course
+
+A mix of theory, data, and practice.
+
+## The course website
+
+Some of the course will use the BBCX investments library.
+
+The pages demonstrate the tools we will be using.
+
+- Can be used to solve problems.
+- Should be used to help understand concepts and develop intuition.
+
+## {background-iframe="http://bbcx-investments.com" background-interactive="True"}
+
+
+## The textbook
+
+- My colleagues and I are writing a bespoke textbook for this and other courses we teach.  It is available at:
+http://mi.bbcx-investments.com/.
+
+
+- If you want to diversify your reading list (and have time to spare!), the syllabus also provides relevant readings in a traditional Investments textbook by Bodie, Kane, and Marcus.
+
+
+
+## Python resources
+
+- I use both Jupyter notebooks (.ipynb) and the Spyder IDE to run Python files (.py), depending on what I'm working on.
+
+- You are welcome to install Python on your machines and run everything yourself.
+
+- Alternatively, you can use Python notebooks at mybinder.org to work with Python.
+
+- In general, I will not be troubleshooting Python
+
+
+
+
+## Saving for retirement
+
+
+
+
 

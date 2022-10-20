@@ -1,0 +1,93 @@
+---
+title: 'Portfolios: Sensitivity of Inputs'
+author: "<br>Kevin Crotty<br>BUSI 448: Investments"
+format: 
+    revealjs:
+        incremental: true
+        logo: RiceLogo.png
+        footer: "BUSI 448"
+        self-contained: true
+        code-fold: true
+        theme: [default, custom.scss]
+        show-slide-number: print
+execute:
+    echo: true
+    freeze: auto
+jupyter: python3
+---
+
+
+
+# Practical Issues
+
+
+
+
+## Sensitivity of portfolio weights to inputs (aka Garbage In=Garbage Out)
+
+FROM YUHANG'S SLIDES, HOW FRENCH PORTFOLIO WGT CHANGES BASED ON THE INPUTS
+
+COULD ALSO BE A HOMEWORK ASSIGNMENT
+
+## Inputs Must Be Estimated!^[more on estimation to come...]
+
+Mean-variance optimization is quite sensitive to the input parameters.
+
+Inputs: \
+-Set of expected returns for assets \<br />
+
+-Set of variances for assets \<br />
+
+-Set of covariances (correlations) across assets \<br />
+
+How good are we at estimating these things?
+
+## The Error-Maximization Problem
+
+Mean-variance portfolio optimization: \
+-Will tilt too heavily toward assets with estimated expected returns above true expected returns $(\hat{\mu}>\mu)$ \ 
+
+-Will tilt too heavily toward assets with diversification benefits greater than true benefits $(\widehat{\text{cov}}_{ij}<\text{cov}_{ij})$ \ 
+
+-Often tries to short assets with diversification benefits lower than true benefits $(\widehat{\text{cov}}_{ij}>\text{cov}_{ij})$
+
+
+## Performance of Historical Plug-in Estimators
+
+ADD WEBPAGE DOING SIMULATION IN KEVIN'S NOTES BASED ON 5-ASSET ALLOCATION EXAMPLE
+
+
+## Strategies Dealing with Estimation Error
+
+#### Shrinkage \
+&emsp; Shrink extreme inputs toward some more moderate input 
+
+#### Short-selling constraints: \
+&emsp; Prevent hedging positions due to overestimated covariances or underestimated expected returns
+
+#### Maximum position limits \
+&emsp; Prevents overweighting due to overestimated $E[r]$ or underestimated covariances 
+
+## Strategies Dealing with Estimation Error
+
+#### Apply models to infer expected returns \
+&emsp; Use market wgts to back out $E[r_i]$'s via CAPM (Black-Litterman) \
+&emsp; Use more advanced factor models to estiamte $E[r_i]$'s <br />
+
+#### Don’t even try to estimate some inputs \
+&emsp; Global minimum variance:	assume all $E[r_i]$'s equal \
+&emsp; Risk parity: assume all $E[r_i]$'s equal and all $\rho_{ij}=0$ \
+&emsp; Equal-weighted portfolio: assume all $E[r_i]$'s, $\text{sd}[r_i]$'s equal; all  $\rho_{ij}=0$
+
+## Historical Performance
+
+LINK TO OPTIMAL PORTFOLIOS OF STOCKS, BONDS, AND GOLD?
+
+ADD SIMULATION WITH GMV/RISK PARITY/EW/VW?
+
+
+## Another Solution: Sort on Predictive Signals
+
+We will see this later in the course
+
+ADD TABLE OR LINK TO FACTOR INVESTING PAGE

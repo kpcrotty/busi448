@@ -1,6 +1,6 @@
 ---
 title: 'Asset Classes, the Historical Record, and Portfolios'
-author: "<br>Kevin Crotty<br>BUSI 448"
+author: "<br>Kevin Crotty<br>BUSI 448: Investments"
 format: 
     revealjs:
         incremental: true
@@ -18,10 +18,24 @@ jupyter: python3
 
 ## Asset Classes
 
+
+
+
+## {background-iframe="http://bbcx-investments.com/risk/sbb" background-interactive="True"}
+
+
+## {background-iframe="http://bbcx-investments.com/risk/sbb" background-interactive="True"}
+
+
+## {background-iframe="http://bbcx-investments.com/risk/asset-classes" background-interactive="True"}
+
+
 ## Portfolio Math
 
 ## Portfolios
+
 -Portfolio are combinations of underlying assets \
+
 -Given return properties of the underlying assets, what are the return properties of their combination? \
 
 ## Expected Return of Portfolio of $N$ Assets 
