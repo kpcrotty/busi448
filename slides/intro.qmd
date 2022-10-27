@@ -77,6 +77,137 @@ http://mi.bbcx-investments.com/.
 - In general, I will not be troubleshooting Python
 
 
+## Python is useful for fetching data
+
+- Stock price data (Yahoo Finance)
+
+- Macroeconomic data (FRED)
+
+- Investments data (Ken French Data Library)
+
+
+
+## Python is useful for data analysis
+
+- Summarizing data
+
+- Data visualization
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Why study expected returns?
+
+```{python}
+#| echo: false
+import plotly.graph_objects as go
+import numpy as np
+
+trace1= go.Scatter(
+    x=np.arange(31), 
+    y=1.08**np.arange(31),
+    mode="lines",
+    name="8%"
+)
+
+trace2 = go.Scatter(
+    x=np.arange(31), 
+    y=1.04**np.arange(31),
+    mode="lines",
+    name="4%"
+)
+
+fig = go.Figure()
+fig.add_trace(trace1)
+fig.add_trace(trace2)
+string = "year %{x}<br>balance = $%{y:.2f}<extra></extra>"
+fig.update_traces(hovertemplate=string)
+fig.update_layout(
+    template="none",
+    xaxis_title="Year",
+    yaxis_title="Account Balance",
+    yaxis_tickprefix="$", 
+    yaxis_tickformat=",.0f",
+    legend=dict(
+        yanchor="top", 
+        y=0.99, 
+        xanchor="left", 
+        x=0.01
+        )
+)
+fig.show()
+```
+
+## Some python
+``` p
+import numpy_financial as npf
+
+r   = 0.04
+nper= 30
+pmt = 0
+pv  = 1
+
+fv = npf.fv(r, nper, -pmt, -pv)
+print(f'${fv:0.2f}')
+
+```
+
+## What about saving every period?
+
+- Let's assume we want to save $10,000 every year.
+- Our initial balance is zero.
+- How much would we have in 30 years?
+
+## Annuity
+```{python}
+#| echo: false
+import plotly.graph_objects as go
+import numpy as np
+import numpy_financial as npf
+
+trace1= go.Scatter(
+    x=np.arange(31), 
+    y=np.array([npf.fv(0.08,n,-10000,0) for n in np.arange(31)]),
+    mode="lines",
+    name="8%"
+)
+
+trace2 = go.Scatter(
+    x=np.arange(31), 
+    y=np.array([npf.fv(0.04,n,-10000,0) for n in np.arange(31)]),
+    mode="lines",
+    name="4%"
+)
+
+fig = go.Figure()
+fig.add_trace(trace1)
+fig.add_trace(trace2)
+string = "year %{x}<br>balance = $%{y:.2f}<extra></extra>"
+fig.update_traces(hovertemplate=string)
+fig.update_layout(
+    template="none",
+    xaxis_title="Year",
+    yaxis_title="Account Balance",
+    yaxis_tickprefix="$", 
+    yaxis_tickformat=",.0f",
+    legend=dict(
+        yanchor="top", 
+        y=0.99, 
+        xanchor="left", 
+        x=0.01
+        )
+)
+fig.show()
+```
 
 
 ## Saving for retirement
