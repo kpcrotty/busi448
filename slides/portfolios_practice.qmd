@@ -1263,11 +1263,6 @@ figtbl(mn_stock,mn_bond,sd_stock,sd_bond,corr,rs,extra,raver1, raver2, "Stock","
 ## {background-iframe="http://bbcx-investments.com/portfolios/optimal-two-rates" background-interactive="True"}
 
 
-## For next time: Sensitivity to Inputs
-
-<br><br><br><br>
-
-![](RiceLogo.png){fig-align="center"}
 
 
 
@@ -1539,3 +1534,14 @@ bnds = [(0, None) for i in range(n)]
 # Optimization
 wgts_tangency = minimize(f, w0, bounds=bnds, constraints=cons).x
 ```
+
+
+## Industry portfolios and short-sales constraints
+
+Let's look at a notebook that implements portfolio optimization on industry portfolios with and without short-sales constraints.
+
+## For next time: Rebalancing
+
+<br><br><br><br>
+
+![](RiceLogo.png){fig-align="center"}
