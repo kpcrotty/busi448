@@ -1,5 +1,5 @@
 ---
-title: 'Asset Classes, the Historical Record, and Portfolios'
+title: 'Asset Classes'
 author: "<br>Kevin Crotty<br>BUSI 448: Investments"
 format: 
     revealjs:
@@ -10,6 +10,9 @@ format:
         code-fold: true
         theme: [default, custom.scss]
         show-slide-number: print
+        menu: 
+            width: wide
+            numbers: true             
 execute:
     echo: true
     freeze: auto
@@ -18,7 +21,58 @@ jupyter: python3
 
 ## Asset Classes
 
+- Equity markets
 
+- Fixed income markets
+
+- Money markets
+
+## Money markets
+
+- The market for short-term borrowing, usually a year or less
+- Generally large denomination ($\ge$ $1 million)
+- Commonly 3 months or less
+
+. . . 
+
+We will focus on: 
+- Treasury Bills
+- Repos
+- Commercial Paper
+- Money Market Mutual Funds
+- Shadow Banking System
+
+## Treasury Bills
+
+- Short-term borrowing by the US Government
+- Maturity of 1 year or less (1, 3, 6, 12 months)
+- Usually issued as discount securities
+- Default risk-free 
+- Extremely liquid – can convert to cash at low cost/quickly
+- Taxes – exempt from state and local income taxes
+- Small denomination – can purchase in $100 increments from Treasury Direct
+
+## Historical yields
+
+## {background-iframe="https://fred.stlouisfed.org/series/TB3MS" background-interactive="True"}
+
+
+
+
+## Repurchase agreements
+
+
+
+## Fixed income markets
+
+
+## Equity markets
+
+
+
+
+
+## {background-iframe="https://www.sifma.org/resources/research/fixed-income-chart/" background-interactive="True"}
 
 
 ## {background-iframe="http://bbcx-investments.com/risk/sbb" background-interactive="True"}

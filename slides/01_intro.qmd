@@ -10,6 +10,9 @@ format:
         code-fold: true
         theme: [default, custom.scss]
         show-slide-number: print
+        menu: 
+            width: wide
+            numbers: true        
 execute:
     echo: true
     freeze: auto
