@@ -29,19 +29,16 @@ jupyter: python3
 
 ## Why Study Investments?
 
-A very intellectually interesting field.
-
-A potentially lucrative field.
-
-Every one of us will (or maybe have already) faced savings problems where we need an understanding of investments.
-
-Rice University faces this problem.  
+- A very intellectually interesting field.
+- A potentially lucrative field.
+- Every one of us will (or maybe have already) face savings problems where we need an understanding of investments.
+- Rice University faces this problem.  
 
 ## Why Python?
 
-Python is open-source, so you'll be able to use it without cost down the road in your careers.
+- Python is open-source, so you'll be able to use it without cost down the road in your careers.
 
-Python allows us to study data and models that would be cumbersome to evaluate in Excel.
+- Python allows us to study data and models that would be cumbersome to evaluate in Excel.
 
 ## This Course
 
@@ -97,6 +94,15 @@ http://mi.bbcx-investments.com/.
 - Data visualization
 
 
+## mybinder site
+
+
+## Navigating a notebook
+
+- ctrl + enter
+- esc + a
+- esc + b
+- Delete a cell: \t esc + dd
 
 
 
@@ -213,7 +219,6 @@ fig.show()
 ```
 
 
-## Saving for retirement
 
 
 

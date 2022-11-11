@@ -1,5 +1,5 @@
 ---
-title: 'Introduction'
+title: 'Returns'
 author: "<br>Kevin Crotty<br>BUSI 448: Investments"
 format: 
     revealjs:
@@ -19,203 +19,640 @@ execute:
 jupyter: python3
 ---
 
-## Introduction
+# Calculating Returns
+
+## Close-to-close Returns 
+
+- Let's compute close-to-close daily stock returns.  Let $P_t$ denote the price at close on day $t$. 
+- If no dividends,  the gain on day $t$ is $P_t - P_{t-1}$. 
+
+. . .
+
+The return per $1 invested in a share at close on $t-1$ is 
+
+. . . 
+
+$$\frac{(P_t - P_{t-1})}{P_{t-1}}$$
 
 
-## This Course
+## What about dividends?  CVX in Fall 2021
 
-- Finance
-- Python
+Chevron Corporation (CVX) will begin trading ex-dividend on August 18, 2021. A cash dividend payment of $1.34 per share is scheduled to be paid on September 10, 2021. Shareholders who purchased CVX prior to the ex-dividend date are eligible for the cash dividend payment.
+<br>
 
-## Why Study Investments?
+. . .
 
-A very intellectually interesting field.
+**Three Dates:**
 
-A potentially lucrative field.
+- August 18: (begins trading ex-dividend) \
+- August 19: (shareholders of record receive the dividend) \
+- September 10: (dividend is paid)
 
-Every one of us will (or maybe have already) faced savings problems where we need an understanding of investments.
+## Ex-dividend days
 
-Rice University faces this problem.  
+- If you buy on Aug 18, you are not entitled to the dividend.
 
-## Why Python?
+- Purchase Aug 17 or before (and hold through Aug 17) 
+  -  → will be shareholder of record on Aug 19 \
+  -  → receive dividend on Sept 10
+- Why Aug 17 → Aug 19? 
+  - T+2 settlement
 
-Python is open-source, so you'll be able to use it without cost down the road in your careers.
+##
 
-Python allows us to study data and models that would be cumbersome to evaluate in Excel.
+- For computing returns, the dividend goes on the ex day.  
+- The close Aug 17 to close Aug 18 return for CVX is calculated as $(P_{\text{Aug18}} + 1.34 - P_{\text{Aug17}})/P_{\text{Aug17}}$.
+- We compound daily returns to get weekly, monthly, or annual returns:
 
-## This Course
+. . .
 
-A mix of theory, data, and practice.
+$$
+  (1+r_1)(1+r_2)...(1+r_T)-1
+$$
+<br>
 
-## The course website
+. . . 
 
-Some of the course will use the BBCX investments library.
-
-The pages demonstrate the tools we will be using.
-
-- Can be used to solve problems.
-- Should be used to help understand concepts and develop intuition.
-
-## {background-iframe="http://bbcx-investments.com" background-interactive="True"}
-
-
-## The textbook
-
-- My colleagues and I are writing a bespoke textbook for this and other courses we teach.  It is available at:
-http://mi.bbcx-investments.com/.
-
-
-- If you want to diversify your reading list (and have time to spare!), the syllabus also provides relevant readings in a traditional Investments textbook by Bodie, Kane, and Marcus.
-
-
-
-## Python resources
-
-- I use both Jupyter notebooks (.ipynb) and the Spyder IDE to run Python files (.py), depending on what I'm working on.
-
-- You are welcome to install Python on your machines and run everything yourself.
-
-- Alternatively, you can use Python notebooks at mybinder.org to work with Python.
-
-- In general, I will not be troubleshooting Python
-
-
-## Python is useful for fetching data
-
-- Stock price data (Yahoo Finance)
-
-- Macroeconomic data (FRED)
-
-- Investments data (Ken French Data Library)
-
-
-
-## Python is useful for data analysis
-
-- Summarizing data
-
-- Data visualization
+- The weekly, etc. returns are as if the dividend was received on the ex day and reinvested in new shares.
 
 
 
 
+## Stock splits
+
+If a company does an $n$-for-1 stock split, then each shareholder gets $n$ new shares for each of her existing shares.  Shares are worth roughly $1/n$ as much.
+
+**Split adjusted** prices
+
+Data vendors routinely compute split-adjusted prices, scaling down old prices by the same factor for comparability to new prices.
 
 
 
+## Yahoo's adjusted prices
+
+- finance.yahoo.com is a good source for data.
+
+- Yahoo's adjusted closing prices are adjusted for splits and also adjusted for dividends on each ex date.
+- On Aug 18, 2021, the Aug 17 price was adjusted as
+
+. . . 
+
+$$
+  {\hat{P}_{\text{Aug17}}}={P_{\text{Aug17}}}-1.34
+$$ 
+
+
+- \$1.34 of the value of at close on Aug 17 was the dividend.
+Adjusted price is the value without dividend.
+
+##
+
+- So, Aug 17 price is scaled down by the factor
+
+. . . 
+
+$$
+  {\hat{P}_{\text{Aug17}}}/{P_{\text{Aug17}}}
+$$ 
+
+- All prior prices are scaled down by the same factor.
+- Previous price ratios are therefore unchanged:
+
+. . .
+
+$$
+  \frac{\hat{P}_{t}}{\hat{P}_{t-1}}=\frac{P_{t}}{P_{t-1}}=1+r_t
+$$ 
+
+## Summary of Yahoo adjusted closing prices
+
+- On non ex-dividend days, percent change is the return $P_t/P_{t-1} - 1$.
+- On ex-dividend days, percent change is
+
+. . .
+
+$$
+  \frac{P_{t}}{P_{t-1}-D_t} - 1
+$$ 
 
 
 
+## CVX on Aug 18, 2021
+
+. . .
+
+
+The return calculated the usual way is:
+
+$$
+  \frac{P_{\text{Aug18}}+1.34}{P_{\text{Aug17}}} - 1 =-0.0267
+$$ 
+
+. . .
+
+The % change in Yahoo's adjusted close is
+
+$$
+\frac{P_{\text{Aug18}}}{P_{\text{Aug17}}-1.34} - 1=-0.0271
+$$ 
+
+
+## Getting Returns from Yahoo
+
+Install pandas-datareader package
+
+. . .
+
+<br>
+
+```{.p code-line-numbers="1-5|6"}
+!pip install --upgrade pandas-datareader
+from pandas_datareader import DataReader as pdr
+price = pdr('cvx', 'yahoo', start=2010)['Adj Close']
+ret_daily = price.pct_change()
+```
+
+## Compounding Yahoo returns
+
+<br>
+
+- Can get monthly or annual return as % change in monthly or annual Yahoo-adjusted closing prices 
+- Equivalent to compounding Yahoo daily returns.
+
+. . .
+
+<br>
+
+```{.p code-line-numbers="1-3|5-7"}
+price = pdr('cvx', 'yahoo', start=2010)['Adj Close']
+ret_monthly = price.resample('M').last().pct_change()
+ret_annual = price.resample('Y').last().pct_change()
+# change datetime to monthly or annual (optional)
+ret_monthly.index = ret_monthly.index.to_period('M')
+ret_annual.index = ret_annual.index.to_period('Y')
+```
+
+# Average Returns
+
+## Arithmetic Average Returns
+- Arithmetic averages returns are sometimes used to estimate expected returns.
+- Assumption: each realized return was a draw from a single distribution.
+- Definition:
+$$ \frac{1}{T}\sum_{t=1}^T r_t $$
+
+- We will talk later in the class about what to do if we think this is a bad assumption.
 
 
 
-## Why study expected returns?
+## Geometric Average Returns
+
+- Arithmetic average returns are unbiased estimated of the expected return.
+- We may also be interested in summarizing the realized performance of an investment over a time horizon.
+- The **geometric average return** is the constant return that would compound to the same compounded return experienced by an investor.
+  - also known as compound annual growth rate or time-weighted returns. 
+- The geometric average return is **always less** than the arithmetic average return.  
+  - The difference is larger when returns are more volatile. 
+
+## Tesla
+
+- Tesla went down 50% between Nov 2021 and May 2022. 
+- It then went up 50% between May 2022 and Aug 2022.
+- Were Tesla shareholders back to even?
+
+##
+
+- For each $100 of Tesla stock, shareholders experienced 
+100 → 50 
+
+- and then 50 → 75.
+
+- They lost 25%, even though the average return was zero.
+
+- So, lose 50% and make 50% → lose 25%.  Suppose you 
+
+  - make 50% and then lose 50%? 
+
+  - lose 50% and then make 100%? 
+
+  - make 100% and then lose 50%?
+
+## Geometric Average Return
+
+- Given returns $r_1, \cdots, r_n,$ 
+the geometric average return is the number $r$ such that
+
+. . .
+
+$$(1+r)^{n}=(1+r_1)\cdots(1+r_{n})$$
+
+
+- So earning $r$ each period produces the same accumulation as the actual returns $r_1, \cdots, r_n.$
+We solve for $r$ as
+
+. . .
+
+$$r=[(1+r_1)\cdots(1+r_n)]^{1/n}-1$$
+
+
+## Examples
+
+- make 50% and lose 50% → geometric average is  
+
+. . .
+
+$$\sqrt{1.5 \times 0.5}-1=-0.134$$
+
+- make 100% and lose 50% → geometric average is
+
+. . .
+
+$$\sqrt{2 \times 0.5}-1=0$$
+
+## {background-iframe="http://bbcx-investments.com/risk/geometric" background-interactive="True"}
+
+<!-- ## Averaging continuously compounded returns
+
+- Compounding continuously at rate $z$ $\Rightarrow$ \$1 $\rightarrow e^z$ in a year.
+- Actual return is $r$ $\Rightarrow$ continuously compounded return is $\log (1+r)$
+  - because compounding continuously at rate $\log (1+r)$ means \$1 $\rightarrow e^{\log (1+r)} = 1+r$.
+- Make 50% and lose 50% $\Rightarrow$ continuously compounded returns are $\log(1.5)$ and $\log(0.5)$ and average $<0$.
+- Make 100% and lose 50% $\Rightarrow$ continuously compounded returns are
+$\log(2)$ and $\log(0.5)$ and average $=0$. -->
+
+
+
+<!--                       -->
+<!-- ESTIMATING PARAMETERS -->
+<!--                       -->
+
+# Estimating parameters 
+
+- Using past samples to estimate means, standard deviations, and correlations is hazardous.
+- Especially if there are many assets.
+- Need long (stationary) time series of returns
+- And/or some models.  Models limit the degrees of freedom and can help avoid overfitting.
+- And/or some "penalization" -- constraints, etc.
+- This session: past samples.
+
+## Sampling Distributions
+
+- Suppose returns $r_{1},\cdots,r_{n}$ are independent draws from a normal $(\mu,\sigma^2)$ distribution. 
+
+- Let $m =$ sample mean and 
+$s =$ sample std dev = $\sqrt{\sum_{i=1}^n \frac{(r_{i}-m)^2}{n-1}}$ 
+
+- Then, $m$ is normal $(\mu,\sigma^2/n)$ and 
+- $(n-1)s^2/\sigma^2$ is $\chi^2(n-1)$.
+
+
+## Confidence Intervals
+
+- Example: $n=25$, $m=0.12$, $s=0.30$.
+- The estimated std dev (std error) of $\bar{r}$ is $0.30/\sqrt{25}=0.06$.
+- A $95\%$ confidence interval for $\mu$ is 
+
+. . .
+
+$$0.12 ± 1.96 \times 0.06 = [0.013,0.227]$$
+- A similarly wide confidence interval for $\sigma$ is implied by the $\chi^2$ distribution. 
+
+##
+
+- We can sample more frequently to get better estimates of standard deviations and correlations.
+- But it doesn't help for means.
+- The problems with standard deviations and correlations are
+  - Std devs vary over time (turbulent and calm markets).
+  - Correlations also increase in turbulent markets.
+  - There are too many correlations: $n(n-1)/2$.
+
+## Sampling frequency
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+::: {.fragment}
+If we sample monthly, weekly, $\ldots$ then we have more data points, so estimates are more accurate.
+:::
+
+::: {.fragment}
+<!-- <p align=center> <img src="images/pay-3456736_1920.jpg" height=250 width=400></p> -->
+:::
+
+:::
+::: {.column width="50%"}
+
+::: {.fragment}
+When we scale to annual parameters, the accuracy gain vanishes for the mean.
+:::
+
+<br>
+
+::: {.fragment}
+<!-- <p align=center> <img src="images/pay-3456722_1920.jpg" height=250 width=400></p> -->
+:::
+:::
+::::
+
+
+## Simulation 
+
+. . .
+
+To illustrate effect of sampling frequency,
+
+- Simulate 5,000 25-year histories of monthly returns. 
+- Compound monthly returns to get annual returns.
+- Compute sampling distributions (across 5,000 samples) of monthly and annual statistics.
+
+##
+. . .
+
+``` {.p code-line-numbers=1-5|7-8|9-10|12|13-14}
+import numpy as np
+from scipy.stats import norm
+# monthly parameters
+mu, sigma = 0.01, 0.3/np.sqrt(12)  
+mrets = norm.rvs(loc=mu, scale=sigma, size=12*25*5000)
+mrets = mrets.reshape(12, 25, 5000)
+mmeans = np.mean(mrets, axis=(0,1))
+msds = np.std(mrets, axis=(0,1))
+arets = np.prod(1+mrets, axis=0) - 1
+ameans = np.mean(arets, axis=0)
+asds = np.std(arets, axis=0)
+```
+
+## Means -- sampling monthly doesn't help
+
+. . .
+
 
 ```{python}
-#| echo: false
-import plotly.graph_objects as go
 import numpy as np
-
-trace1= go.Scatter(
-    x=np.arange(31), 
-    y=1.08**np.arange(31),
-    mode="lines",
-    name="8%"
+from scipy.stats import norm
+from scipy.stats import gaussian_kde as kde
+import plotly.graph_objects as go
+# monthly parameters
+mu, sigma = 0.01, 0.3/np.sqrt(12)  
+mrets = norm.rvs(loc=mu, scale=sigma, size=12*25*5000)
+mrets = mrets.reshape(12, 25, 5000)
+mmeans = 12*np.mean(mrets, axis=(0,1))
+msds = np.sqrt(12)*np.std(mrets, axis=(0,1))
+arets = np.prod(1+mrets, axis=0) - 1
+ameans = np.mean(arets, axis=0)
+asds = np.std(arets, axis=0)
+adensity = kde(ameans)
+mdensity = kde(mmeans)
+grid = np.linspace(np.min(ameans), np.max(ameans), 100)
+trace1 = go.Scatter(
+  x=grid,
+  y=adensity(grid),
+  mode="lines",
+  name="annual"
 )
-
+grid = np.linspace(np.min(mmeans), np.max(mmeans), 100)
 trace2 = go.Scatter(
-    x=np.arange(31), 
-    y=1.04**np.arange(31),
-    mode="lines",
-    name="4%"
+  x=grid,
+  y=mdensity(grid),
+  mode="lines",
+  name="12*monthly"
 )
-
-fig = go.Figure()
-fig.add_trace(trace1)
+fig = go.Figure(trace1)
 fig.add_trace(trace2)
-string = "year %{x}<br>balance = $%{y:.2f}<extra></extra>"
-fig.update_traces(hovertemplate=string)
 fig.update_layout(
-    template="none",
-    xaxis_title="Year",
-    yaxis_title="Account Balance",
-    yaxis_tickprefix="$", 
-    yaxis_tickformat=",.0f",
-    legend=dict(
+    template="plotly_dark",
+    xaxis_title="Sample Mean",
+    yaxis_title="Density",
+    xaxis_tickformat=".0%",
+    yaxis_tickformat=".0f",
+    xaxis_title_font_size=24,
+    yaxis_title_font_size=24,
+    font_size=20,
+    width=1000,
+    height=520,
+     legend=dict(
         yanchor="top", 
         y=0.99, 
-        xanchor="left", 
-        x=0.01
-        )
+        xanchor="right", 
+        x=0.99
+    ),
 )
 fig.show()
 ```
 
-## Some python
-``` p
-import numpy_financial as npf
+## Standard deviations - monthly is better
 
-r   = 0.04
-nper= 30
-pmt = 0
-pv  = 1
+. . .
 
-fv = npf.fv(r, nper, -pmt, -pv)
-print(f'${fv:0.2f}')
-
-```
-
-## What about saving every period?
-
-- Let's assume we want to save $10,000 every year.
-- Our initial balance is zero.
-- How much would we have in 30 years?
-
-## Annuity
 ```{python}
-#| echo: false
-import plotly.graph_objects as go
-import numpy as np
-import numpy_financial as npf
-
-trace1= go.Scatter(
-    x=np.arange(31), 
-    y=np.array([npf.fv(0.08,n,-10000,0) for n in np.arange(31)]),
-    mode="lines",
-    name="8%"
+adensity = kde(asds)
+mdensity = kde(msds)
+grid = np.linspace(np.min(asds), np.max(asds), 100)
+trace1 = go.Scatter(
+  x=grid,
+  y=adensity(grid),
+  mode="lines",
+  name="annual"
 )
-
+grid = np.linspace(np.min(msds), np.max(msds), 100)
 trace2 = go.Scatter(
-    x=np.arange(31), 
-    y=np.array([npf.fv(0.04,n,-10000,0) for n in np.arange(31)]),
-    mode="lines",
-    name="4%"
+  x=grid,
+  y=mdensity(grid),
+  mode="lines",
+  name="sqrt(12)*monthly"
 )
-
-fig = go.Figure()
-fig.add_trace(trace1)
+fig = go.Figure(trace1)
 fig.add_trace(trace2)
-string = "year %{x}<br>balance = $%{y:.2f}<extra></extra>"
-fig.update_traces(hovertemplate=string)
 fig.update_layout(
-    template="none",
-    xaxis_title="Year",
-    yaxis_title="Account Balance",
-    yaxis_tickprefix="$", 
-    yaxis_tickformat=",.0f",
-    legend=dict(
+    template="plotly_dark",
+    xaxis_title="Sample Standard Deviation",
+    yaxis_title="Density",
+    xaxis_tickformat=".0%",
+    yaxis_tickformat=".0f",
+    xaxis_title_font_size=24,
+    yaxis_title_font_size=24,
+    font_size=20,
+    width=1000,
+    height=520,
+     legend=dict(
         yanchor="top", 
         y=0.99, 
-        xanchor="left", 
-        x=0.01
-        )
+        xanchor="right", 
+        x=0.99
+    ),
 )
 fig.show()
 ```
 
+. . .
 
-## Saving for retirement
-
-
-
+Higher frequency is also better for correlations, covariances, and betas.
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Some Portfolio Math
+
+## Portfolios
+
+-Portfolio are combinations of underlying assets \
+
+-Given return properties of the underlying assets, what are the return properties of their combination? \
+
+## Expected Return of Portfolio of $N$ Assets 
+
+$$ E[r_p] = \sum_{i=1}^{N} w_i E[r_i] $$
+
+-$w_i$ is the portfolio weight of asset $i$ \
+-$E[r_i]$ is the expected return of asset $i$ \
+-The portfolio is fully invested: $\sum_i w_i = 1$ \
+-Notation: $E(r_p)=\mu_i$
+
+## Variance of Portfolio of $N$ Assets 
+
+$$ \text{var}[r_p] = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j \text{cov}[r_i,r_j] $$
+
+-$w_i$ is the portfolio weight of asset $i$ \
+-$\text{cov}[r_i,r_j]$ is the covariance between assets $i$ and $j$ \
+-Recall that $\text{cov}[r_i,r_j]=\text{var}[r_i]$ and $\text{sd}[r_i]=\sqrt{\text{var}[r_i]}$ \
+-Notation: $\text{var}[r_p]=\sigma^2_p$; $\text{cov}[r_i,r_j]=\sigma_{i,j}$; $\text{sd}[r_p]=\sigma_p$
+
+## Variance of Portfolio of $N$ Assets: A Matrix View
+
+$$ \text{var}[r_p] = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j \text{cov}[r_i,r_j] $$
+
+<table border="1">
+  <!-- Row 1 -->
+  <tr> 
+    <td style="text-align:center; background-color:gray">$w_1 w_1 \text{cov}[r_1,r_1]$</td>
+    <td style="text-align:center">$w_1 w_2 \text{cov}[r_1,r_2]$</td>
+    <td style="text-align:center">$w_1 w_3 \text{cov}[r_1,r_3]$</td>
+  </tr>
+  <!-- Row 2 -->
+  <tr>
+    <td style="text-align:center">$w_2 w_1 \text{cov}[r_2,r_1]$</td>
+    <td style="text-align:center; background-color:gray">$w_2 w_2 \text{cov}[r_2,r_2]$</td>
+    <td style="text-align:center">$w_2 w_3 \text{cov}[r_2,r_3]$</td>
+  </tr>
+  <!-- Row 3 -->
+  <tr>
+    <td style="text-align:center">$w_3 w_1 \text{cov}[r_3,r_1]$</td>
+    <td style="text-align:center">$w_3 w_2 \text{cov}[r_3,r_2]$</td>
+    <td style="text-align:center; background-color:gray">$w_3 w_3 \text{cov}[r_3,r_3]$</td>
+  </tr>
+</table>
+
+## Variance of Portfolio of $N$ Assets: A Matrix View
+
+$$ \text{var}[r_p] = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j \text{cov}[r_i,r_j] $$
+
+<table border="1">
+  <!-- Row 1 -->
+  <tr> 
+    <td style="text-align:center; background-color:gray">$w_1^2 \text{var}[r_1]$</td>
+    <td style="text-align:center">$w_1 w_2 \text{cov}[r_1,r_2]$</td>
+    <td style="text-align:center">$w_1 w_3 \text{cov}[r_1,r_3]$</td>
+  </tr>
+  <!-- Row 2 -->
+  <tr>
+    <td style="text-align:center">$w_2 w_1 \text{cov}[r_2,r_1]$</td>
+    <td style="text-align:center; background-color:gray">$w_2^2 \text{var}[r_2]$</td>
+    <td style="text-align:center">$w_2 w_3 \text{cov}[r_2,r_3]$</td>
+  </tr>
+  <!-- Row 3 -->
+  <tr>
+    <td style="text-align:center">$w_3 w_1 \text{cov}[r_3,r_1]$</td>
+    <td style="text-align:center">$w_3 w_2 \text{cov}[r_3,r_2]$</td>
+    <td style="text-align:center; background-color:gray">$w_3^2 \text{var}[r_3]$</td>
+  </tr>
+</table>
+
+## Variance of Portfolio of $N$ Assets: A Matrix View
+
+$$ \text{var}[r_p] = \sum_{i=1}^{N} w_i^2 \text{var}[r_i]+ 2 \sum_{j>i} w_i w_j \text{cov}[r_i,r_j] $$
+
+<table border="1">
+  <!-- Row 1 -->
+  <tr> 
+    <td style="text-align:center; background-color:gray">$w_1^2 \text{var}[r_1]$</td>
+    <td style="text-align:center; background-color:lightblue">$w_1 w_2 \text{cov}[r_1,r_2]$</td>
+    <td style="text-align:center; background-color:lightcoral">$w_1 w_3 \text{cov}[r_1,r_3]$</td>
+  </tr>
+  <!-- Row 2 -->
+  <tr>
+    <td style="text-align:center; background-color:lightblue">$w_2 w_1 \text{cov}[r_2,r_1]$</td>
+    <td style="text-align:center; background-color:gray">$w_2^2 \text{var}[r_2]$</td>
+    <td style="text-align:center; background-color:#d9f2d9">$w_2 w_3 \text{cov}[r_2,r_3]$</td>
+  </tr>
+  <!-- Row 3 -->
+  <tr>
+    <td style="text-align:center; background-color:lightcoral">$w_3 w_1 \text{cov}[r_3,r_1]$</td>
+    <td style="text-align:center; background-color:#d9f2d9">$w_3 w_2 \text{cov}[r_3,r_2]$</td>
+    <td style="text-align:center; background-color:gray">$w_3^2 \text{var}[r_3]$</td>
+  </tr>
+</table>
+
+## Example: Equal-weighted portfolio of two assets
+
+-Expected Return 
+
+\begin{align}
+    E[r_p] =& w_1 E[r_1] + w_2 E[r_2] \\
+           =& 0.5 E[r_1] + 0.5 E[r_2] \\
+\end{align}
+
+. . .
+
+-Portfolio Variance
+
+\begin{align}
+    \text{var}[r_p] =& w_1^2 \text{var}[r_1]+ w_2^2 \text{var}[r_2]+ 2 w_1 w_2 \text{cov}[r_1,r_2] \\ 
+                    =& 0.5^2 \text{var}[r_1]+ 0.5^2 \text{var}[r_2]+ 2\cdot 0.5\cdot 0.5 \text{cov}[r_1,r_2] \\
+                    =& 0.25 \text{var}[r_1]+ 0.25 \text{var}[r_2]+  0.5 \text{cov}[r_1,r_2] \\
+\end{align}
+
+## {background-iframe="http://bbcx-investments.com/portfolios/two-assets" background-interactive="True"}
+
+
+## Variance of Portfolio of $N$ Assets: Matrices {.smaller}
+
+$$ \text{var}[r_p] = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j \text{cov}[r_i,r_j] = w'Vw $$
+
+-Portfolio weights vector:
+$$w'=[w_1\, w_2\,...\,w_N]$$
+
+-Covariance matrix of returns:
+\begin{equation*}
+    V = 
+    \begin{bmatrix}
+        \text{var}[r_1]     & \text{cov}[r_1,r_2] & \dots  & \text{cov}[r_1,r_N] \\
+        \text{cov}[r_2,r_1] & \text{var}[r_2]     & \dots  & \text{cov}[r_2,r_N] \\
+        \vdots              & \vdots              & \ddots &  \vdots \\
+        \text{cov}[r_N,r_1] & \text{cov}[r_N,r_2] & \dots  & \text{var}[r_N] \\
+    \end{bmatrix}
+\end{equation*}
+
+## Covariance and Correlation
+
+-Covariance: absolute degree of co-movement between two assets \
+-Correlation: relative degree of co-movement between two assets
+
+$$ \text{corr}[r_i,r_j] = \rho_{ij} = \frac{\text{cov}[r_i,r_j]}{\text{sd}[r_i]\cdot\text{sd}[r_j]} $$
+
+-What are the possible values for $\rho$?

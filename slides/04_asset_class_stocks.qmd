@@ -1,5 +1,5 @@
 ---
-title: 'Asset Classes'
+title: 'Asset Classes: Stocks'
 author: "<br>Kevin Crotty<br>BUSI 448: Investments"
 format: 
     revealjs:
@@ -19,6 +19,8 @@ execute:
 jupyter: python3
 ---
 
+
+
 ## Asset Classes
 
 - Equity markets
@@ -27,209 +29,805 @@ jupyter: python3
 
 - Money markets
 
-## Money markets
-
-- The market for short-term borrowing, usually a year or less
-- Generally large denomination ($\ge$ $1 million)
-- Commonly 3 months or less
-
 . . . 
 
-We will focus on: 
-- Treasury Bills
-- Repos
-- Commercial Paper
-- Money Market Mutual Funds
-- Shadow Banking System
-
-## Treasury Bills
-
-- Short-term borrowing by the US Government
-- Maturity of 1 year or less (1, 3, 6, 12 months)
-- Usually issued as discount securities
-- Default risk-free 
-- Extremely liquid – can convert to cash at low cost/quickly
-- Taxes – exempt from state and local income taxes
-- Small denomination – can purchase in $100 increments from Treasury Direct
-
-## Historical yields
-
-## {background-iframe="https://fred.stlouisfed.org/series/TB3MS" background-interactive="True"}
+Today, we'll focus on stock markets.
 
 
+<!--                       -->
+<!-- STOCK INDICES         -->
+<!--                       -->
+
+## Stock Market Indices
+
+- SPY
+- Dow Jones
+- Russell
+- FTSE
 
 
-## Repurchase agreements
+<!--                       -->
+<!-- ANNUAL RETURNS        -->
+<!--                       -->
+# Annual Returns
+## Annual SPY returns
 
+SPY = S&P 500 Exchange Traded Fund (ETF)
 
-
-## Fixed income markets
-
-
-## Equity markets
-
-
-
-
-
-## {background-iframe="https://www.sifma.org/resources/research/fixed-income-chart/" background-interactive="True"}
-
-
-## {background-iframe="http://bbcx-investments.com/risk/sbb" background-interactive="True"}
-
-
-## {background-iframe="http://bbcx-investments.com/risk/sbb" background-interactive="True"}
-
-
-## {background-iframe="http://bbcx-investments.com/risk/asset-classes" background-interactive="True"}
-
-
-## Portfolio Math
-
-## Portfolios
-
--Portfolio are combinations of underlying assets \
-
--Given return properties of the underlying assets, what are the return properties of their combination? \
-
-## Expected Return of Portfolio of $N$ Assets 
-
-$$ E[r_p] = \sum_{i=1}^{N} w_i E[r_i] $$
-
--$w_i$ is the portfolio weight of asset $i$ \
--$E[r_i]$ is the expected return of asset $i$ \
--The portfolio is fully invested: $\sum_i w_i = 1$ \
--Notation: $E(r_p)=\mu_i$
-
-## Variance of Portfolio of $N$ Assets 
-
-$$ \text{var}[r_p] = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j \text{cov}[r_i,r_j] $$
-
--$w_i$ is the portfolio weight of asset $i$ \
--$\text{cov}[r_i,r_j]$ is the covariance between assets $i$ and $j$ \
--Recall that $\text{cov}[r_i,r_j]=\text{var}[r_i]$ and $\text{sd}[r_i]=\sqrt{\text{var}[r_i]}$ \
--Notation: $\text{var}[r_p]=\sigma^2_p$; $\text{cov}[r_i,r_j]=\sigma_{i,j}$; $\text{sd}[r_p]=\sigma_p$
-
-## Variance of Portfolio of $N$ Assets: A Matrix View
-
-$$ \text{var}[r_p] = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j \text{cov}[r_i,r_j] $$
-
-<table border="1">
-  <!-- Row 1 -->
-  <tr> 
-    <td style="text-align:center; background-color:gray">$w_1 w_1 \text{cov}[r_1,r_1]$</td>
-    <td style="text-align:center">$w_1 w_2 \text{cov}[r_1,r_2]$</td>
-    <td style="text-align:center">$w_1 w_3 \text{cov}[r_1,r_3]$</td>
-  </tr>
-  <!-- Row 2 -->
-  <tr>
-    <td style="text-align:center">$w_2 w_1 \text{cov}[r_2,r_1]$</td>
-    <td style="text-align:center; background-color:gray">$w_2 w_2 \text{cov}[r_2,r_2]$</td>
-    <td style="text-align:center">$w_2 w_3 \text{cov}[r_2,r_3]$</td>
-  </tr>
-  <!-- Row 3 -->
-  <tr>
-    <td style="text-align:center">$w_3 w_1 \text{cov}[r_3,r_1]$</td>
-    <td style="text-align:center">$w_3 w_2 \text{cov}[r_3,r_2]$</td>
-    <td style="text-align:center; background-color:gray">$w_3 w_3 \text{cov}[r_3,r_3]$</td>
-  </tr>
-</table>
-
-## Variance of Portfolio of $N$ Assets: A Matrix View
-
-$$ \text{var}[r_p] = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j \text{cov}[r_i,r_j] $$
-
-<table border="1">
-  <!-- Row 1 -->
-  <tr> 
-    <td style="text-align:center; background-color:gray">$w_1^2 \text{var}[r_1]$</td>
-    <td style="text-align:center">$w_1 w_2 \text{cov}[r_1,r_2]$</td>
-    <td style="text-align:center">$w_1 w_3 \text{cov}[r_1,r_3]$</td>
-  </tr>
-  <!-- Row 2 -->
-  <tr>
-    <td style="text-align:center">$w_2 w_1 \text{cov}[r_2,r_1]$</td>
-    <td style="text-align:center; background-color:gray">$w_2^2 \text{var}[r_2]$</td>
-    <td style="text-align:center">$w_2 w_3 \text{cov}[r_2,r_3]$</td>
-  </tr>
-  <!-- Row 3 -->
-  <tr>
-    <td style="text-align:center">$w_3 w_1 \text{cov}[r_3,r_1]$</td>
-    <td style="text-align:center">$w_3 w_2 \text{cov}[r_3,r_2]$</td>
-    <td style="text-align:center; background-color:gray">$w_3^2 \text{var}[r_3]$</td>
-  </tr>
-</table>
-
-## Variance of Portfolio of $N$ Assets: A Matrix View
-
-$$ \text{var}[r_p] = \sum_{i=1}^{N} w_i^2 \text{var}[r_i]+ 2 \sum_{j>i} w_i w_j \text{cov}[r_i,r_j] $$
-
-<table border="1">
-  <!-- Row 1 -->
-  <tr> 
-    <td style="text-align:center; background-color:gray">$w_1^2 \text{var}[r_1]$</td>
-    <td style="text-align:center; background-color:lightblue">$w_1 w_2 \text{cov}[r_1,r_2]$</td>
-    <td style="text-align:center; background-color:lightcoral">$w_1 w_3 \text{cov}[r_1,r_3]$</td>
-  </tr>
-  <!-- Row 2 -->
-  <tr>
-    <td style="text-align:center; background-color:lightblue">$w_2 w_1 \text{cov}[r_2,r_1]$</td>
-    <td style="text-align:center; background-color:gray">$w_2^2 \text{var}[r_2]$</td>
-    <td style="text-align:center; background-color:#d9f2d9">$w_2 w_3 \text{cov}[r_2,r_3]$</td>
-  </tr>
-  <!-- Row 3 -->
-  <tr>
-    <td style="text-align:center; background-color:lightcoral">$w_3 w_1 \text{cov}[r_3,r_1]$</td>
-    <td style="text-align:center; background-color:#d9f2d9">$w_3 w_2 \text{cov}[r_3,r_2]$</td>
-    <td style="text-align:center; background-color:gray">$w_3^2 \text{var}[r_3]$</td>
-  </tr>
-</table>
-
-## Example: Equal-weighted portfolio of two assets
-
--Expected Return 
-
-\begin{align}
-    E[r_p] =& w_1 E[r_1] + w_2 E[r_2] \\
-           =& 0.5 E[r_1] + 0.5 E[r_2] \\
-\end{align}
+<br>
 
 . . .
 
--Portfolio Variance
+```{python}
+from pandas_datareader import DataReader as pdr
+import plotly.graph_objects as go
+import numpy as np
+spy = pdr('SPY', 'yahoo', start=1990)['Adj Close']
+spy = spy.resample('Y').last()
+spy = spy.pct_change().dropna()
+spy.index = spy.index.to_period('Y').astype(str)
+spy = spy.reset_index()
+spy.columns = ['date', 'ret']
+trace = go.Scatter(
+    x=spy.date,
+    y=spy.ret,
+        hovertemplate="%{x}<br>%{y:.1%}<extra></extra>",
+    name="",
+    )
+fig = go.Figure(trace)
+fig.update_layout(
+    template="plotly_dark",
+    xaxis_title="",
+    yaxis_title="",
+    yaxis_tickformat=".0%",
+    width=1000,
+    height=460,
+  )
+fig.update_xaxes(title_font_size=24)
+fig.update_yaxes(title_font_size=24)
+fig.update_layout(font_size=20)
+fig.show()
+```
 
-\begin{align}
-    \text{var}[r_p] =& w_1^2 \text{var}[r_1]+ w_2^2 \text{var}[r_2]+ 2 w_1 w_2 \text{cov}[r_1,r_2] \\ 
-                    =& 0.5^2 \text{var}[r_1]+ 0.5^2 \text{var}[r_2]+ 2\cdot 0.5\cdot 0.5 \text{cov}[r_1,r_2] \\
-                    =& 0.25 \text{var}[r_1]+ 0.25 \text{var}[r_2]+  0.5 \text{cov}[r_1,r_2] \\
-\end{align}
-
-## {background-iframe="http://bbcx-investments.com/portfolios/two-assets" background-interactive="True"}
 
 
-## Variance of Portfolio of $N$ Assets: Matrices {.smaller}
+##  Compounded SPY returns
 
-$$ \text{var}[r_p] = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j \text{cov}[r_i,r_j] = w'Vw $$
+. . .
 
--Portfolio weights vector:
-$$w'=[w_1\, w_2\,...\,w_N]$$
+```{python}
+compound = (1+spy.ret).cumprod()
+trace = go.Scatter(
+    x=spy.date,
+    y=compound,
+        hovertemplate="%{x}<br>$%{y:.2f}<extra></extra>",
+    name="",
+    )
+fig = go.Figure(trace)
+fig.update_layout(
+    template="plotly_dark",
+    xaxis_title="",
+    yaxis_title="Accumulation from $1",
+    yaxis_tickformat=".0f",
+    width=1000,
+    height=460,
+    legend=dict(
+        yanchor="top", 
+        y=0.99, 
+        xanchor="right", 
+        x=0.99
+    )
+  )
+fig.update_xaxes(title_font_size=24)
+fig.update_yaxes(title_font_size=24)
+fig.update_layout(font_size=20)
+fig.show()
+```
 
--Covariance matrix of returns:
-\begin{equation*}
-    V = 
-    \begin{bmatrix}
-        \text{var}[r_1]     & \text{cov}[r_1,r_2] & \dots  & \text{cov}[r_1,r_N] \\
-        \text{cov}[r_2,r_1] & \text{var}[r_2]     & \dots  & \text{cov}[r_2,r_N] \\
-        \vdots              & \vdots              & \ddots &  \vdots \\
-        \text{cov}[r_N,r_1] & \text{cov}[r_N,r_2] & \dots  & \text{var}[r_N] \\
-    \end{bmatrix}
-\end{equation*}
+<br>
 
-## Covariance and Correlation
+value of $1 investment with dividends reinvested
 
--Covariance: absolute degree of co-movement between two assets \
--Correlation: relative degree of co-movement between two assets
+## Compounded returns on log scale: motivation
 
-$$ \text{corr}[r_i,r_j] = \rho_{ij} = \frac{\text{cov}[r_i,r_j]}{\text{sd}[r_i]\cdot\text{sd}[r_j]} $$
+  - Let's look at accumulations from two hypothetical stocks. 
+    - stock 1: 10% per year 
+    - stock 1: 2% per year until 2000 and 10% afterwards
+  - It will appear that stock 2 did nothing before 2000 and earned a lot less than stock 1 even after 2000.
 
--What are the possible values for $\rho$?
+## Plot of the Example 
+
+. . .
+
+```{python}
+r1 = np.cumprod([1] + 51*[1.1])
+r2 = np.cumprod([1] + 30*[1.02] + 21*[1.1])
+years = np.arange(1970, 2022)
+trace1 = go.Scatter(
+  x=years,
+  y=r1,
+  mode="lines",
+  name="stock 1"
+)
+trace2 = go.Scatter(
+  x=years,
+  y=r2,
+  mode="lines",
+  name="stock 2"
+)
+fig = go.Figure()
+fig.add_trace(trace1)
+fig.add_trace(trace2)
+string = "year %{x}<br>accum = %{y:.2f}"
+fig.update_traces(hovertemplate=string)
+fig.update_layout(
+    template="plotly_dark",
+    xaxis_title="",
+    yaxis_title="Accumulation",
+    xaxis_title_font_size=24,
+    yaxis_title_font_size=24,
+    font_size=20,
+    yaxis_tickprefix="$", 
+    yaxis_tickformat=",.0f",
+    width=1000,
+    height=520,
+    legend=dict(
+        yanchor="top", 
+        y=0.99, 
+        xanchor="left", 
+        x=0.1
+    )
+)
+fig.show()
+```
+
+
+## Log (base 10) of accumulation
+
+. . .
+
+```{python}
+trace1 = go.Scatter(
+  x=years,
+  y=np.log10(r1),
+  mode="lines",
+  name="stock 1"
+)
+trace2 = go.Scatter(
+  x=years,
+  y=np.log10(r2),
+  mode="lines",
+  name="stock 2"
+)
+fig = go.Figure()
+fig.add_trace(trace1)
+fig.add_trace(trace2)
+string = "year %{x}<br>log = %{y:.2f}"
+fig.update_traces(hovertemplate=string)
+fig.update_layout(
+    template="plotly_dark",
+    xaxis_title="",
+    yaxis_title="Log of Accumulation",
+    xaxis_title_font_size=24,
+    yaxis_title_font_size=24,
+    font_size=20,
+    yaxis_tickformat=",.1f",
+    width=1000,
+    height=520,
+    legend=dict(
+        yanchor="top", 
+        y=0.99, 
+        xanchor="left", 
+        x=0.1
+    )
+)
+fig.show()
+```
+
+
+## Map $y$ tick labels to dollars
+
+. . .
+
+
+```{python}
+trace1 = go.Scatter(
+  x=years,
+  y=r1,
+  mode="lines",
+  name="stock 1"
+)
+trace2 = go.Scatter(
+  x=years,
+  y=r2,
+  mode="lines",
+  name="stock 2"
+)
+fig = go.Figure()
+fig.add_trace(trace1)
+fig.add_trace(trace2)
+string = "year %{x}<br>$%{y:.2f}"
+fig.update_traces(hovertemplate=string)
+fig.update_layout(
+    template="plotly_dark",
+    xaxis_title="",
+    yaxis_title="Accumulation",
+    xaxis_title_font_size=24,
+    yaxis_title_font_size=24,
+    font_size=20,
+    yaxis_type="log",
+    yaxis_tickformat=",.0f",
+    yaxis_tickprefix="$",
+    width=1000,
+    height=520,
+    legend=dict(
+        yanchor="top", 
+        y=0.99, 
+        xanchor="left", 
+        x=0.1
+    ),
+    yaxis = dict(
+        tickmode = 'array',
+        tickvals = [1, 2, 5, 10, 20, 50, 100],
+    )
+)
+fig.show()
+```
+
+
+##  Compounded SPY returns on log scale
+
+```{python}
+trace = go.Scatter(
+    x=spy.date,
+    y=compound,
+        hovertemplate="%{x}<br>$%{y:.2f}<extra></extra>",
+    name="",
+    )
+fig = go.Figure(trace)
+fig.update_layout(
+    template="plotly_dark",
+    xaxis_title="",
+    yaxis_title="Accumulation from $1",
+    xaxis_title_font_size=24,
+    yaxis_title_font_size=24,
+    font_size=20,
+    yaxis_tickformat=".0f",
+    yaxis_type="log",
+    width=1000,
+    height=460,
+    yaxis = dict(
+        tickmode = 'array',
+        tickvals = [2, 5, 10, 16],
+    )
+  )
+fig.show()
+```
+
+<br>
+
+value of $1 investment with dividends reinvested
+
+
+## Box Plot
+
+- Box contains 25th percentile through 75th percentile.
+
+- Median is indicated as a line in the box.
+- Fences extend 1.5 times inter-quartile range from 25th and 75th percentiles or to the most extreme observation if that is closer to the box. 
+    - inter-quartile range = 75th minus 25th percentile
+- Points outside the fences are outliers. 
+    - If you simulate data from a normal distribution, there will typically be very few points outside the fences.
+
+## Box and density plots of annual SPY returns 
+
+::: {.panel-tabset}
+
+## Density plot
+
+```{python}
+from scipy.stats import norm
+from scipy.stats import gaussian_kde as kde
+density = kde(spy.ret)
+grid = np.linspace(np.min(spy.ret), np.max(spy.ret), 100)
+trace1 = go.Scatter(
+  x=grid,
+  y=density(grid),
+  mode="lines",
+  name="actual"
+)
+trace2 = go.Scatter(
+  x=grid, 
+  y=norm.pdf(grid, np.mean(spy.ret), scale=np.std(spy.ret)), 
+  mode="lines", 
+  name="normal"
+)
+fig = go.Figure()
+fig.add_trace(trace1)
+fig.add_trace(trace2)
+fig.update_layout(
+    template="plotly_dark",
+    xaxis_title="Annual Return",
+    yaxis_title="",
+    xaxis_title_font_size=24,
+    yaxis_title_font_size=24,
+    font_size=20,
+    xaxis_tickformat=".0%",
+    yaxis_tickformat="",
+    width=1000,
+    height=360,
+     legend=dict(
+        yanchor="top", 
+        y=0.99, 
+        xanchor="left", 
+        x=0.01
+    ),
+)
+fig.show()
+```
+Normal distribution has same mean and std dev as actual.
+<br>x-axis range is minimum to maximum return.
+
+## Box plot
+```{python}
+trace = go.Box(
+    x=spy.ret,
+    text=spy.date,
+    hovertemplate="%{text}<extra></extra>",
+    name="",
+    )
+fig = go.Figure(trace)
+fig.update_layout(
+    template="plotly_dark",
+    yaxis_title="",
+    xaxis_title="Annual Return",
+    xaxis_title_font_size=24,
+    yaxis_title_font_size=24,
+    font_size=20,
+    xaxis_tickformat=".0%",
+    yaxis_tickformat="",
+    width=1000,
+    height=500,
+)
+fig.show()
+```
+
+
+:::
+
+
+
+## {background-iframe="https://bbcx-investments.com/risk/returns" background-interactive="True"}
+
+## Autocorrelations
+
+- Autocorrelation is the correlation of a time series with its own lagged values.
+- Autocorrelation at lag 1 tells us whether the current value predicts the next one.
+- For monthly data, autocorrelation might be high at lag 12 (seasonality).
+
+## Autocorrelations of annual SPY returns
+
+. . 
+
+```{python}
+from statsmodels.graphics.tsaplots import plot_acf
+import matplotlib.pyplot as plt
+plt.style.use('classic')
+plt.rcParams.update({'font.size': 26})
+fig = plot_acf(spy.ret)
+plt.xlabel("Year")
+plt.ylabel("Autocorrelation")
+plt.title("")
+_ = fig.set_size_inches(18,9)
+```
+
+
+## Does last year's return predict this year's?
+
+. . .
+
+```{python}
+import statsmodels.formula.api as smf
+spy['lag'] = spy.ret.shift()
+spy = spy.dropna()
+trace = go.Scatter(
+  x=spy.lag,
+  y=spy.ret,
+  text=spy.date,
+  mode="markers",
+  hovertemplate="%{text}<extra></extra>",
+  showlegend=False,
+  marker=dict(size=15)
+)
+fig = go.Figure(trace)
+result = smf.ols("ret ~ lag", data=spy).fit()
+predict = result.params['Intercept'] + result.params['lag']*spy.lag
+trace = go.Scatter(
+  x=spy.lag,
+  y=predict,
+  mode="lines",
+  name="regression line",
+)
+fig.add_trace(trace)
+fig.update_layout(
+    template="plotly_dark",
+    xaxis_title="Lagged Return",
+    yaxis_title="Return",
+    xaxis_title_font_size=24,
+    yaxis_title_font_size=24,
+    font_size=20,
+    xaxis_tickformat=".0%",
+    yaxis_tickformat=".0%",
+    width=1000,
+    height=520,
+)
+fig.show()
+```
+No, the autocorrelation is almost zero.
+
+
+
+
+
+
+<!--                       -->
+<!-- DAILY RETURNS         -->
+<!--                       -->
+# Daily Returns
+
+## Daily SPY returns
+
+. . .
+
+```{python}
+from pandas_datareader import DataReader as pdr
+import plotly.graph_objects as go
+import numpy as np
+spy = pdr('SPY', 'yahoo', start=1990)['Adj Close']
+spy = spy.pct_change().dropna()
+spy.index = spy.index.astype(str)
+spy = spy.reset_index()
+spy.columns = ['date', 'ret']
+trace = go.Scatter(
+    x=spy.date,
+    y=spy.ret,
+        hovertemplate="%{x}<br>%{y:.1%}<extra></extra>",
+    name="",
+    )
+fig = go.Figure(trace)
+fig.update_layout(
+    template="plotly_dark",
+    xaxis_title="",
+    yaxis_title="",
+    yaxis_title_font_size=24,
+    xaxis_title_font_size=24,
+    font_size=20,
+    yaxis_tickformat=".0%",
+    width=1000,
+    height=500,
+  )
+fig.show()
+```
+
+
+## Box and density plots of daily SPY returns 
+
+::: {.panel-tabset}
+
+## Density plot
+
+```{python}
+from scipy.stats import norm
+from scipy.stats import gaussian_kde as kde
+density = kde(spy.ret)
+grid = np.linspace(np.min(spy.ret), np.max(spy.ret), 100)
+trace1 = go.Scatter(
+  x=grid,
+  y=density(grid),
+  mode="lines",
+  name="actual"
+)
+trace2 = go.Scatter(
+  x=grid, 
+  y=norm.pdf(grid, loc=np.mean(spy.ret), scale=np.std(spy.ret)), 
+  mode="lines", 
+  name="normal"
+)
+fig = go.Figure()
+fig.add_trace(trace1)
+fig.add_trace(trace2)
+fig.update_layout(
+    template="plotly_dark",
+    xaxis_title="Daily Return",
+    yaxis_title="",
+    yaxis_title_font_size=24,
+    xaxis_title_font_size=24,
+    font_size=20,
+    xaxis_tickformat=".0%",
+    yaxis_tickformat="",
+    width=1000,
+    height=360,
+     legend=dict(
+        yanchor="top", 
+        y=0.99, 
+        xanchor="right", 
+        x=0.99
+    ),
+)
+fig.show()
+```
+Normal distribution has same mean and std dev as actual.<br>x-axis range is minimum to maximum return.
+
+## Box plot
+
+```{python}
+#| panel: input
+#| layout-ncol: 2
+trace = go.Box(
+    x=spy.ret,
+    text=spy.date,
+    hovertemplate="%{text}<extra></extra>",
+    name="",
+    )
+fig = go.Figure(trace)
+fig.update_layout(
+    template="plotly_dark",
+    xaxis_title="Daily Return",
+    yaxis_title="",
+    yaxis_title_font_size=24,
+    xaxis_title_font_size=24,
+    font_size=20,
+    xaxis_tickformat=".0%",
+    yaxis_tickformat="",
+    width=980,
+    height=440,
+)
+fig.show()
+```
+
+:::
+
+
+
+## {background-iframe="https://bbcx-investments.com/risk/frequency" background-interactive="True"}
+
+
+## Autocorrelations of daily SPY returns
+
+. . .
+
+```{python}
+from statsmodels.graphics.tsaplots import plot_acf
+import matplotlib.pyplot as plt
+plt.style.use('classic')
+plt.rcParams.update({'font.size': 26})
+fig = plot_acf(spy.ret)
+fig.set_size_inches(18,9)
+plt.xlabel("Year")
+plt.ylabel("Autocorrelation")
+_ = plt.title("")
+```
+
+
+## Does today's return predict tomorrow's?
+
+. . .
+
+```{python}
+import statsmodels.formula.api as smf
+spy['lag'] = spy.ret.shift()
+spy = spy.dropna()
+trace = go.Scatter(
+  x=spy.lag,
+  y=spy.ret,
+  text=spy.date,
+  mode="markers",
+  hovertemplate="%{text}<extra></extra>",
+  showlegend=False,
+)
+fig = go.Figure(trace)
+result = smf.ols("ret ~ lag", data=spy).fit()
+predict = result.params['Intercept'] + result.params['lag']*spy.lag
+trace = go.Scatter(
+  x=spy.lag,
+  y=predict,
+  mode="lines",
+  name="regression line"
+)
+fig.add_trace(trace)
+fig.update_layout(
+    template="plotly_dark",
+    xaxis_title="Lagged Return",
+    yaxis_title="Return",
+    yaxis_title_font_size=24,
+    xaxis_title_font_size=24,
+    font_size=20,
+    xaxis_tickformat=".0%",
+    yaxis_tickformat=".0%",
+    width=1000,
+    height=500,
+)
+fig.show()
+```
+
+No, the autocorrelation is almost zero.
+
+## Autocorrelations of absolute returns
+
+Absolute returns are a measure of volatility.
+. . .
+
+```{python}
+plt.style.use('classic')
+plt.rcParams.update({'font.size': 26})
+fig = plot_acf(spy.ret.abs())
+fig.set_size_inches(18,9)
+plt.xlabel("Year")
+plt.ylabel("Autocorrelation")
+_ = plt.title("")
+```
+
+
+## Does today's absolute return predict tomorrow's?
+
+. . .
+
+```{python}
+import plotly.io as pio
+plotly_template = pio.templates["plotly_dark"]
+colors = plotly_template.layout.colorway
+blue = colors[0]
+spy['absret'] = spy.ret.abs()
+spy['abslag'] = spy.lag.abs()
+trace = go.Scatter(
+  x=spy.abslag,
+  y=spy.absret,
+  text=spy.date,
+  mode="markers",
+  hovertemplate="%{text}<extra></extra>",
+  showlegend=False,
+  marker=dict(size=10)
+)
+fig = go.Figure(trace)
+result = smf.ols("absret ~ abslag", data=spy).fit()
+spy['predict'] = result.params['Intercept'] + result.params['abslag']*spy.abslag
+spy = spy.sort_values(by="abslag")
+trace = go.Scatter(
+  x=spy.abslag,
+  y=spy.predict,
+  mode="lines",
+  name="regression line",
+)
+fig.add_trace(trace)
+fig.update_layout(
+    template="plotly_dark",
+    xaxis_title="Lagged Absolute Return",
+    yaxis_title="Absolute Return",
+    yaxis_title_font_size=24,
+    xaxis_title_font_size=24,
+    font_size=20,
+    xaxis_tickformat=".0%",
+    yaxis_tickformat=".0%",
+    xaxis_rangemode="tozero",
+    yaxis_rangemode="tozero",
+    width=1000,
+    height=500,
+)
+fig.show()
+```
+Yes, volatility is persistent.
+
+
+
+
+<!--                       -->
+<!-- LONG-RUN RISKS        -->
+<!--                       -->
+
+# Long-Run Risks
+## Betting on the stock market 
+
+- Based on history, the bet is definitely in our favor.  
+
+- Play for a long time $\Rightarrow$ almost certainly come out ahead.
+
+- But how far ahead is quite uncertain.
+
+    - In [worst 20-year period]{style="color:tomato; font-weight:bold"} in U.S. stock market since 1926, [\$1 $\rightarrow$ \$1.73]{style="color:tomato; font-weight:bold"}, a geometric average return of 2.8% per year (1929-1948).
+    - In [best 20-year period]{style="color:tomato; font-weight:bold"} since 1926, [\$1 $\rightarrow$ \$24.65]{style="color:tomato; font-weight:bold"}, a geometric average return of 17.4% per year (1980-1999).
+
+## {background-iframe="http://bbcx-investments.com/risk/best-worst" background-interactive="True"}
+
+
+## Simulate returns
+
+- Mean and std dev of U.S. market return 1970-2021 was 12.5% and 17.4%.
+- Simulate 20-year compounded returns.
+
+. . .
+
+```{.p code-line-numbers="1-5|7|8"}
+import numpy as np
+mn = 0.125
+sd = 0.174
+nyears = 20
+r = np.random.normal(loc=mn, scale=sd, size=nyears)
+comp_ret = np.prod(1+r)
+```
+
+## Repeat and evaluate the distribution
+
+. . .
+
+
+```{.p code-line-numbers="1|3-4|5"}
+nsims = 1000
+r = np.random.normal(loc=mn, scale=sd, size=nyears*nsims)
+r = r.reshape((nyears, nsims))
+comp_ret = np.prod(1+r, axis=0)
+```
+
+. . .
+
+
+:::: columns
+
+::: column 
+
+```{python}
+import numpy as np
+import plotly.graph_objects as go
+mn = 0.125
+sd = 0.174
+nsims = 1000
+r = np.random.normal(loc=mn, scale=sd, size=30*nsims)
+r = r.reshape((30,1000))
+comp_ret = np.prod(1+r, axis=0)
+trace = go.Box(
+  y=comp_ret,
+  name="",
+  hovertemplate="%{text}<extra></extra>",
+)
+fig = go.Figure(trace)
+fig.update_layout(
+    template="plotly_dark",
+    yaxis_title="Accumulation from $1",
+    xaxis_title="",
+    yaxis_title_font_size=20,
+    xaxis_title_font_size=20,
+    font_size=16,
+    yaxis_tickprefix="$",
+    yaxis_tickformat=".0f",
+    xaxis_tickformat="",
+    height=360,
+    width=500
+)
+fig.show()
+```
+
+:::
+
+::: column
+
+
+```{python}
+import pandas as pd
+comp_ret = pd.Series(comp_ret)
+table = comp_ret.describe(percentiles=[0.1,0.25,0.5,0.75,0.9])
+print(table.iloc[1:].round(2))
+```
+:::
+
+::::
+
+## Retirement Planning Simulation
+
+Uncertainty about long-run returns $\Rightarrow$ uncertainty about retirement plans.
+
+- Revisit the retirement plan
+- Generate random returns and simulate many lifetimes.
+
+## {background-iframe="https://bbcx-investments.com/borrowing-saving/retirement-planning-sim" background-interactive="True"}
+
+
+
