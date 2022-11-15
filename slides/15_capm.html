@@ -443,7 +443,7 @@
   <meta name="generator" content="quarto-1.0.38">
 
   <meta name="author" content=" Kevin Crotty BUSI 448: Investments">
-  <title>CAPM and Market Model Regressions</title>
+  <title>CAPM</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -1184,13 +1184,34 @@ display: none;
     <div class="slides">
 
 <section id="title-slide" class="center">
-  <h1 class="title">CAPM and Market Model Regressions</h1>
+  <h1 class="title">CAPM</h1>
   <p class="author"><br>Kevin Crotty<br>BUSI 448: Investments</p>
 </section>
 
+<section id="where-are-we" class="slide level2">
+<h2>Where are we?</h2>
+<p><strong>Last time</strong>:</p>
+<div>
+<ul>
+<li>Market Model Regressions</li>
+<li>Alphas and Betas</li>
+<li>Estimating Covariance Matrix</li>
+</ul>
+</div>
+<div class="fragment">
+<p><strong>Today</strong>:</p>
+<div>
+<ul>
+<li>CAPM and the Market Model Regression</li>
+<li>CAPM: Theory</li>
+<li>CAPM: Practice</li>
+</ul>
+</div>
+</div>
+</section>
 <section>
-<section id="defining-capm-and-the-market-model-regression" class="title-slide slide level1 center">
-<h1>Defining CAPM and the Market Model Regression</h1>
+<section id="capm-and-the-market-model-regression" class="title-slide slide level1 center">
+<h1>CAPM and the Market Model Regression</h1>
 
 </section>
 <section id="what-is-the-capm" class="slide level2">
@@ -1219,54 +1240,6 @@ display: none;
 <li class="fragment">What differs between the top and bottom equations?</li>
 </ul>
 </div>
-</section>
-<section id="understanding-the-market-model-regression" class="slide level2">
-<h2>Understanding the Market Model Regression</h2>
-<p><span class="math display">\[ r_{i,t} - r_{f,t} = \alpha_i + \beta_i (r_{m,t} - r_{f,t}) + \varepsilon_{i,t} \]</span></p>
-<ul>
-<li class="fragment">Meaning of <span class="math inline">\(\alpha\)</span>?</li>
-<li class="fragment">Meaning of <span class="math inline">\(\beta\)</span>?</li>
-<li class="fragment">Meaning of <span class="math inline">\(\varepsilon\)</span>?</li>
-</ul>
-<div class="fragment">
-<p>Let’s look at an example.</p>
-</div>
-</section>
-<section id="section" class="slide level2" data-background-iframe="https://bbcx-investments.com/capm/alphas-betas" data-background-interactive="True">
-<h2></h2>
-</section>
-<section id="meaning-of-beta" class="slide level2">
-<h2>Meaning of <span class="math inline">\(\beta\)</span></h2>
-<p><strong>Beta answers the question:</strong></p>
-<p>if the benchmark is up 1%, how much do we expect the asset to be up, all else equal?</p>
-<div class="fragment">
-<div class="columns">
-<div class="column" style="width:100%;">
-<ul>
-<li class="fragment"><strong>If <span class="math inline">\(\beta\)</span>=2, we expect the asset to be up 2%</strong></li>
-<li class="fragment"><strong>If <span class="math inline">\(\beta\)</span>=0.5, we expect the asset to be up 0.5%</strong></li>
-</ul>
-</div>
-</div>
-</div>
-</section>
-<section id="meaning-of-alpha" class="slide level2">
-<h2>Meaning of <span class="math inline">\(\alpha\)</span></h2>
-<p><strong>Alpha answers the question:</strong></p>
-<p>if I were holding the market, could I have improved mean-variance efficiency by investing something in the asset?</p>
-<div class="fragment">
-<div class="columns">
-<div class="column" style="width:100%;">
-<ul>
-<li class="fragment"><strong>The answer is “yes” if and only if <span class="math inline">\(\alpha\)</span> &gt; 0</strong></li>
-<li class="fragment"><strong>If <span class="math inline">\(\alpha\)</span> &lt; 0, mean-variance efficiency could have been improved by shorting the asset.</strong></li>
-</ul>
-</div>
-</div>
-</div>
-</section>
-<section id="section-1" class="slide level2" data-background-iframe="http://bbcx-investments.com/capm/alphas-mve" data-background-interactive="True">
-<h2></h2>
 </section></section>
 <section>
 <section id="theory-capm" class="title-slide slide level1 center">
@@ -1451,7 +1424,7 @@ display: none;
 </table>
 </div>
 </section>
-<section id="section-2" class="slide level2" data-background-iframe="http://bbcx-investments.com/capm/mrp_estimation" data-background-interactive="True">
+<section id="section" class="slide level2" data-background-iframe="http://bbcx-investments.com/capm/mrp_estimation" data-background-interactive="True">
 <h2></h2>
 </section>
 <section id="simulation-of-estimating-betas" class="slide level2">
@@ -1478,7 +1451,7 @@ display: none;
 <li class="fragment">Average returns are mostly unrelated to betas.</li>
 </ul>
 </section>
-<section id="section-3" class="slide level2" data-background-iframe="https://bbcx-investments.com/capm/sml-industries" data-background-interactive="True">
+<section id="section-1" class="slide level2" data-background-iframe="https://bbcx-investments.com/capm/sml-industries" data-background-interactive="True">
 <h2></h2>
 </section>
 <section id="in-class-notebook-version" class="slide level2">
@@ -1486,7 +1459,7 @@ display: none;
 <p>Let’s look at what this webpage is doing.</p>
 </section>
 <section id="for-next-time-anomalies-and-the-cross-section-of-returns" class="slide level2">
-<h2>For next time: ``Anomalies and the Cross-Section of Returns”</h2>
+<h2>For next time: Anomalies and the Cross-Section of Returns</h2>
 <p><br><br><br><br></p>
 <div class="quarto-figure quarto-figure-center">
 <figure>

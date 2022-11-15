@@ -1,5 +1,5 @@
 ---
-title: 'CAPM and Market Model Regressions'
+title: 'CAPM'
 author: "<br>Kevin Crotty<br>BUSI 448: Investments"
 format: 
     revealjs:
@@ -20,7 +20,26 @@ jupyter: python3
 ---
 
 
-# Defining CAPM and the Market Model Regression
+## Where are we?
+**Last time**:
+
+::: {.nonincremental}
+- Market Model Regressions
+- Alphas and Betas
+- Estimating Covariance Matrix
+:::
+
+. . . 
+
+**Today**:
+
+::: {.nonincremental}
+- CAPM and the Market Model Regression
+- CAPM: Theory
+- CAPM: Practice
+:::
+
+# CAPM and the Market Model Regression
 ## What is the CAPM?
 
 - The Capital Asset Pricing Model (CAPM) is a theory from the 1960s.  Its discoverer won the Nobel prize in economics.
@@ -44,51 +63,6 @@ $$ r_{i,t} - r_{f,t} = \alpha_i + \beta_i (r_{m,t} - r_{f,t}) + \varepsilon_{i,t
 
 - What differs between the top and bottom equations?
 
-
-## Understanding the Market Model Regression
-$$ r_{i,t} - r_{f,t} = \alpha_i + \beta_i (r_{m,t} - r_{f,t}) + \varepsilon_{i,t} $$
-
-- Meaning of $\alpha$?
-- Meaning of $\beta$?
-- Meaning of $\varepsilon$?
-
-. . .
-
-Let's look at an example.
-
-## {background-iframe="https://bbcx-investments.com/capm/alphas-betas" background-interactive="True"}
-
-## Meaning of $\beta$
-
-**Beta answers the question:**
-
-if the benchmark is up 1%, how much do we expect the asset to be up, all else equal?
-
-. . .
-
-:::: {.columns}
-::: {.column width="100%"}
-- **If $\beta$=2, we expect the asset to be up 2%**
-- **If $\beta$=0.5, we expect the asset to be up 0.5%**
-:::
-::::
-
-## Meaning of $\alpha$
-
-**Alpha answers the question:**
-
-if I were holding the market, could I have improved mean-variance efficiency by investing something in the asset?
-
-. . .
-
-:::: {.columns}
-::: {.column width="100%"}
-- **The answer is "yes" if and only if $\alpha$ > 0**
-- **If $\alpha$ < 0, mean-variance efficiency could have been improved by shorting the asset.**
-:::
-::::
-
-## {background-iframe="http://bbcx-investments.com/capm/alphas-mve" background-interactive="True"}
 
 
 
@@ -252,7 +226,7 @@ What if this weren't the case?
 
 Let's look at what this webpage is doing.
 
-## For next time: ``Anomalies and the Cross-Section of Returns"
+## For next time: Anomalies and the Cross-Section of Returns
 
 <br><br><br><br>
 
