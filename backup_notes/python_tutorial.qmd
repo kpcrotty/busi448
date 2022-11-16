@@ -1,0 +1,61 @@
+---
+title: "Python Tutorial"
+format: html
+---
+
+
+# Python Overview
+## Packages
+
+Some software comes with everything pre-installed.  Python allows the user to customize how much of the software is loaded.  
+We will load various required packages as:
+
+``` {.python}
+# Load numpy package
+import numpy
+
+# Alternative 
+
+```
+
+## Jupyter Notebooks
+
+Jupyter notebo
+
+## Lists
+
+``` {.python}
+# This is a list  
+import matplotlib.pyplot as plt
+plt.plot([1,23,2,4])
+plt.show()
+```
+
+## Dicts
+## Writing Functions
+## Simulating random variables
+- univariate normal
+- multivariate normal
+## Numpy financial
+
+## Intro to Pandas
+- DataFrames
+  - creating dataframes
+  - columns
+  - index
+- Accessing rows, columns, and Cells
+
+## Working with Data
+- Fetching Data
+  - pandas_datareader
+    - FRED
+    - Fama-French
+    - FactSet
+- Summarizing Data
+  - describe
+  - 
+- Plotting Data
+- Regression
+- Sorting
+- Grouping Data
+  - lambda functions and apply
