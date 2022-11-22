@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Duration and Convexity</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+<script src="duration_convexity_files/libs/clipboard/clipboard.min.js"></script>
+<script src="duration_convexity_files/libs/quarto-html/quarto.js"></script>
+<script src="duration_convexity_files/libs/quarto-html/popper.min.js"></script>
+<script src="duration_convexity_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="duration_convexity_files/libs/quarto-html/anchor.min.js"></script>
+<link href="duration_convexity_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="duration_convexity_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="duration_convexity_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="duration_convexity_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="duration_convexity_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Duration and Convexity</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>A coupon bond pricing function can be written:</p>
+<p><span class="math display">\[ P = \sum_{t=1}^T \frac{CF_t}{(1+y/m)^t} \]</span></p>
+<p>where <span class="math inline">\(y\)</span> is the annual yield-to-maturity, <span class="math inline">\(m\)</span> is the number of payments per year, <span class="math inline">\(T\)</span> is the total number of payment periods, and <span class="math inline">\(CF_t\)</span> is the cash flow at time <span class="math inline">\(t\)</span>.</p>
+<section id="duration" class="level2">
+<h2 class="anchored" data-anchor-id="duration">Duration</h2>
+<p>The derivative of <span class="math inline">\(P\)</span> with respect to <span class="math inline">\(y\)</span> is:</p>
+<p><span class="math display">\[\frac{dP}{dy} = \sum_{t=1}^T -\frac{t}{m} \cdot \frac{CF_t}{(1+y/m)^{t+1}}.\]</span></p>
+<p>Divide both sides by the price <span class="math inline">\(P\)</span> and factor out <span class="math inline">\(-1/(1+y/m)\)</span> from the right-hand side to get:</p>
+<p><span class="math display">\[\frac{1}{P}\cdot\frac{dP}{dy} = \frac{-1}{(1+y/m)} \left[\sum_{t=1}^T \frac{t}{m} \cdot \frac{PV(CF_t)}{P}\right].\]</span></p>
+<p>Note that the term in brackets is Macaulay duration. The derivative of the bond pricing function in terms of duration, price and the yield is:</p>
+<p><span class="math display">\[\frac{dP}{dy} = - \frac{\text{duration}}{(1+y/m)} \cdot P .\]</span></p>
+<p>Alternatively, we can write the derivate in terms of modified duration and the price:</p>
+<p><span class="math display">\[\frac{dP}{dy} = - \text{modified duration} \cdot P .\]</span></p>
+<section id="duration-approximation" class="level4">
+<h4 class="anchored" data-anchor-id="duration-approximation">Duration approximation</h4>
+<p>The approximate percent change in price of the bond is:</p>
+<p><span class="math display">\[\frac{\Delta P}{P} \approx -D \cdot \frac{\Delta y}{1+y}.\]</span></p>
+<p>Or equivalently, in terms of modified duration:</p>
+<p><span class="math display">\[\frac{\Delta P}{P} \approx -D_{\text{modified}} \cdot \Delta y.\]</span></p>
+<p>These approximations are straighforward applications of a first-order Taylor series approximation around the prevailing yield <span class="math inline">\(y\)</span>:</p>
+<p><span class="math display">\[ P(y + \Delta y) \approx P(y) + \frac{dP}{dy} \cdot \Delta y.\]</span></p>
+</section>
+</section>
+<section id="convexity" class="level2">
+<h2 class="anchored" data-anchor-id="convexity">Convexity</h2>
+<p>Convexity measures the curvature of the bond pricing function. Mathematically, it is related to the second derivative of the pricing function with respect to yield.</p>
+<p>The second derivative of <span class="math inline">\(P\)</span> with respect to <span class="math inline">\(y\)</span> is:</p>
+<p><span class="math display">\[\frac{d^2 P}{dy^2} = \frac{d}{dy} \left[\sum_{t=1}^T -\frac{t}{m} \cdot \frac{CF_t}{(1+y/m)^{t+1}} \right].\]</span></p>
+<p>Taking the derivative of the right-hand side yields:</p>
+<p><span class="math display">\[ \frac{1}{(1+y/m)^2} \left[\sum_{t=1}^T \frac{t(t+1)}{m^2} \cdot \frac{CF_t}{(1+y/m)^{t}} \right].\]</span></p>
+<p>Convexity is defined as second derivative scaled by price:</p>
+<p><span class="math display">\[ \text{convexity} = \frac{1}{(1+y/m)^2} \left[\sum_{t=1}^T \frac{t(t+1)}{m^2} \cdot \frac{PV(CF_t)}{P} \right]. \]</span></p>
+<section id="nd-order-approximation" class="level4">
+<h4 class="anchored" data-anchor-id="nd-order-approximation">2nd order approximation</h4>
+<p>A second-order Taylor series approximation of the price around the prevailing yield <span class="math inline">\(y\)</span> is:</p>
+<p><span class="math display">\[ P(y + \Delta y) \approx P(y) + \frac{dP}{dy} \cdot \Delta y + 0.5 \cdot \frac{d^2P}{dy^2} \cdot (\Delta y)^2.\]</span></p>
+<p>Rearranging in terms of percent change in price:</p>
+<p><span class="math display">\[ \frac{\Delta P}{P(y)} \approx \frac{1}{P}\cdot\frac{dP}{dy} \cdot \Delta y + 0.5 \frac{1}{P} \frac{d^2P}{dy^2} \cdot (\Delta y)^2.  \]</span></p>
+<p>This can be written as</p>
+<p><span class="math display">\[ \frac{\Delta P}{P(y)} \approx - {\text{modified duration}} \cdot \Delta y + 0.5\cdot\text{convexity}\cdot (\Delta y)^2.\]</span></p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

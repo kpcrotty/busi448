@@ -1,0 +1,60 @@
+---
+title: "Duration and Convexity"
+format: html
+---
+
+A coupon bond pricing function can be written:
+
+$$ P = \sum_{t=1}^T \frac{CF_t}{(1+y/m)^t} $$
+where $y$ is the annual yield-to-maturity, $m$ is the number of payments per year, $T$ is the total number of payment periods, and $CF_t$ is the cash flow at time $t$.
+
+## Duration
+
+The derivative of $P$ with respect to $y$ is:
+
+$$\frac{dP}{dy} = \sum_{t=1}^T -\frac{t}{m} \cdot \frac{CF_t}{(1+y/m)^{t+1}}.$$
+
+Divide both sides by the price $P$ and factor out $-1/(1+y/m)$ from the right-hand side to get:
+$$\frac{1}{P}\cdot\frac{dP}{dy} = \frac{-1}{(1+y/m)} \left[\sum_{t=1}^T \frac{t}{m} \cdot \frac{PV(CF_t)}{P}\right].$$
+
+Note that the term in brackets is Macaulay duration.  The derivative of the bond pricing function in terms of duration, price and the yield is:
+$$\frac{dP}{dy} = - \frac{\text{duration}}{(1+y/m)} \cdot P .$$
+Alternatively, we can write the derivate in terms of modified duration and the price:
+$$\frac{dP}{dy} = - \text{modified duration} \cdot P .$$
+
+#### Duration approximation
+
+The approximate percent change in price of the bond is:
+$$\frac{\Delta P}{P} \approx -D \cdot \frac{\Delta y}{1+y}.$$
+Or equivalently, in terms of modified duration:
+$$\frac{\Delta P}{P} \approx -D_{\text{modified}} \cdot \Delta y.$$
+
+These approximations are straighforward applications of a first-order Taylor series approximation around the prevailing yield $y$:
+
+$$ P(y + \Delta y) \approx P(y) + \frac{dP}{dy} \cdot \Delta y.$$
+
+## Convexity
+
+Convexity measures the curvature of the bond pricing function.  Mathematically, it is related to the second derivative of the pricing function with respect to yield.
+
+The second derivative of $P$ with respect to $y$ is:
+
+$$\frac{d^2 P}{dy^2} = \frac{d}{dy} \left[\sum_{t=1}^T -\frac{t}{m} \cdot \frac{CF_t}{(1+y/m)^{t+1}} \right].$$
+
+Taking the derivative of the right-hand side yields:
+$$ \frac{1}{(1+y/m)^2} \left[\sum_{t=1}^T \frac{t(t+1)}{m^2} \cdot \frac{CF_t}{(1+y/m)^{t}} \right].$$
+
+Convexity is defined as second derivative scaled by price:
+$$ \text{convexity} = \frac{1}{(1+y/m)^2} \left[\sum_{t=1}^T \frac{t(t+1)}{m^2} \cdot \frac{PV(CF_t)}{P} \right]. $$
+
+#### 2nd order approximation
+
+A second-order Taylor series approximation of the price around the prevailing yield $y$ is:
+
+$$ P(y + \Delta y) \approx P(y) + \frac{dP}{dy} \cdot \Delta y + 0.5 \cdot \frac{d^2P}{dy^2} \cdot (\Delta y)^2.$$
+
+Rearranging in terms of percent change in price:
+$$ \frac{\Delta P}{P(y)} \approx \frac{1}{P}\cdot\frac{dP}{dy} \cdot \Delta y + 0.5 \frac{1}{P} \frac{d^2P}{dy^2} \cdot (\Delta y)^2.  $$
+
+This can be written as 
+$$ \frac{\Delta P}{P(y)} \approx - {\text{modified duration}} \cdot \Delta y + 0.5\cdot\text{convexity}\cdot (\Delta y)^2.$$
