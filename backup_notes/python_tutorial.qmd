@@ -20,7 +20,31 @@ import numpy
 
 ## Jupyter Notebooks
 
-Jupyter notebo
+Jupyter notebook tips
+
+`ctrl` + `enter`: Run current cell
+`Esc`: Exit current cell
+`Esc` + `m`: make current cell a markdown cell
+`ctrl` + `shift` + `_`: Split current cell in two
+`esc` + `a`: add cell above
+`esc` + `b`: add cell below
+
+
+
+In code:
+- Use `#` to start a line for comments
+
+### Markdown basics
+- `#` is biggest font
+- `##` is a bit smaller
+- `###` is even smaller
+- Basic LaTeX style math writing
+  - Enclose math in `$`
+  - `a_t` for $a_t$
+  - `a^2` for $a^2$
+  - Use braces for longer sub- and super-scripts `a_{i,t}` is $a_{i,t}$
+
+
 
 ## Lists
 
@@ -43,8 +67,8 @@ plt.show()
   - creating dataframes
   - columns
   - index
-- Accessing rows, columns, and Cells
-
+- Accessing rows, columns, and cells
+.loc vs .iloc
 ## Working with Data
 - Fetching Data
   - pandas_datareader
