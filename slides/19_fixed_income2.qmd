@@ -1,5 +1,5 @@
 ---
-title: 'Fixed Income'
+title: 'Interest Rate Risk'
 author: "<br>Kevin Crotty<br>BUSI 448: Investments"
 format: 
     revealjs:

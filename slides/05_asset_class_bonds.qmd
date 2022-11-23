@@ -65,6 +65,9 @@ We will focus on:
 
 ## Fixed income markets
 
+We will focus on: 
+- Treasury notes and bonds
+- Corporate bonds
 
 ## {background-iframe="https://www.sifma.org/resources/research/fixed-income-chart/" background-interactive="True"}
 

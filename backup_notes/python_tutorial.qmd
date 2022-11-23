@@ -69,12 +69,20 @@ plt.show()
   - index
 - Accessing rows, columns, and cells
 .loc vs .iloc
+- Heirarchical indexing
+pd.MultiIndex.from_product(LIST of LISTS)
+
+- Subsetting data
+df_subset = df[(df.company_symbol==ticker) & (df.DATE==date)]
+
 ## Working with Data
 - Fetching Data
   - pandas_datareader
     - FRED
     - Fama-French
     - FactSet
+
+- 
 - Summarizing Data
   - describe
   - 
