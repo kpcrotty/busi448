@@ -19,103 +19,39 @@ execute:
 jupyter: python3
 ---
 
-## Introduction
+# Investments Introduction
+
+## Course topics (1)
+
+- Asset Class Overview
+  - Stocks + bonds focus
+  - Historical performance
+- Financial Markets
+  - Structure
+  - Trading
 
 
-## This Course
+## Course topics (2)
+- Optimal Portfolios
+- Equity pricing models
+- Debt pricing models
+- Asset manager performance evaluation
+- Taxes
 
-- Finance
-- Python
 
-## Why Study Investments?
-
-- A very intellectually interesting field.
+## Why study investments?
+- An intellectually interesting field.
 - A potentially lucrative field.
 - Every one of us will (or maybe have already) face savings problems where we need an understanding of investments.
-- Rice University faces this problem.  
-
-## Why Python?
-
-- Python is open-source, so you'll be able to use it without cost down the road in your careers.
-
-- Python allows us to study data and models that would be cumbersome to evaluate in Excel.
-
-## This Course
-
-A mix of theory, data, and practice.
-
-## The course website
-
-Some of the course will use the BBCX investments library.
-
-The pages demonstrate the tools we will be using.
-
-- Can be used to solve problems.
-- Should be used to help understand concepts and develop intuition.
-
-## {background-iframe="http://bbcx-investments.com" background-interactive="True"}
-
-
-## The textbook
-
-- My colleagues and I are writing a bespoke textbook for this and other courses we teach.  It is available at:
-http://mi.bbcx-investments.com/.
-
-
-- If you want to diversify your reading list (and have time to spare!), the syllabus also provides relevant readings in a traditional Investments textbook by Bodie, Kane, and Marcus.
-
-
-
-## Python resources
-
-- I use both Jupyter notebooks (.ipynb) and the Spyder IDE to run Python files (.py), depending on what I'm working on.
-
-- You are welcome to install Python on your machines and run everything yourself.
-
-- Alternatively, you can use Python notebooks at mybinder.org to work with Python.
-
-- In general, I will not be troubleshooting Python
-
-
-## Python is useful for fetching data
-
-- Stock price data (Yahoo Finance)
-
-- Macroeconomic data (FRED)
-
-- Investments data (Ken French Data Library)
-
-
-
-## Python is useful for data analysis
-
-- Summarizing data
-
-- Data visualization
-
-
-## mybinder site
-
-
-## Navigating a notebook
-
-- ctrl + enter
-- esc + a
-- esc + b
-- Delete a cell: \t esc + dd
-
-
-
-
-
-
-
-
+- Rice University itself faces this problem!  
+  - [Rice Management Company](https://investments.rice.edu/)
 
 
 
 ## Why study expected returns?
 
+**Compounding**: twice the rate turns into much more than twice the money if invested over enough time!
+
 ```{python}
 #| echo: false
 import plotly.graph_objects as go
@@ -123,76 +59,14 @@ import numpy as np
 
 trace1= go.Scatter(
     x=np.arange(31), 
-    y=1.08**np.arange(31),
+    y=10000*1.08**np.arange(31),
     mode="lines",
     name="8%"
 )
 
 trace2 = go.Scatter(
     x=np.arange(31), 
-    y=1.04**np.arange(31),
-    mode="lines",
-    name="4%"
-)
-
-fig = go.Figure()
-fig.add_trace(trace1)
-fig.add_trace(trace2)
-string = "year %{x}<br>balance = $%{y:.2f}<extra></extra>"
-fig.update_traces(hovertemplate=string)
-fig.update_layout(
-    template="none",
-    xaxis_title="Year",
-    yaxis_title="Account Balance",
-    yaxis_tickprefix="$", 
-    yaxis_tickformat=",.0f",
-    legend=dict(
-        yanchor="top", 
-        y=0.99, 
-        xanchor="left", 
-        x=0.01
-        )
-)
-fig.show()
-```
-
-## Some python
-``` p
-import numpy_financial as npf
-
-r   = 0.04
-nper= 30
-pmt = 0
-pv  = 1
-
-fv = npf.fv(r, nper, -pmt, -pv)
-print(f'${fv:0.2f}')
-
-```
-
-## What about saving every period?
-
-- Let's assume we want to save $10,000 every year.
-- Our initial balance is zero.
-- How much would we have in 30 years?
-
-## Annuity
-```{python}
-#| echo: false
-import plotly.graph_objects as go
-import numpy as np
-import numpy_financial as npf
-
-trace1= go.Scatter(
-    x=np.arange(31), 
-    y=np.array([npf.fv(0.08,n,-10000,0) for n in np.arange(31)]),
-    mode="lines",
-    name="8%"
-)
-
-trace2 = go.Scatter(
-    x=np.arange(31), 
-    y=np.array([npf.fv(0.04,n,-10000,0) for n in np.arange(31)]),
+    y=10000*1.04**np.arange(31),
     mode="lines",
     name="4%"
 )
@@ -219,8 +93,166 @@ fig.show()
 ```
 
 
+## BBCX website
+Some of the course will use the [BBCX investments library](http://bbcx-investments.com).
+
+. . . 
+
+The pages demonstrate many concepts we will cover.
+
+- Can be used to solve problems.
+- Should be used to help understand concepts and develop intuition.
+
+
+## {background-iframe="http://bbcx-investments.com" background-interactive="True"}
+
+
+## Textbooks
+- My colleagues and I are writing a bespoke textbook for this and other courses we teach.  
+- A working version is available [here](http://mi.bbcx-investments.com/)
+- Recommended readings also available in the syllabus from Investments text by Bodie, Kane, and Marcus.
+
+
+## Some tools we'll develop
+- Analyzing data
+  - basic summarization
+  - regression analysis
+- Constrained optimization
+- Monte carlo analysis (simulation)
+
+. . . 
+
+We will use Python as our toolkit.
+
+
+## Our toolkit: Python
+Why python?
+
+- Python is open-source, so you'll be able to use it without cost down the road in your careers.
+- Python allows us to study data and models that would be cumbersome to evaluate in Excel.
+
+
+## Python resources
+- I use both Jupyter notebooks (.ipynb) and the Spyder IDE to run Python files (.py), depending on what I'm working on.
+- We will use Jupyter notebooks to run Python at mybinder.org.
+- Alternatively, you are welcome to install Python on your machines and run everything yourself.
+  - In general, I will not be troubleshooting Python installations
+- Good python reference: [Python for Data Analysis](https://wesmckinney.com/book/)
+
+
+## Course binder
+- In class calculations will be done through mybinder.org.
+- [Course binder link](https://mybinder.org/v2/gh/kpcrotty/busi448_binder/HEAD)
+- We will start out today with straight-forward finance concepts to get on the same page.
 
 
 
 
+# Bond Pricing
+
+## Quick review
+
+Bond pricing inputs:
+
+- CR: annual coupon rate
+- YTM: annual yield to maturity
+- NOP: payments per year (also # of compounding periods)
+- PRINCIPAL: face value of the bond (amt borrowed)
+- MATURITY: time-to-maturity (either in periods or years)
+
+. . . 
+
+What does the timeline of bond CFs look like?
+
+
+## Bond pricing function
+
+Zero coupon bond:
+$$ P = \frac{FACE}{(1+YTM)^T} $$
+
+Annual coupon bond:
+$$ P = \sum_{t=1}^T\frac{COUPON}{(1+YTM)^T} + \frac{FACE}{(1+YTM)^T} $$
+
+- YTM: rate that sets the price of the bond equal to PV(future CFs)
+
+
+
+## Bond pricing function
+
+**Bond prices move inversely with yield!**
+
+``` {python}
+#| echo: false
+import numpy as np
+import pandas as pd
+import numpy_financial as npf
+import plotly.graph_objects as go
+
+def bondpv(cr,ytm,nop,ttm, principal):
+    ''' 
+    Inputs:
+        cr:             coupon rate (per year, in decimal)
+        ytm:            yield-to-maturity (per year, in decimal)
+        nop:            number of payments per year
+        ttm:            time-to-maturity (in periods)
+        principal:      face value
+    Outputs:
+        p:              bond price
+    '''
+    dr = ytm/nop
+    c = cr/nop*principal
+    p = -npf.pv(dr,ttm,c,principal)
+    return p
+
+# Inputs
+CR = 0.06           # annual coupon rate
+YTM= 0.05           # annual yield to maturity
+NOP= 2              # payments per year
+TTM_PERIODS = 30    # time to maturity (in periods)
+PRINCIPAL = 100     # face value of the bond
+
+
+# Calculate bond prices for a range of yields
+yields = np.arange(0.005,0.125,0.005)
+prices = [bondpv(CR,y,NOP,TTM_PERIODS,PRINCIPAL) for y in yields]
+
+df = pd.DataFrame(prices,index=yields)
+df.columns = ['price']
+df.index.name='ytm'
+
+# Plot the data
+trace= go.Scatter(x=df.index, y=df.price, mode='lines')
+
+fig = go.Figure()
+fig.add_trace(trace)
+fig.update_xaxes(title='Yield',tickformat=".2%")
+fig.update_yaxes(title='Price',tickformat=".2f")
+# fig.update_layout(title='Bond Pricing')
+fig.show()
+
+```
+
+## Bond pricing - multiple payments per year
+
+$$ P = \sum_{t=1}^T\frac{C}{(1+DR)^T} + \frac{FACE}{(1+DR)^T} $$
+where:
+
+- $DR = \frac{YTM}{NOP}=$ periodic discount rate
+- $C = \frac{CR\cdot FACE}{NOP}=$ periodic coupon paymnet ($)
+- $T=MATURITY \cdot NOP=$ total number of payments (compounding periods)
+
+## Pricing a Bond in Python
+3 methods:
+
+- Write out and discount each cash flow
+- Use `npf.pv` function 
+  - custom function to take annual inputs
+- Use analytical annuity formula $$ P = \frac{C}{DR} \left(1 - \frac{1}{(1+DR)^T} \right) + \frac{FACE}{(1+DR)^T}$$
+
+
+## For next time: Saving for Retirement
+
+<br><br><br><br>
+
+![](RiceLogo.png){fig-align="center"}
 
