@@ -19,15 +19,13 @@ execute:
 jupyter: python3
 ---
 
-# Saving for retirement
-
 ## Where are we?
 **Last time**:
 
 ::: {.nonincremental}
-- Capital Allocation: Risk-free + Risky
-- Preferences over risk and return
-- Optimal portfolios
+- Course intro
+- Bond pricing
+- Basic Jupyter notebook
 :::
 
 . . . 
@@ -35,20 +33,21 @@ jupyter: python3
 **Today**:
 
 ::: {.nonincremental}
-- Borrowing frictions
-- Short-sales constraints
+- Saving for retirement
+- Real and nominal cash flows and rates
 :::
 
+# Saving for retirement
 
-
-
-## What about saving every period?
+## Future value of annuity savings
 
 - Let's assume we want to save $10,000 every year.
 - Our initial balance is zero.
 - How much would we have in 30 years?
+  - For 8% rate?
+  - for 4% rate?
 
-## Annuity
+## Future value of annuity savings
 ```{python}
 #| echo: false
 import plotly.graph_objects as go
@@ -90,8 +89,89 @@ fig.update_layout(
 fig.show()
 ```
 
+## Two ways to tackle this problem
+
+- Write out series of cash flows and compound
+- Use `npf.fv` function 
+  - `npf.fv(rate, n_periods, -pmt, -pv)`
+- Let's try both in today's [notebook](https://mybinder.org/v2/gh/kpcrotty/busi448_binder/HEAD)
 
 
-# Real and Nominal Cash Flows
+## The savings/retirement problem
 
-##
+
+- Suppose we'd like to withdraw $100,000 in each year of a 20-year retirement
+- We'll save for 30 years
+- Assume a rate of 5%.
+
+. . .
+
+**If we save a constant amount each year for 30 years, how much money will we need to invest each year?**
+
+. . . 
+
+A useful function: `npf.pmt`
+
+
+
+# Saving for retirement with inflation
+## Saving for retirement with inflation
+- Now assume we consume a constant **real** amount in retirement
+  - our standard of living will be unchanged each year
+- Can finance with constant nominal or real saving
+- Assume a nominal rate of 5% and inflation of 2% each year
+
+. . .
+
+**Q1: How much do we need to save each year if saving a constant real amount?**
+
+. . . 
+
+**Q2: How much do we need to save each year if saving a constant nominal amount?**
+
+
+## Real and Nominal Cash Flows
+
+What is the relationship between real and nominal cash flows at a point in time $t$?
+
+. . . 
+
+$$ \text{Nominal CF}_t = \text{Real CF}_t \cdot (1+\text{inflation})^t. $$
+
+. . .
+
+What does the above look like?
+
+## Real and Nominal Discount Rates
+
+What is the relationship between real and nominal rates?
+
+. . .
+
+$$ 1+ \text{nominal rate} = (1+\text{real rate})(1+\text{inflation}).$$
+
+- Nominal cash flows are discounted/compounded using nominal rates.
+- Real cash flows are discounted/compounded using real rates.
+
+
+# Uncertain returns
+
+## Simulating random returns
+
+We can easily simulate random returns in Python
+
+``` {.python}
+from scipy.stats import norm
+norm.rvs(loc=0.03, scale=0.1, size=50)
+```
+
+- What does the distribution of ending balances look like if we save $32,000 for 30 years (in real terms) and withdraw $100,000 for 20 years? (both in real terms)
+  - Assume real returns are normally distributed with mean of 3% and standard deviation of 10%.
+- How often do we run out of money?!?
+
+
+## For next time: Returns, returns, and more returns...
+
+<br><br><br><br>
+
+![](RiceLogo.png){fig-align="center"}
