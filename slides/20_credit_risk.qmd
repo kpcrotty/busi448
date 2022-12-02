@@ -1,5 +1,5 @@
 ---
-title: 'Asset Managers'
+title: 'Credit Risk'
 author: "<br>Kevin Crotty<br>BUSI 448: Investments"
 format: 
     revealjs:
@@ -20,3 +20,18 @@ jupyter: python3
 ---
 
 
+
+
+## YTM versus Expected Returns
+
+**For a risky bond, YTM $\neq$ expected return!**
+
+- YTM is the IRR of a bond based on **promised** cash flows.
+   - IRR's based on other CFs can exist (yield-to-call)
+![](../images/corp_bond_tree.png)
+
+. . .
+
+$$E[r] = (1-p_{\text{default}})\cdot YTM + p_{\text{default}}\cdot r_{\text{default}}.$$
+
+**YTM overestimates expected returns for risky bonds.**

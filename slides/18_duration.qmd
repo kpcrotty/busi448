@@ -20,16 +20,6 @@ jupyter: python3
 ---
 
 
-## Yield to Maturity refresher
-$$ P = \frac{CF_1}{(1+y)}+\frac{CF_2}{(1+y)^2}+...+\frac{CF_T}{(1+y)^T} $$ 
-
-For bonds, the cash flows are usually fixed coupon payments, so this reduces to:
-
-$$ P = \frac{C}{(1+y)}+\frac{C}{(1+y)^2}+...+\frac{C}{(1+y)^T}+\frac{FACE}{(1+y)^T}$$
-
-where $C$ is the coupon payment of the bond and $y$ is the bond's yield-to-maturity.
-
-
 ## Fixed Income Risks
 
 - Interest rate risk
@@ -41,20 +31,18 @@ where $C$ is the coupon payment of the bond and $y$ is the bond's yield-to-matur
   - Credit default swaps
 - Reinvestment risk
 
+## Bond pricing refresher
+$$ P = \frac{CF_1}{(1+y/m)}+\frac{CF_2}{(1+y/m)^2}+...+\frac{CF_T}{(1+y/m)^T} $$ 
+- $m$: number of payments per year
+- $y/m$: per period yield (i.e., the discount rate)
 
-## YTM versus Expected Returns
-
-**For a risky bond, YTM $\neq$ expected return!**
-
-- YTM is the IRR of a bond based on **promised** cash flows.
-   - IRR's based on other CFs can exist (yield-to-call)
-![](../images/corp_bond_tree.png)
 
 . . .
 
-$$E[r] = (1-p_{\text{default}})\cdot YTM + p_{\text{default}}\cdot r_{\text{default}}.$$
+For bonds, the cash flows are usually fixed coupon payments, so this reduces to:
+$$ P = \frac{C}{(1+y/m)}+\frac{C}{(1+y/m)^2}+...+\frac{C+FACE}{(1+y/m)^T}$$
+where $C$ is the coupon payment of the bond.
 
-**YTM overestimates expected returns for risky bonds.**
 
 ## Duration defined {.smaller}
 
