@@ -1,5 +1,5 @@
 ---
-title: 'Asset Classes'
+title: 'Asset Classes: Bonds'
 author: "<br>Kevin Crotty<br>BUSI 448: Investments"
 format: 
     revealjs:
@@ -19,53 +19,97 @@ execute:
 jupyter: python3
 ---
 
-## Asset Classes
 
-- Equity markets
+## Where are we?
+**Last time**:
 
-- Fixed income markets
+::: {.nonincremental}
+- Asset Classes: Equities
+:::
 
-- Money markets
+. . . 
+
+**Today**:
+
+::: {.nonincremental}
+- Asset Classes: Bonds
+- Term Structure
+- Spot Rates
+:::
+
+
+# Money markets
 
 ## Money markets
 
-- The market for short-term borrowing, usually a year or less
-- Generally large denomination ($\ge$ $1 million)
+- Markets for short-term borrowing, usually a year or less
+- Sometimes large denomination ($\ge$ $1 million)
 - Commonly 3 months or less
 
 . . . 
 
 We will focus on: 
+
 - Treasury Bills
 - Repos
 - Commercial Paper
-- Money Market Mutual Funds
-- Shadow Banking System
+<!-- - Money Market Mutual Funds
+- Shadow Banking System -->
+
+## Participants (1)
+
+- Commercial banks
+  - borrow to fun loan portfolios + satisfy reserve reqs
+  - dealers in OTC interest rate derivatives
+- Corporations
+  - commercial paper
+  - banker's acceptance
+- Gov'ts (federal, state, municipal) + GSEs
+  - Treasury bills
+
+## Participants (2)
+- Federal Reserve
+  - buy/sell Tbills in open-market operations
+  - discount windo and rate affects federal funds rate (interbank lending)
+- Brokers + dealers
+  - dealers use repos to finance inventory
+  - brokers match buyers + sellers (for commission)
+- MM mutual funds
+  - buy money market instruments on behalf of fund investors
 
 ## Treasury Bills
 
 - Short-term borrowing by the US Government
 - Maturity of 1 year or less (1, 3, 6, 12 months)
-- Usually issued as discount securities
+- Usually issued as **discount securities**
 - Default risk-free 
 - Extremely liquid – can convert to cash at low cost/quickly
 - Taxes – exempt from state and local income taxes
-- Small denomination – can purchase in $100 increments from Treasury Direct
+- Small denomination – can purchase in $100 increments from [Treasury Direct](https://www.treasurydirect.gov/)
 
 ## Historical yields
 
-## {background-iframe="https://fred.stlouisfed.org/series/TB3MS" background-interactive="True"}
+- can pull data from FRED at St. Louis Fed
+- [3-month Tbill series](https://fred.stlouisfed.org/series/TB3MS)
+
+. . .
+
+``` {.python}
+import pandas as pd
+from pandas_datareader import DataReader as pdr
+y3mo = pdr("TB3MS", "fred", start="1929-12-01")
+```
+
+<!-- ## {background-iframe="https://fred.stlouisfed.org/series/TB3MS" background-interactive="True"} -->
 
 
 
-
-## Repurchase agreements
-
-
+# Fixed income markets
 
 ## Fixed income markets
 
 We will focus on: 
+
 - Treasury notes and bonds
 - Corporate bonds
 
