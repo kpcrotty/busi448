@@ -23,12 +23,14 @@ import numpy
 Jupyter notebook tips
 
 `ctrl` + `enter`: Run current cell
-`Esc`: Exit current cell
-`Esc` + `m`: make current cell a markdown cell
+`esc`: Exit current cell
+`esc` + `m`: make current cell a markdown cell
+`esc` + `y`: make current cell a code cell
 `ctrl` + `shift` + `_`: Split current cell in two
 `esc` + `a`: add cell above
 `esc` + `b`: add cell below
-
+`ctrl` + `/`: comment (in VS Code)
+`esc` + `dd`: delete current cell
 
 
 In code:

@@ -468,6 +468,7 @@ fig.show()
 
 - Correlations
 
+
 ## The Error-Maximization Problem
 
 Mean-variance portfolio optimization: \
@@ -479,7 +480,233 @@ Mean-variance portfolio optimization: \
 - May try to short assets with diversification benefits lower than true benefits $(\widehat{\text{cov}}_{ij}>\text{cov}_{ij})$
 
 
-## Strategies For Dealing with Estimation Error
+
+<!--                       -->
+<!-- ESTIMATING PARAMETERS -->
+<!--                       -->
+
+# Estimating parameters 
+
+- Using past samples to estimate means, standard deviations, and correlations is hazardous.
+- Especially if there are many assets.
+- Need long (stationary) time series of returns
+- And/or some models.  Models limit the degrees of freedom and can help avoid overfitting.
+- And/or some "penalization" -- constraints, etc.
+
+
+## Sampling distributions
+
+- Suppose returns $r_{1},\cdots,r_{T}$ are independent draws from a normal $N(\mu,\sigma^2)$ distribution. 
+- Let $m =$ sample mean and $s =$ sample std dev 
+
+<br>
+
+. . . 
+
+From stats, we know:
+
+- $m$ is distributed normal: $N(\mu,\sigma^2/n)$
+- $\frac{(n-1)s^2}{\sigma^2}$ is distributed chi-squared: $\chi^2(n-1)$.
+
+
+## Confidence Intervals
+
+- Example: $T=25$, $m=0.12$, $s=0.30$.
+- The estimated std dev (std error) of $\bar{r}$ is $0.30/\sqrt{25}=0.06$.
+- A $95\%$ confidence interval for $\mu$ is 
+
+. . .
+
+$$0.12 ± 1.96 \times 0.06 = [0.013,0.227]$$
+- A similarly wide confidence interval for $\sigma$ is implied by the $\chi^2$ distribution. 
+
+##
+
+- We can sample more frequently to get better estimates of standard deviations and correlations.
+- But it doesn't help for means.
+- The problems with standard deviations and correlations are
+  - Std devs vary over time (turbulent and calm markets).
+  - Correlations also increase in turbulent markets.
+  - There are too many correlations: $n(n-1)/2$.
+
+## Sampling frequency
+
+- Can we sample prices more frequently to get better estimates?
+- If we sample monthly, weekly, $\ldots$ then we have more data points, so estimates are more accurate.
+- Higher frequency is better for standard deviations, correlations, covariances, and betas.
+- However, we lose the accuracy gains for the mean when we convert to annual terms.
+- Let's see a simulation to show this.
+
+## Simulation 
+
+To illustrate effect of sampling frequency,
+
+- Simulate 5,000 25-year histories of monthly returns. 
+- Compound monthly returns to get annual returns.
+- Compute sampling distributions (across 5,000 samples) of monthly and annual statistics.
+
+## Simulation code
+. . .
+
+``` {.p code-line-numbers=1-4|5-9|11-15|17-19|20-26}
+import numpy as np
+import pandas as pd
+from scipy.stats import norm
+
+NSIMS = 5000
+YRS = 50
+
+# monthly parameters
+MU, SIGMA = 0.01, 0.3/np.sqrt(12)  
+
+# Draw random returns and put in dataframe
+mrets = norm.rvs(loc=MU, scale=SIGMA, size=12*YRS*NSIMS)
+idx = pd.MultiIndex.from_product([np.arange(NSIMS), np.arange(YRS), np.arange(12)])
+df  = pd.DataFrame(data=mrets,columns=['ret'],index=idx)
+df.index.names = ['sim','yr','month']
+
+# Summarize monthly returns within each simulation
+mmeans = 12*df.groupby('sim').mean()
+msds   = np.sqrt(12)*df.groupby('sim').std()
+
+# Annualize returns
+arets = (1+df.ret).groupby(['sim','yr']).prod()-1
+
+# Summarize annual returns within each simulation
+ameans = arets.groupby('sim').mean()
+asds   = arets.groupby('sim').std()
+
+```
+
+## Means -- sampling monthly doesn't help
+
+. . .
+
+
+```{python}
+import numpy as np
+import pandas as pd
+from scipy.stats import norm
+from scipy.stats import gaussian_kde as kde
+import plotly.graph_objects as go
+
+NSIMS = 5000
+YRS = 50
+
+# monthly parameters
+MU, SIGMA = 0.01, 0.3/np.sqrt(12)  
+
+# Draw random returns and put in dataframe
+mrets = norm.rvs(loc=MU, scale=SIGMA, size=12*YRS*NSIMS)
+idx = pd.MultiIndex.from_product([np.arange(NSIMS), np.arange(YRS), np.arange(12)])
+df  = pd.DataFrame(data=mrets,columns=['ret'],index=idx)
+df.index.names = ['sim','yr','month']
+
+# Summarize monthly returns within each simulation
+mmeans = 12*df.groupby('sim').mean()
+msds   = np.sqrt(12)*df.groupby('sim').std()
+
+# Annualize returns
+arets = (1+df.ret).groupby(['sim','yr']).prod()-1
+
+# Summarize annual returns within each simulation
+ameans = arets.groupby('sim').mean()
+asds   = arets.groupby('sim').std()
+
+
+ameans = ameans.values
+mmeans = mmeans.ret.values
+
+adensity = kde(ameans)
+mdensity = kde(mmeans)
+grid = np.linspace(np.min(ameans), np.max(ameans), 100)
+trace1 = go.Scatter(
+  x=grid,
+  y=adensity(grid),
+  mode="lines",
+  name="annual"
+)
+grid = np.linspace(np.min(mmeans), np.max(mmeans), 100)
+trace2 = go.Scatter(
+  x=grid,
+  y=mdensity(grid),
+  mode="lines",
+  name="12*monthly"
+)
+fig = go.Figure(trace1)
+fig.add_trace(trace2)
+fig.add_vline(x=MU*12, line_width=2, line_dash="dash", line_color="black")
+fig.update_layout(
+    xaxis_title="Sample Mean",
+    yaxis_title="Density",
+    xaxis_tickformat=".0%",
+    yaxis_tickformat=".0f",
+    xaxis_title_font_size=24,
+    yaxis_title_font_size=24,
+    font_size=20,
+    width=1000,
+    height=520,
+     legend=dict(
+        yanchor="top", 
+        y=0.99, 
+        xanchor="right", 
+        x=0.99
+    ),
+)
+fig.show()
+```
+
+## Standard deviations - monthly is better
+
+. . .
+
+```{python}
+asds = asds.values
+msds = msds.ret.values
+
+adensity = kde(asds)
+mdensity = kde(msds)
+grid = np.linspace(np.min(asds), np.max(asds), 100)
+trace1 = go.Scatter(
+  x=grid,
+  y=adensity(grid),
+  mode="lines",
+  name="annual"
+)
+grid = np.linspace(np.min(msds), np.max(msds), 100)
+trace2 = go.Scatter(
+  x=grid,
+  y=mdensity(grid),
+  mode="lines",
+  name="sqrt(12)*monthly"
+)
+fig = go.Figure(trace1)
+fig.add_trace(trace2)
+fig.add_vline(x=SIGMA*np.sqrt(12), line_width=2, line_dash="dash", line_color="black")
+fig.update_layout(
+    xaxis_title="Sample Standard Deviation",
+    yaxis_title="Density",
+    xaxis_tickformat=".0%",
+    yaxis_tickformat=".0f",
+    xaxis_title_font_size=24,
+    yaxis_title_font_size=24,
+    font_size=20,
+    width=1000,
+    height=520,
+     legend=dict(
+        yanchor="top", 
+        y=0.99, 
+        xanchor="right", 
+        x=0.99
+    ),
+)
+fig.show()
+```
+
+
+
+
+# Strategies For Dealing with Estimation Error
 
 #### Shrinkage \
 &emsp; Shrink extreme inputs toward some more moderate input 
