@@ -14,7 +14,7 @@ format:
             width: wide
             numbers: true             
 execute:
-    echo: true
+    echo: false
     freeze: auto
 jupyter: python3
 ---
@@ -31,7 +31,15 @@ jupyter: python3
 
 . . . 
 
-Today, we'll focus on stock markets.
+Today, we'll focus on some empirical facts about the stock market.
+
+## Some empirical facts for today
+
+- Over long horizons, average returns in the US stock market have been exceeded those of bonds.
+- Stock returns are risky; that is, volatile.
+- Stock return distributions are fat-tailed and negatively skewed.
+- Past aggregate returns do **not** predict future aggregate returns.
+- Volatility is time-varying and persistent.
 
 
 <!--                       -->
@@ -40,75 +48,99 @@ Today, we'll focus on stock markets.
 
 ## Stock Market Indices
 
-- SPY
+- S&P Indices
+  - 500, Midcap 400, Smallcap 600
+  - value-weighted index
 - Dow Jones
+  - price-weighted index
 - Russell
-- FTSE
-
+  - 1000 + 2000 $\rightarrow$ 3000
+- MSCI int'l indices
+- FTSE, DAX, Hang Seng, etc.
 
 <!--                       -->
 <!-- ANNUAL RETURNS        -->
 <!--                       -->
 # Annual Returns
-## Annual SPY returns
-
-SPY = S&P 500 Exchange Traded Fund (ETF)
-
-<br>
-
-. . .
+## Time-series
 
 ```{python}
+import pandas as pd
+import numpy as np
 from pandas_datareader import DataReader as pdr
 import plotly.graph_objects as go
-import numpy as np
-spy = pdr('SPY', 'yahoo', start=1990)['Adj Close']
-spy = spy.resample('Y').last()
-spy = spy.pct_change().dropna()
-spy.index = spy.index.to_period('Y').astype(str)
-spy = spy.reset_index()
-spy.columns = ['date', 'ret']
-trace = go.Scatter(
-    x=spy.date,
-    y=spy.ret,
-        hovertemplate="%{x}<br>%{y:.1%}<extra></extra>",
-    name="",
-    )
-fig = go.Figure(trace)
+
+# Monthly returns
+mrets = pdr('F-F_Research_Data_Factors','famafrench', start=1900)[0]/100
+# Clean-up missings
+for c in mrets.columns:
+    mrets[c] = np.where(mrets[c]==-99.99, np.nan, mrets[c])
+mmkt = mrets['Mkt-RF'] + mrets['RF']
+
+# Daily returns
+drets = pdr('F-F_Research_Data_Factors_daily','famafrench', start=1900)[0]/100
+drets.index = drets.index.to_period('D')
+# Clean-up missings
+for c in drets.columns:
+    drets[c] = np.where(drets[c]==-99.99, np.nan, drets[c])
+dmkt = drets['Mkt-RF'] + drets['RF']
+
+# Annual returns
+amkt = (1+mmkt).resample('Y').prod()-1
+amkt.index = amkt.index.astype(str)
+amkt = amkt.reset_index()
+amkt.columns = ['year','ret']
+
+# Plot annual returns
+fig = go.Figure()
+trace= go.Scatter(x=amkt.year, y=amkt.ret)
+fig.add_trace(trace)
+# some formatting
+fig.update_traces(marker_line_width=1, marker_line_color='black')
 fig.update_layout(
-    template="plotly_dark",
-    xaxis_title="",
-    yaxis_title="",
-    yaxis_tickformat=".0%",
-    width=1000,
-    height=460,
-  )
-fig.update_xaxes(title_font_size=24)
-fig.update_yaxes(title_font_size=24)
-fig.update_layout(font_size=20)
+    xaxis_title="Year",
+    yaxis_title="Return",
+    yaxis_tickformat=".0%"
+)
+fig.show()
+```
+
+
+## Distribution
+
+```{python}
+# Plot the distribution of annual returns
+fig = go.Figure()
+trace= go.Histogram(x=amkt.ret, histnorm='percent',hovertemplate="<br>%{y:.2}% of years <br><extra></extra>")
+fig.add_trace(trace)
+# some formatting
+fig.update_traces(marker_line_width=1, marker_line_color='black')
+fig.update_layout(
+    xaxis_title="Annual Market Return",
+    yaxis_title="Percent of Years",
+    xaxis_tickformat=".0%"
+)
 fig.show()
 ```
 
 
 
-##  Compounded SPY returns
-
-. . .
+##  Compounded return
 
 ```{python}
-compound = (1+spy.ret).cumprod()
+# Plot compound return
+compound = (1+amkt.ret).cumprod()
 trace = go.Scatter(
-    x=spy.date,
+    x=amkt.year,
     y=compound,
         hovertemplate="%{x}<br>$%{y:.2f}<extra></extra>",
     name="",
     )
 fig = go.Figure(trace)
 fig.update_layout(
-    template="plotly_dark",
     xaxis_title="",
     yaxis_title="Accumulation from $1",
-    yaxis_tickformat=".0f",
+    yaxis_tickformat=",.0f",
     width=1000,
     height=460,
     legend=dict(
@@ -123,8 +155,6 @@ fig.update_yaxes(title_font_size=24)
 fig.update_layout(font_size=20)
 fig.show()
 ```
-
-<br>
 
 value of $1 investment with dividends reinvested
 
@@ -161,7 +191,6 @@ fig.add_trace(trace2)
 string = "year %{x}<br>accum = %{y:.2f}"
 fig.update_traces(hovertemplate=string)
 fig.update_layout(
-    template="plotly_dark",
     xaxis_title="",
     yaxis_title="Accumulation",
     xaxis_title_font_size=24,
@@ -205,7 +234,6 @@ fig.add_trace(trace2)
 string = "year %{x}<br>log = %{y:.2f}"
 fig.update_traces(hovertemplate=string)
 fig.update_layout(
-    template="plotly_dark",
     xaxis_title="",
     yaxis_title="Log of Accumulation",
     xaxis_title_font_size=24,
@@ -249,7 +277,6 @@ fig.add_trace(trace2)
 string = "year %{x}<br>$%{y:.2f}"
 fig.update_traces(hovertemplate=string)
 fig.update_layout(
-    template="plotly_dark",
     xaxis_title="",
     yaxis_title="Accumulation",
     xaxis_title_font_size=24,
@@ -275,117 +302,94 @@ fig.show()
 ```
 
 
-##  Compounded SPY returns on log scale
+##  Compounded market returns on log scale
 
 ```{python}
+# Plot compound return (log scale)
+compound = (1+amkt.ret).cumprod()
 trace = go.Scatter(
-    x=spy.date,
+    x=amkt.year,
     y=compound,
         hovertemplate="%{x}<br>$%{y:.2f}<extra></extra>",
     name="",
     )
 fig = go.Figure(trace)
 fig.update_layout(
-    template="plotly_dark",
     xaxis_title="",
     yaxis_title="Accumulation from $1",
-    xaxis_title_font_size=24,
-    yaxis_title_font_size=24,
-    font_size=20,
-    yaxis_tickformat=".0f",
-    yaxis_type="log",
+    yaxis_tickformat=",.0f",
     width=1000,
     height=460,
+    legend=dict(
+        yanchor="top", 
+        y=0.99, 
+        xanchor="right", 
+        x=0.99
+    ),
+    yaxis_type="log",
     yaxis = dict(
         tickmode = 'array',
-        tickvals = [2, 5, 10, 16],
-    )
+        tickvals = [2, 5, 10, 50, 100, 500, 2500, 10000],
+    )    
   )
+fig.update_xaxes(title_font_size=24)
+fig.update_yaxes(title_font_size=24)
+fig.update_layout(font_size=20)
 fig.show()
 ```
-
-<br>
 
 value of $1 investment with dividends reinvested
 
 
-## Box Plot
+## {background-iframe="https://bbcx-investments.com/risk/returns" background-interactive="True"}
 
-- Box contains 25th percentile through 75th percentile.
 
-- Median is indicated as a line in the box.
-- Fences extend 1.5 times inter-quartile range from 25th and 75th percentiles or to the most extreme observation if that is closer to the box. 
-    - inter-quartile range = 75th minus 25th percentile
-- Points outside the fences are outliers. 
-    - If you simulate data from a normal distribution, there will typically be very few points outside the fences.
+## Does last year's return predict this year's?
 
-## Box and density plots of annual SPY returns 
+- How would we test this?
+- Autocorrelation is the correlation of a time series with its own lagged values.
+- Autocorrelation at lag 1 tells us whether the current value predicts the next one. $$ r_t = a + \rho \cdot r_{t-1} + \varepsilon_t $$
+- What should be true of $\rho$?
 
-::: {.panel-tabset}
-
-## Density plot
-
+## Does last year's return predict this year's?
 ```{python}
-from scipy.stats import norm
-from scipy.stats import gaussian_kde as kde
-density = kde(spy.ret)
-grid = np.linspace(np.min(spy.ret), np.max(spy.ret), 100)
-trace1 = go.Scatter(
-  x=grid,
-  y=density(grid),
-  mode="lines",
-  name="actual"
-)
-trace2 = go.Scatter(
-  x=grid, 
-  y=norm.pdf(grid, np.mean(spy.ret), scale=np.std(spy.ret)), 
-  mode="lines", 
-  name="normal"
-)
+import statsmodels.formula.api as smf
+amkt['lag'] = amkt['ret'].shift()
+amkt = amkt.dropna().copy()
+result = smf.ols("ret ~ lag", data=amkt).fit()
+amkt['predict'] = result.params['Intercept'] + result.params['lag']*amkt.lag
+# print(result.summary())
+
+# scatter plot + regression line
 fig = go.Figure()
+trace1 = go.Scatter(
+  x=amkt.lag,
+  y=amkt.ret,
+  text=amkt.year,
+  mode="markers",
+  hovertemplate="%{text}<extra></extra>",
+  showlegend=False,
+  marker=dict(size=10)
+)
 fig.add_trace(trace1)
+
+trace2 = go.Scatter(
+  x=amkt.lag,
+  y=amkt.predict,
+  mode="lines",
+  name="regression line",
+)
 fig.add_trace(trace2)
 fig.update_layout(
-    template="plotly_dark",
-    xaxis_title="Annual Return",
-    yaxis_title="",
-    xaxis_title_font_size=24,
+    xaxis_title="Lagged Return",
+    yaxis_title="Return",
     yaxis_title_font_size=24,
+    xaxis_title_font_size=24,
     font_size=20,
     xaxis_tickformat=".0%",
-    yaxis_tickformat="",
-    width=1000,
-    height=360,
-     legend=dict(
-        yanchor="top", 
-        y=0.99, 
-        xanchor="left", 
-        x=0.01
-    ),
-)
-fig.show()
-```
-Normal distribution has same mean and std dev as actual.
-<br>x-axis range is minimum to maximum return.
-
-## Box plot
-```{python}
-trace = go.Box(
-    x=spy.ret,
-    text=spy.date,
-    hovertemplate="%{text}<extra></extra>",
-    name="",
-    )
-fig = go.Figure(trace)
-fig.update_layout(
-    template="plotly_dark",
-    yaxis_title="",
-    xaxis_title="Annual Return",
-    xaxis_title_font_size=24,
-    yaxis_title_font_size=24,
-    font_size=20,
-    xaxis_tickformat=".0%",
-    yaxis_tickformat="",
+    yaxis_tickformat=".0%",
+    xaxis_rangemode="tozero",
+    yaxis_rangemode="tozero",
     width=1000,
     height=500,
 )
@@ -393,314 +397,409 @@ fig.show()
 ```
 
 
-:::
+
+
+<!--                       -->
+<!-- MONTHLY RETURNS        -->
+<!--                       -->
+# Monthly Returns
+## Time-series
+
+```{python}
+mmkt.index = mmkt.index.astype(str)
+mmkt = mmkt.reset_index()
+mmkt.columns = ['month','ret']
+
+# Plot monthly time-series
+fig = go.Figure()
+trace= go.Scatter(x=mmkt.month, y=mmkt.ret)
+fig.add_trace(trace)
+fig.update_traces(marker_line_width=1, marker_line_color='black')
+fig.update_layout(
+    xaxis_title="Month",
+    yaxis_title="Return",
+    yaxis_tickformat=".0%"
+)
+fig.show()
+```
+
+
+## Distribution
+
+```{python}
+# Plot the distribution of monthly returns
+fig = go.Figure()
+trace= go.Histogram(x=mmkt.ret, histnorm='percent',hovertemplate="<br>%{y:.2}% of months <br><extra></extra>")
+fig.add_trace(trace)
+fig.update_traces(marker_line_width=1, marker_line_color='black')
+fig.update_layout(
+    xaxis_title="Monthly Market Return",
+    yaxis_title="Percent of Months",
+    xaxis_tickformat=".0%"
+)
+fig.show()
+```
 
 
 
-## {background-iframe="https://bbcx-investments.com/risk/returns" background-interactive="True"}
+##  Empirical vs. normal distribution
+
+```{python}
+from scipy.stats import norm
+from scipy.stats import gaussian_kde as kde
+
+# Density of actual returns
+grid = np.linspace(np.min(mmkt.ret), np.max(mmkt.ret), 400)
+empirical_density = kde(mmkt.ret)
+trace1 = go.Scatter(x=grid,y=empirical_density(grid), mode="lines", name="actual")
+
+# normal density with same mean and SD
+m = mmkt.ret.mean()
+s = mmkt.ret.std()
+normal_density = norm.pdf(grid, loc=m, scale=s)
+trace2= go.Scatter(x=grid, y=normal_density, mode='lines',name='normal')
+
+fig = go.Figure()
+fig.add_trace(trace1)
+fig.add_trace(trace2)
+fig.update_traces(marker_line_width=1, marker_line_color='black')
+fig.update_layout(
+    xaxis_title="Monthly Market Return",
+    yaxis_title="Density",
+    xaxis_tickformat=".0%"
+)
+fig.show()
+```
+
+
+
+## Does last month's return predict this month's?
+
+```{python}
+mmkt['lag'] = mmkt['ret'].shift()
+mmkt = mmkt.dropna().copy()
+result = smf.ols("ret ~ lag", data=mmkt).fit()
+mmkt['predict'] = result.params['Intercept'] + result.params['lag']*mmkt.lag
+
+# scatter plot + regression line
+fig = go.Figure()
+trace1 = go.Scatter(
+  x=mmkt.lag,
+  y=mmkt.ret,
+  text=mmkt.month,
+  mode="markers",
+  hovertemplate="%{text}<extra></extra>",
+  showlegend=False,
+  marker=dict(size=10)
+)
+fig.add_trace(trace1)
+
+trace2 = go.Scatter(
+  x=mmkt.lag,
+  y=mmkt.predict,
+  mode="lines",
+  name="regression line",
+)
+fig.add_trace(trace2)
+fig.update_layout(
+    xaxis_title="Lagged Return",
+    yaxis_title="Return",
+    yaxis_title_font_size=24,
+    xaxis_title_font_size=24,
+    font_size=20,
+    xaxis_tickformat=".0%",
+    yaxis_tickformat=".0%",
+    xaxis_rangemode="tozero",
+    yaxis_rangemode="tozero",
+    width=1000,
+    height=500,
+)
+fig.show()
+```
 
 ## Autocorrelations
-
-- Autocorrelation is the correlation of a time series with its own lagged values.
-- Autocorrelation at lag 1 tells us whether the current value predicts the next one.
-- For monthly data, autocorrelation might be high at lag 12 (seasonality).
-
-## Autocorrelations of annual SPY returns
-
-. . 
 
 ```{python}
 from statsmodels.graphics.tsaplots import plot_acf
 import matplotlib.pyplot as plt
 plt.style.use('classic')
 plt.rcParams.update({'font.size': 26})
-fig = plot_acf(spy.ret)
+fig = plot_acf(mmkt.ret)
 plt.xlabel("Year")
+plt.ylabel("Autocorrelation")
+plt.title("")
+_ = fig.set_size_inches(20,10)
+```
+
+- For monthly data, autocorrelation might be high at lag 12 (seasonality).
+
+<!--                       -->
+<!-- DAILY RETURNS         -->
+<!--                       -->
+# Daily Returns
+## Daily market returns
+
+. . .
+
+```{python}
+dmkt.index = dmkt.index.astype(str)
+dmkt = dmkt.reset_index()
+dmkt.columns = ['date','ret']
+
+# Plot time-series
+fig = go.Figure()
+trace= go.Scatter(x=dmkt.date, y=dmkt.ret)
+fig.add_trace(trace)
+fig.update_traces(marker_line_width=1, marker_line_color='black')
+fig.update_layout(
+    xaxis_title="Year",
+    yaxis_title="Return",
+    yaxis_tickformat=".0%"
+)
+fig.show()
+```
+
+
+## Empirical vs. normal distribution
+
+```{python}
+from scipy.stats import norm
+from scipy.stats import gaussian_kde as kde
+
+# Density of actual returns
+grid = np.linspace(np.min(dmkt.ret), np.max(dmkt.ret), 400)
+empirical_density = kde(dmkt.ret)
+trace1 = go.Scatter(x=grid,y=empirical_density(grid), mode="lines", name="actual")
+
+# normal density with same mean and SD
+m = dmkt.ret.mean()
+s = dmkt.ret.std()
+normal_density = norm.pdf(grid, loc=m, scale=s)
+trace2= go.Scatter(x=grid, y=normal_density, mode='lines',name='normal')
+
+fig = go.Figure()
+fig.add_trace(trace1)
+fig.add_trace(trace2)
+fig.update_traces(marker_line_width=1, marker_line_color='black')
+fig.update_layout(
+    xaxis_title="Daily Market Return",
+    yaxis_title="Density",
+    xaxis_tickformat=".0%"
+)
+fig.show()
+```
+Normal distribution has same mean and std dev as actual.<br>x-axis range is minimum to maximum return.
+
+
+## {background-iframe="https://bbcx-investments.com/risk/frequencies" background-interactive="True"}
+
+## Does today's return predict tomorrow's?
+. . .
+
+```{python}
+dmkt['lag'] = dmkt['ret'].shift()
+dmkt = dmkt.dropna().copy()
+result = smf.ols("ret ~ lag", data=dmkt).fit()
+dmkt['predict'] = result.params['Intercept'] + result.params['lag']*dmkt.lag
+
+# scatter plot + regression line
+fig = go.Figure()
+trace1 = go.Scatter(
+  x=dmkt.lag,
+  y=dmkt.ret,
+  text=dmkt.date,
+  mode="markers",
+  hovertemplate="%{text}<extra></extra>",
+  showlegend=False,
+  marker=dict(size=10)
+)
+fig.add_trace(trace1)
+
+trace2 = go.Scatter(
+  x=dmkt.lag,
+  y=dmkt.predict,
+  mode="lines",
+  name="regression line",
+)
+fig.add_trace(trace2)
+fig.update_layout(
+    xaxis_title="Lagged Return",
+    yaxis_title="Return",
+    yaxis_title_font_size=24,
+    xaxis_title_font_size=24,
+    font_size=20,
+    xaxis_tickformat=".0%",
+    yaxis_tickformat=".0%",
+    xaxis_rangemode="tozero",
+    yaxis_rangemode="tozero",
+    width=1000,
+    height=500,
+)
+fig.show()
+```
+
+No, the autocorrelation is almost zero.
+
+## Autocorrelations of daily market returns
+
+. . .
+
+```{python}
+from statsmodels.graphics.tsaplots import plot_acf
+import matplotlib.pyplot as plt
+plt.style.use('classic')
+plt.rcParams.update({'font.size': 26})
+fig = plot_acf(dmkt.ret)
+plt.xlabel("Day")
 plt.ylabel("Autocorrelation")
 plt.title("")
 _ = fig.set_size_inches(18,9)
 ```
 
 
-## Does last year's return predict this year's?
-
-. . .
-
-```{python}
-import statsmodels.formula.api as smf
-spy['lag'] = spy.ret.shift()
-spy = spy.dropna()
-trace = go.Scatter(
-  x=spy.lag,
-  y=spy.ret,
-  text=spy.date,
-  mode="markers",
-  hovertemplate="%{text}<extra></extra>",
-  showlegend=False,
-  marker=dict(size=15)
-)
-fig = go.Figure(trace)
-result = smf.ols("ret ~ lag", data=spy).fit()
-predict = result.params['Intercept'] + result.params['lag']*spy.lag
-trace = go.Scatter(
-  x=spy.lag,
-  y=predict,
-  mode="lines",
-  name="regression line",
-)
-fig.add_trace(trace)
-fig.update_layout(
-    template="plotly_dark",
-    xaxis_title="Lagged Return",
-    yaxis_title="Return",
-    xaxis_title_font_size=24,
-    yaxis_title_font_size=24,
-    font_size=20,
-    xaxis_tickformat=".0%",
-    yaxis_tickformat=".0%",
-    width=1000,
-    height=520,
-)
-fig.show()
-```
-No, the autocorrelation is almost zero.
 
 
+# Volatility
+
+## Measuring volatility
+
+1. Monthly series of SD(daily returns)
+
+2. Daily series of absolute value of returns
 
 
-
-
-<!--                       -->
-<!-- DAILY RETURNS         -->
-<!--                       -->
-# Daily Returns
-
-## Daily SPY returns
-
-. . .
+## Time-series of monthly volatility
 
 ```{python}
-from pandas_datareader import DataReader as pdr
-import plotly.graph_objects as go
-import numpy as np
-spy = pdr('SPY', 'yahoo', start=1990)['Adj Close']
-spy = spy.pct_change().dropna()
-spy.index = spy.index.astype(str)
-spy = spy.reset_index()
-spy.columns = ['date', 'ret']
-trace = go.Scatter(
-    x=spy.date,
-    y=spy.ret,
-        hovertemplate="%{x}<br>%{y:.1%}<extra></extra>",
-    name="",
-    )
-fig = go.Figure(trace)
-fig.update_layout(
-    template="plotly_dark",
-    xaxis_title="",
-    yaxis_title="",
-    yaxis_title_font_size=24,
-    xaxis_title_font_size=24,
-    font_size=20,
-    yaxis_tickformat=".0%",
-    width=1000,
-    height=500,
-  )
-fig.show()
-```
+dmkt['DATE']=pd.to_datetime(dmkt['date'])
+dmkt['month'] = dmkt.DATE.dt.to_period('M')
+volatility = dmkt.groupby('month')['ret'].std()
+volatility.index = volatility.index.astype(str)
+volatility = volatility.reset_index()
+volatility.columns=['month','sd_dret']
+volatility
 
-
-## Box and density plots of daily SPY returns 
-
-::: {.panel-tabset}
-
-## Density plot
-
-```{python}
-from scipy.stats import norm
-from scipy.stats import gaussian_kde as kde
-density = kde(spy.ret)
-grid = np.linspace(np.min(spy.ret), np.max(spy.ret), 100)
-trace1 = go.Scatter(
-  x=grid,
-  y=density(grid),
-  mode="lines",
-  name="actual"
-)
-trace2 = go.Scatter(
-  x=grid, 
-  y=norm.pdf(grid, loc=np.mean(spy.ret), scale=np.std(spy.ret)), 
-  mode="lines", 
-  name="normal"
-)
+# Plot monthly time-series
 fig = go.Figure()
-fig.add_trace(trace1)
-fig.add_trace(trace2)
-fig.update_layout(
-    template="plotly_dark",
-    xaxis_title="Daily Return",
-    yaxis_title="",
-    yaxis_title_font_size=24,
-    xaxis_title_font_size=24,
-    font_size=20,
-    xaxis_tickformat=".0%",
-    yaxis_tickformat="",
-    width=1000,
-    height=360,
-     legend=dict(
-        yanchor="top", 
-        y=0.99, 
-        xanchor="right", 
-        x=0.99
-    ),
-)
-fig.show()
-```
-Normal distribution has same mean and std dev as actual.<br>x-axis range is minimum to maximum return.
-
-## Box plot
-
-```{python}
-#| panel: input
-#| layout-ncol: 2
-trace = go.Box(
-    x=spy.ret,
-    text=spy.date,
-    hovertemplate="%{text}<extra></extra>",
-    name="",
-    )
-fig = go.Figure(trace)
-fig.update_layout(
-    template="plotly_dark",
-    xaxis_title="Daily Return",
-    yaxis_title="",
-    yaxis_title_font_size=24,
-    xaxis_title_font_size=24,
-    font_size=20,
-    xaxis_tickformat=".0%",
-    yaxis_tickformat="",
-    width=980,
-    height=440,
-)
-fig.show()
-```
-
-:::
-
-
-
-## {background-iframe="https://bbcx-investments.com/risk/frequency" background-interactive="True"}
-
-
-## Autocorrelations of daily SPY returns
-
-. . .
-
-```{python}
-from statsmodels.graphics.tsaplots import plot_acf
-import matplotlib.pyplot as plt
-plt.style.use('classic')
-plt.rcParams.update({'font.size': 26})
-fig = plot_acf(spy.ret)
-fig.set_size_inches(18,9)
-plt.xlabel("Year")
-plt.ylabel("Autocorrelation")
-_ = plt.title("")
-```
-
-
-## Does today's return predict tomorrow's?
-
-. . .
-
-```{python}
-import statsmodels.formula.api as smf
-spy['lag'] = spy.ret.shift()
-spy = spy.dropna()
-trace = go.Scatter(
-  x=spy.lag,
-  y=spy.ret,
-  text=spy.date,
-  mode="markers",
-  hovertemplate="%{text}<extra></extra>",
-  showlegend=False,
-)
-fig = go.Figure(trace)
-result = smf.ols("ret ~ lag", data=spy).fit()
-predict = result.params['Intercept'] + result.params['lag']*spy.lag
-trace = go.Scatter(
-  x=spy.lag,
-  y=predict,
-  mode="lines",
-  name="regression line"
-)
+trace= go.Scatter(x=volatility.month, y=volatility.sd_dret)
 fig.add_trace(trace)
+fig.update_traces(marker_line_width=1, marker_line_color='black')
 fig.update_layout(
-    template="plotly_dark",
-    xaxis_title="Lagged Return",
-    yaxis_title="Return",
-    yaxis_title_font_size=24,
-    xaxis_title_font_size=24,
-    font_size=20,
-    xaxis_tickformat=".0%",
-    yaxis_tickformat=".0%",
-    width=1000,
-    height=500,
+    xaxis_title="Month",
+    yaxis_title="Volatility",
+    yaxis_tickformat=".0%"
 )
 fig.show()
 ```
 
-No, the autocorrelation is almost zero.
-
-## Autocorrelations of absolute returns
-
-Absolute returns are a measure of volatility.
-. . .
+## Does last month's SD(ret) predict this month's?
 
 ```{python}
-plt.style.use('classic')
-plt.rcParams.update({'font.size': 26})
-fig = plot_acf(spy.ret.abs())
-fig.set_size_inches(18,9)
-plt.xlabel("Year")
-plt.ylabel("Autocorrelation")
-_ = plt.title("")
-```
+volatility['lag'] = volatility['sd_dret'].shift()
+volatility = volatility.dropna()
+result = smf.ols("sd_dret ~ lag", data=volatility).fit()
+volatility['predict'] = result.params['Intercept'] + result.params['lag']*volatility.lag
 
-
-## Does today's absolute return predict tomorrow's?
-
-. . .
-
-```{python}
-import plotly.io as pio
-plotly_template = pio.templates["plotly_dark"]
-colors = plotly_template.layout.colorway
-blue = colors[0]
-spy['absret'] = spy.ret.abs()
-spy['abslag'] = spy.lag.abs()
-trace = go.Scatter(
-  x=spy.abslag,
-  y=spy.absret,
-  text=spy.date,
+# scatter plot + regression line
+fig = go.Figure()
+trace1 = go.Scatter(
+  x=volatility.lag,
+  y=volatility.sd_dret,
+  text=volatility.month,
   mode="markers",
   hovertemplate="%{text}<extra></extra>",
   showlegend=False,
   marker=dict(size=10)
 )
-fig = go.Figure(trace)
-result = smf.ols("absret ~ abslag", data=spy).fit()
-spy['predict'] = result.params['Intercept'] + result.params['abslag']*spy.abslag
-spy = spy.sort_values(by="abslag")
-trace = go.Scatter(
-  x=spy.abslag,
-  y=spy.predict,
+fig.add_trace(trace1)
+
+trace2 = go.Scatter(
+  x=volatility.lag,
+  y=volatility.predict,
   mode="lines",
   name="regression line",
 )
-fig.add_trace(trace)
+fig.add_trace(trace2)
 fig.update_layout(
-    template="plotly_dark",
+    xaxis_title="Lagged Volatility",
+    yaxis_title="Volatility",
+    yaxis_title_font_size=24,
+    xaxis_title_font_size=24,
+    font_size=20,
+    xaxis_tickformat=".0%",
+    yaxis_tickformat=".0%",
+    xaxis_rangemode="tozero",
+    yaxis_rangemode="tozero",
+    width=1000,
+    height=500,
+)
+fig.show()
+```
+
+
+
+## Autocorrelations of monthly volatility
+
+```{python}
+fig = plot_acf(volatility.sd_dret)
+plt.xlabel("Month")
+plt.ylabel("Autocorrelation")
+plt.title("")
+_ = fig.set_size_inches(18,9)
+```
+
+
+
+
+## Time-series of daily absolute return
+
+```{python}
+row1990 = dmkt[dmkt.date=='1990-01-02'].index[0]
+dmkt1990 = dmkt.iloc[row1990:].copy()
+dmkt1990['abs_ret'] = np.abs(dmkt1990.ret)
+
+# Plot daily time-series
+fig = go.Figure()
+trace= go.Scatter(x=dmkt1990.date, y=dmkt1990.abs_ret)
+fig.add_trace(trace)
+fig.update_traces(marker_line_width=1, marker_line_color='black')
+fig.update_layout(
+    xaxis_title="Date",
+    yaxis_title="Volatility",
+    yaxis_tickformat=".0%"
+)
+fig.show()
+```
+
+## Does yesterday's abs(ret) predict today's?
+
+```{python}
+dmkt1990['lag'] = dmkt1990['abs_ret'].shift()
+dmkt1990 = dmkt1990.dropna()
+result = smf.ols("abs_ret ~ lag", data=dmkt1990).fit()
+dmkt1990['predict'] = result.params['Intercept'] + result.params['lag']*dmkt1990.lag
+
+# scatter plot + regression line
+fig = go.Figure()
+trace1 = go.Scatter(
+  x=dmkt1990.lag,
+  y=dmkt1990.abs_ret,
+  text=dmkt.date,
+  mode="markers",
+  hovertemplate="%{text}<extra></extra>",
+  showlegend=False,
+  marker=dict(size=10)
+)
+fig.add_trace(trace1)
+
+trace2 = go.Scatter(
+  x=dmkt1990.lag,
+  y=dmkt1990.predict,
+  mode="lines",
+  name="regression line",
+)
+fig.add_trace(trace2)
+fig.update_layout(
     xaxis_title="Lagged Absolute Return",
     yaxis_title="Absolute Return",
     yaxis_title_font_size=24,
@@ -715,7 +814,19 @@ fig.update_layout(
 )
 fig.show()
 ```
-Yes, volatility is persistent.
+
+
+
+## Autocorrelations of daily absolute return
+
+```{python}
+fig = plot_acf(dmkt1990.abs_ret)
+plt.xlabel("Day")
+plt.ylabel("Autocorrelation")
+plt.title("")
+_ = fig.set_size_inches(18,9)
+```
+
 
 
 
@@ -739,86 +850,100 @@ Yes, volatility is persistent.
 ## {background-iframe="http://bbcx-investments.com/risk/best-worst" background-interactive="True"}
 
 
-## Simulate returns
+## Saving with risky returns 
 
+- Let's revisit our savings problem with **uncertain** returns
 - Mean and std dev of U.S. market return 1970-2021 was 12.5% and 17.4%.
 - Simulate 20-year compounded returns.
+- On average, what would $1 turn into?
+- What is the median amount $1 turns into?
 
-. . .
 
-```{.p code-line-numbers="1-5|7|8"}
-import numpy as np
-mn = 0.125
-sd = 0.174
-nyears = 20
-r = np.random.normal(loc=mn, scale=sd, size=nyears)
-comp_ret = np.prod(1+r)
+## Monte Carlo Analysis: simulate returns
+
+```{.p code-line-numbers="1-4|6-17"}
+from scipy.stats import norm
+MEAN, SD = 0.125, 0.174
+N_SAVING = 20
+PMT, PV  = 0.0, 1.0
+
+def endbal(mean, sd, n_saving, pmt):
+    acct = pd.DataFrame(dtype=float,columns=['begbal','return','capgain','deposit','endbal'],index=np.arange(1,N_SAVING+1))
+    acct.deposit = PMT
+    acct['return'] = norm.rvs(loc=MEAN,scale=SD, size=N_SAVING)
+    for t in acct.index:
+        if t==1:
+            acct.loc[t,'begbal'] = PV
+        else:
+            acct.loc[t,'begbal'] = acct.loc[t-1,'endbal']
+        acct.loc[t,'capgain'] = acct.loc[t,'begbal']*acct.loc[t,'return']
+        acct.loc[t,'endbal'] = acct.loc[t,'begbal'] + acct.loc[t,'capgain'] + acct.loc[t,'deposit']
+    return acct.loc[N_SAVING,'endbal']
 ```
 
-## Repeat and evaluate the distribution
+
+## Monte Carlo Analysis: simulate returns
 
 . . .
 
 
-```{.p code-line-numbers="1|3-4|5"}
-nsims = 1000
-r = np.random.normal(loc=mn, scale=sd, size=nyears*nsims)
-r = r.reshape((nyears, nsims))
-comp_ret = np.prod(1+r, axis=0)
+```{.p code-line-numbers="1-5|7-9"}
+NSIMS    = 1000
+df = pd.DataFrame(dtype=float,columns=['endbal'], index=np.arange(NSIMS))
+for s in df.index:
+    df.loc[s,'endbal']=endbal(MEAN,SD,N_SAVING,PMT)
+df.describe()
+
+# More pythonic code
+data = [endbal(MEAN,SD,N_SAVING,PMT) for s in np.arange(NSIMS)]
+df = pd.DataFrame(data, columns=['endbal'])
 ```
 
-. . .
-
-
-:::: columns
-
-::: column 
+## Distribution
 
 ```{python}
-import numpy as np
-import plotly.graph_objects as go
-mn = 0.125
-sd = 0.174
-nsims = 1000
-r = np.random.normal(loc=mn, scale=sd, size=30*nsims)
-r = r.reshape((30,1000))
-comp_ret = np.prod(1+r, axis=0)
-trace = go.Box(
-  y=comp_ret,
-  name="",
-  hovertemplate="%{text}<extra></extra>",
-)
-fig = go.Figure(trace)
+from scipy.stats import norm
+MEAN, SD = 0.125, 0.174
+N_SAVING = 20
+PMT, PV  = 0.0, 1.0
+NSIMS    = 1000
+
+# function to capture ending balance
+def endbal(mean, sd, n_saving, pmt):
+    acct = pd.DataFrame(dtype=float,columns=['begbal','return','capgain','deposit','endbal'],index=np.arange(1,N_SAVING+1))
+    acct.deposit = PMT
+    acct['return'] = norm.rvs(loc=MEAN,scale=SD, size=N_SAVING)
+    for t in acct.index:
+        if t==1:
+            acct.loc[t,'begbal'] = PV
+        else:
+            acct.loc[t,'begbal'] = acct.loc[t-1,'endbal']
+        acct.loc[t,'capgain'] = acct.loc[t,'begbal']*acct.loc[t,'return']
+        acct.loc[t,'endbal'] = acct.loc[t,'begbal'] + acct.loc[t,'capgain'] + acct.loc[t,'deposit']
+
+    pd.options.display.float_format = '{:,.2f}'.format
+    endbal = acct.loc[N_SAVING,'endbal']
+    return endbal
+
+
+df = pd.DataFrame(dtype=float,columns=['endbal'], index=np.arange(NSIMS))
+for s in df.index:
+    df.loc[s,'endbal']=endbal(MEAN,SD,N_SAVING,PMT)
+
+# Plot the distribution of annual returns
+fig = go.Figure()
+trace= go.Histogram(x=df.endbal, histnorm='percent',hovertemplate="<br>%{y:.2}% of simulations <br><extra></extra>")
+fig.add_trace(trace)
+fig.update_traces(marker_line_width=1, marker_line_color='black')
 fig.update_layout(
-    template="plotly_dark",
-    yaxis_title="Accumulation from $1",
-    xaxis_title="",
-    yaxis_title_font_size=20,
-    xaxis_title_font_size=20,
-    font_size=16,
-    yaxis_tickprefix="$",
-    yaxis_tickformat=".0f",
-    xaxis_tickformat="",
-    height=360,
-    width=500
+    xaxis_title="Ending Balance",
+    yaxis_title="Percent of Years",
+    xaxis_tickformat="$,.0f"
 )
-fig.show()
+fig.show()    
 ```
 
 :::
-
-::: column
-
-
-```{python}
-import pandas as pd
-comp_ret = pd.Series(comp_ret)
-table = comp_ret.describe(percentiles=[0.1,0.25,0.5,0.75,0.9])
-print(table.iloc[1:].round(2))
-```
-:::
-
-::::
 
 ## Retirement Planning Simulation
 
@@ -831,3 +956,9 @@ Uncertainty about long-run returns $\Rightarrow$ uncertainty about retirement pl
 
 
 
+
+# For next time: Fixed Income Markets
+
+<br><br><br><br>
+
+![](RiceLogo.png){fig-align="center"}
