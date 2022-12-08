@@ -24,7 +24,7 @@ jupyter: python3
 **Last time**:
 
 ::: {.nonincremental}
-- Asset Classes: Equities
+- Empirical facts about equities
 :::
 
 . . . 
@@ -32,13 +32,498 @@ jupyter: python3
 **Today**:
 
 ::: {.nonincremental}
-- Asset Classes: Bonds
-- Term Structure
-- Spot Rates
+- Treasury market basics
+- Term structure
+- Spot rates
+- Arbitrage
 :::
 
 
-# Money markets
+# Treasury Securities
+
+## Bills
+
+- Bills 
+  - Maturity of 1 year or less (1, 3, 6, 12 months)
+  - Usually issued as **discount** securities
+  - Taxes – exempt from state and local income taxes
+  - Small denomination – can purchase in $100 increments from [Treasury Direct](https://www.treasurydirect.gov/)
+
+
+## Bonds and Notes
+- Notes
+  - Maturity between 2 years and 10 years (2, 3, 5, 7, 10 years)
+  - Coupon securities (semiannual)
+- Bonds
+  - Maturity greater than 10 years (20, 30 years)
+  - Coupon securities
+
+## TIPS and STRIPS
+
+- Treasury inflation protection securities (TIPS)
+  - Principal is indexed to consumer price index
+  - Maturities of 5, 10, 30 years
+
+- STRIPS (Separate Trading of Registered Interest and Principal Securities)
+  - Allows individual component of Treasuries to be traded
+  - Improves liquidity for zero-coupon Treasury markets
+
+## Historical yields
+
+- can pull data from FRED at St. Louis Fed
+- [3-month Tbill series](https://fred.stlouisfed.org/series/TB3MS)
+
+. . .
+
+``` {.python}
+import pandas as pd
+from pandas_datareader import DataReader as pdr
+y3mo = pdr("TB3MS", "fred", start="1929-12-01")
+```
+
+
+# Treasury Curve
+## Term structure of rates
+
+- Interest rates (yields) of different maturity bonds are generally different
+  - For instance,  10-year bond may have a different yield than a 2-year note
+- The **yield curve** is the plot of yields as a function of time to maturity
+- The **term structure of rates** is the relation between yields and maturity
+
+. . .
+
+Key aspects
+
+1. Level
+2. Slope
+3. Curvature
+
+## Historical Yield Curves 
+
+``` {python}
+#| echo: false
+import pandas as pd
+import numpy as np
+from pandas_datareader import DataReader as pdr
+import plotly.graph_objects as go
+
+tseries = ['DGS'+x for x in ['1MO','3MO','1','2','3','5','10','20','30']]
+df = pdr(tseries, "fred", start="1929-12-01")
+# Convert to monthly and keep last
+df = df.reset_index()
+df['month'] = df.DATE.dt.to_period('M')
+df = df.groupby('month').last()
+
+ttms = [0.0833, 0.25, 1, 2, 3, 5, 10, 20, 30]
+months = ['1983-07', '1992-10', '2000-08', '2020-02', ]
+fig = go.Figure()
+for m in months:
+    yields = df.loc[m, tseries]
+    yields.index = ttms
+    yields=yields.dropna()
+    trace= go.Scatter(
+                    x=yields.index, 
+                    y=yields, 
+                    hovertemplate="<br>" + str(m) +"<br>%{x:.2f} year bond <br>%{y:.1f}%<extra></extra>",
+                    mode="lines+markers", 
+                    name=m)
+    fig.add_trace(trace)
+fig.update_yaxes(title='Yield (%)',tickformat=".0f")
+fig.update_xaxes(title='Maturity', tickformat=".0f")
+fig.show()
+```
+
+
+## {background-iframe="http://bbcx-investments.com/fixed-income/termstructure" background-interactive="True"}
+
+
+## Time-series of yields
+``` {python}
+#| echo: false
+# Pull recession data
+rec = pdr("USREC", "fred", start="1935-12-01")
+starts = rec[(rec.USREC==1) & (rec.USREC.shift()==0)]
+ends   = rec[(rec.USREC==1) & (rec.USREC.shift(-1)==0)]
+dates = pd.merge(starts.reset_index()['DATE'], ends.reset_index()['DATE'],left_index=True,right_index=True )
+dates.columns=['start','end']
+dates.start =dates.start.dt.to_period('M')
+dates.end   =dates.end.dt.to_period('M')
+
+# Create list of dictionaries for shading
+def dict_creator(start,end):
+    d = dict(
+            type="rect",
+            xref="x",
+            yref="paper",
+            x0=str(start),
+            y0=0,
+            x1=str(end),
+            y1=1,
+            fillcolor="DarkGray",
+            opacity=0.5,
+            layer="below",
+            line_width=0,
+        )
+    return d
+dict_list = [dict_creator(dates.loc[i,'start'], dates.loc[i,'end']) for i in dates.index]
+
+# Plot time-series
+fig = go.Figure()
+series_to_plot = ['DGS3MO','DGS1','DGS10']
+
+trace1= go.Scatter(x=df.index.astype(str), y=df['DGS1'], mode="lines", name='1-yr Treasury',
+                hovertemplate="1-yr Treasury<br>%{x}: %{y:.1f}%<extra></extra>")
+fig.add_trace(trace1)
+
+trace10= go.Scatter(x=df.index.astype(str), y=df['DGS10'], mode="lines", name='10-yr Treasury',
+                hovertemplate="10-yr Treasury<br>%{x}: %{y:.1f}%<extra></extra>")
+fig.add_trace(trace10)
+
+fig.update_yaxes(title='Yield (%)',tickformat=".0f")
+fig.update_xaxes(title='Date')
+fig.update_layout(xaxis_range=[str(min(df.index)),str(max(df.index))])
+fig.update_layout(legend=dict(yanchor="top", y =0.99, xanchor="left", x=0.6))
+# add nber recession indicators
+fig.update_layout(shapes=dict_list)
+fig.show()
+```
+
+- Shaded regions are NBER recessions
+- What do you notice prior to recessions?
+
+
+
+# Some fixed income empirical facts
+
+## Size
+
+- [SIFMA link](https://www.sifma.org/resources/research/fixed-income-chart/)
+
+## {background-iframe="http://bbcx-investments.com/risk/sbb" background-interactive="True"}
+
+
+## {background-iframe="http://bbcx-investments.com/risk/asset-classes" background-interactive="True"}
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Spot rate curve
+## Spot rates
+
+- **Spot rates** are the discount rates asscoiated with CFs of a particular maturity.
+
+. . . 
+
+Two methods to get them:
+
+- Use zero-coupon bonds (i.e., Tbills or STRIPS)
+- Bootstrap them from coupon bonds
+
+
+## Bond pricing revisited 
+
+If $z_1$, $z_2$, ..., $z_T$ are maturity-specific riskless spot rates, then the bond price is:
+
+$$ P(\mathbf{z}) = \frac{C/m}{(1+z_1)} + \frac{C/m}{(1+z_2)^2} + ... + \frac{C+FACE}{(1+z_T)^T} $$
+
+$$ P(\mathbf{z}) = \sum_{t=1}^T\frac{C/m}{(1+z_t)^t} + \frac{FACE}{(1+z_T)^T} $$
+
+where 
+
+::: {.nonincremental}
+
+- $C/m$ is the periodic coupon payment
+- $m$ is the compounding periods per year
+- $T$ is the total number of payments (# years $\cdot m$)
+
+:::
+
+## Spot rates from zero-coupon bonds
+
+- A zero-coupon bond pays no coupons $$ P(z_t) =\frac{FACE}{(1+z_t)^t}$$
+- Using traded prices, we can solve for $z_t$ $$z_t = \left(\frac{Face}{P(z_t)}\right)^{1/t}-1$$
+
+## Spot rates from coupon bonds
+
+- **Bootstrapping**: method of extracting spot rates from coupon bond prices.
+- Iterative procedure – first solve for $z_1$, then $z_2$ using $z_1$, etc.
+
+- To get spot rate $z_t$, we must know $z_1$,$z_2$, ..., $z_{t-1}$ and use the formula $$z_t = \left(\frac{CF_t}{PV(CF_t)}\right)^{1/t}-1$$
+
+- $PV(CF_t) = P_t - \sum_{i=1}^{t-1} \frac{CF_i}{(1+z_i)^i}$
+- $P_t$ is the price of the coupon bond maturing at time $t$.
+
+<!-- - The "trick" is converting a coupon bond into a zero-coupon bond. -->
+## Example
+
+<table border="1">
+  <!-- Row 0 -->
+  <tr> 
+    <td style="text-align:center">**Bond**</td>
+    <td style="text-align:center">Price</td>
+    <td style="text-align:center">Coupon Rate </td>
+    <td style="text-align:center">Maturity</td>
+    <td style="text-align:center">Face Value</td>    
+  </tr>
+  <!-- Row 1 -->  
+  <tr> 
+    <td style="text-align:center">A</td>
+    <td style="text-align:center">97.5</td>
+    <td style="text-align:center">0%</td>
+    <td style="text-align:center">0.5</td>
+    <td style="text-align:center">100</td>        
+  </tr>
+  <!-- Row 2 -->
+  <tr> 
+    <td style="text-align:center">B</td>
+    <td style="text-align:center">95</td>
+    <td style="text-align:center">0%</td>
+    <td style="text-align:center">1.0</td>
+    <td style="text-align:center">100</td>        
+  </tr>
+  <!-- Row 3 -->
+  <tr> 
+    <td style="text-align:center">C</td>
+    <td style="text-align:center">955</td>
+    <td style="text-align:center">2.5%</td>
+    <td style="text-align:center">1.5</td>
+    <td style="text-align:center">1,000</td>        
+  </tr>
+  <!-- Row 4 -->
+  <tr> 
+    <td style="text-align:center">D</td>
+    <td style="text-align:center">1,000</td>
+    <td style="text-align:center">5.75%</td>
+    <td style="text-align:center">2 </td>
+    <td style="text-align:center">1,000</td>        
+  </tr>  
+</table>
+
+The bonds above make semiannual coupon payments and are without credit risk.
+
+1. Determine the spot rates for the four periods
+2. What is the fair price of a 2-year 10% coupon bond with a face value of $1,000 if it pays annual coupons?
+
+
+# Arbitrage and pricing
+## No-arbitrage Pricing
+
+- Arbitrage is a trade that generates positive profits in some state of the world and generates losses in **no** state of the world.
+- Bootstrapping is based on the principle of **no-arbitrage pricing**.
+  - First, assume a pricing relationship between two or more assets
+  - Second, try to construct an arbitrage from that relation
+  - If you can, then the assumed relationship cannot be true (or you should trade!)
+
+## Law of One Price
+
+- Two assets that generate the same cash flows should have the same price.
+- We can try to form a **replicating portfolio** with the same cash flows as the security we are trying to value.
+
+. . . 
+
+Example
+
+- Suppose we have a 1-year bond with cash flows of $15 in 6 months and $115 in one year that costs $125.
+- What is the spot-rate implied price of this bond?
+
+- Can we replicate the cash flows of this bond with a portfolio of A, B, C, D?
+
+## Replicating portfolio 
+
+We only need to use bonds A and B since the target bond is a one-year bond. 
+Let $x_A$ denote the amount invested in bond $A$ and $x_B$ be the amount invested in bond B.  We want to solve the following system of equations (one for each time period with payments for the 1-year target bond):
+$$ x_A \cdot A_1 + x_B \cdot B_1 = 15 $$
+$$ x_A \cdot A_2 + x_B \cdot B_2 = 115 $$
+
+
+## Replicating portfolio 
+$$ x_A \cdot 100 + x_B \cdot 0 = 15 $$
+$$ x_A \cdot 0   + x_B \cdot 100 = 115 $$
+
+Solving for $x_A$ and $x_B$:
+$$ x_A = \frac{15}{100} = 0.15$$
+$$ x_B = \frac{115}{100} = 1.15$$
+
+
+## Market price versus replicating portfolio value
+
+- The replicating portfolio has a value of $123.875
+- The actual 1-year bond price is $125.
+- Can we construct an arbitrage trade?
+
+## The arbitrage trade
+
+- Sell the (15,115) 1-year bond
+- Buy the replicating portfolio
+- For each unit of the 1-year bond:
+  - buy 0.15 of A
+  - buy 1.15 of B
+- Profit of $1.125 per $100 face in 1-year bond
+
+
+
+
+## Replication with coupon bonds
+
+- What did we do above?
+- We solved a system of equations to create a portfolio of bonds that each mature at different period in order to replicate the cash flows of our 'target' bond.
+- Can we form replicating portfolios using coupon bonds as well?
+
+. . . 
+
+YES!
+
+
+## Example (2-yr cont'd)
+
+- Suppose the price of the 2-year bond was actually $1,050.  Let's call this bond V.
+- Can we construct an arbitrage trade?
+- Again, the key is to construct a portfolio of bonds A, B, C, and D that **replicates** the CFs of the 2-year annual bond:
+
+. . .
+
+::: {.smaller}
+$$
+\begin{align*}
+x_A \cdot A_1  + x_B \cdot B_1  + x_C \cdot C_1  + x_D \cdot D_1 &= V_1 \\
+x_A \cdot A_2  + x_B \cdot B_2  + x_C \cdot C_2  + x_D \cdot D_2 &= V_2 \\
+x_A \cdot A_3  + x_B \cdot B_3  + x_C \cdot C_3  + x_D \cdot D_3 &= V_3 \\
+x_A \cdot A_4  + x_B \cdot B_4  + x_C \cdot C_4  + x_D \cdot D_4 &= V_4 
+\end{align*}
+$$
+::: 
+
+<!-- ::: {.smaller}
+$$
+\begin{matrix}
+x_A \cdot A_1 & + x_B \cdot B_1 & + x_C \cdot C_1 & + x_D \cdot D_1 &= V_1 \\
+x_A \cdot A_2 & + x_B \cdot B_2 & + x_C \cdot C_2 & + x_D \cdot D_2 &= V_2 \\
+x_A \cdot A_3 & + x_B \cdot B_3 & + x_C \cdot C_3 & + x_D \cdot D_3 &= V_3 \\
+x_A \cdot A_4 & + x_B \cdot B_4 & + x_C \cdot C_4 & + x_D \cdot D_4 &= V_4 \\
+\end{matrix}
+$$
+:::  -->
+
+
+
+
+## Plugging in the cash flows for each bond {.smaller}
+
+$$
+\begin{matrix}
+x_A \cdot 100 &+&  x_B \cdot 0   &+&  x_C \cdot 12.5 &+&  x_D \cdot 28.75 &=& 0 \\
+x_A \cdot 0   &+&  x_B \cdot 100 &+&  x_C \cdot 12.5 &+&  x_D \cdot 28.75 &=& 100 \\
+x_A \cdot 0   &+&  x_B \cdot 0   &+&  x_C \cdot 12.5 &+&  x_D \cdot 28.75 &=& 0 \\
+x_A \cdot 0   &+&  x_B \cdot 0   &+&  x_C \cdot 1012.5 &+&  x_D \cdot 1028.75 &=& 1100 \\
+\end{matrix}
+$$
+
+## Solving for the position sizes $x$
+
+- The intuition is the same as the two-period bond, but the math is more annoying.
+- Option #1: grind through the algebra
+  - what if there are more than 4 periods?!?
+- Option #2: let python solve it for us with matrices
+
+## Replicating portfolio w/ matrices 
+
+The system of equations above can be written in matrix notation as:
+
+$$ \mathbf{x} \cdot \mathbf{CF} = \mathbf{cf} $$
+
+- $\mathbf{x} = \begin{bmatrix}
+      x_A & x_B & x_C & x_D
+    \end{bmatrix}$
+
+- $\mathbf{CF} = 
+    \begin{bmatrix}
+        A_1 & A_2 & A_3  & A_4 \\
+        B_1 & B_2 & B_3  & B_4 \\
+        C_1 & C_2 & C_3  & C_4 \\
+        D_1 & D_2 & D_3  & D_4 \\
+    \end{bmatrix}$
+
+- $\mathbf{cf}=
+    \begin{bmatrix}
+      V_1 & V_2 & V_3  & V_4 \\
+    \end{bmatrix}$
+
+. . .
+
+In python, solve for $\mathbf{x}$ using `cf @ np.linalg.inv(CF)`!
+
+## Market price versus replicating portfolio value
+
+- The replicating portfolio has a value of $1,076.82
+  - look familiar?
+- The actual 2-year bond price is $1,050.
+- Can we construct an arbitrage trade?
+
+## The arbitrage trade
+
+- Buy the 2-year bond
+- Sell the replicating portfolio
+- For every unit of the 2-year bond:
+  - buy 0.304 of A
+  - sell 0.696 of B
+  - buy 0.030 of C
+  - sell 1.069 of D
+- Profit of $26.82 for each unit of 2-year bond bought
+
+# Trading
+
+## Primary markets
+
+- Treasuries sold via sealed-bid, single-price [auctions.](https://www.treasurydirect.gov/auctions/announcements-data-results/announcement-results-press-releases/treasury-marketable/)
+- Competitive bids
+  - Bidder specifies rate or yield that is acceptable
+  - Limited to 35% of the offering amount for each bidder
+- Noncompetitive bids
+  - Bidder agrees to accept rate determined at auction
+  - Limited to purchases of $5 million per auction
+- Treasury awards all noncompetitive bids and then accepts competitive bids in ascending order of their rate until the quantity of awarded bids = offering amount.
+- All bidders receive same rate as the highest accepted bid.
+
+
+## Secondary markets
+
+- The secondary market is an over-the-counter dealer market.
+- Extremely liquid market 
+- Trading occurs around the clock – New York, London, Tokyo as main centers
+- Primary dealers are the principal market makers
+- Most of the trading volume occurs in on-the-run issues (most recently issued)
+- Settlement is T+1
+
+. . . 
+
+**When-Issued Market**
+
+- issues trade prior to Treasury issuance
+- trading occurs from the day the auction is announced until the issue date
+
+
+
+
+
+# For next time: Markets and Trading
+
+<br><br><br><br>
+
+![](RiceLogo.png){fig-align="center"}
+
+
+
+
+<!-- # Money markets
 
 ## Money markets
 
@@ -53,8 +538,6 @@ We will focus on:
 - Treasury Bills
 - Repos
 - Commercial Paper
-<!-- - Money Market Mutual Funds
-- Shadow Banking System -->
 
 ## Participants (1)
 
@@ -75,52 +558,4 @@ We will focus on:
   - dealers use repos to finance inventory
   - brokers match buyers + sellers (for commission)
 - MM mutual funds
-  - buy money market instruments on behalf of fund investors
-
-## Treasury Bills
-
-- Short-term borrowing by the US Government
-- Maturity of 1 year or less (1, 3, 6, 12 months)
-- Usually issued as **discount securities**
-- Default risk-free 
-- Extremely liquid – can convert to cash at low cost/quickly
-- Taxes – exempt from state and local income taxes
-- Small denomination – can purchase in $100 increments from [Treasury Direct](https://www.treasurydirect.gov/)
-
-## Historical yields
-
-- can pull data from FRED at St. Louis Fed
-- [3-month Tbill series](https://fred.stlouisfed.org/series/TB3MS)
-
-. . .
-
-``` {.python}
-import pandas as pd
-from pandas_datareader import DataReader as pdr
-y3mo = pdr("TB3MS", "fred", start="1929-12-01")
-```
-
-<!-- ## {background-iframe="https://fred.stlouisfed.org/series/TB3MS" background-interactive="True"} -->
-
-
-
-# Fixed income markets
-
-## Fixed income markets
-
-We will focus on: 
-
-- Treasury notes and bonds
-- Corporate bonds
-
-## {background-iframe="https://www.sifma.org/resources/research/fixed-income-chart/" background-interactive="True"}
-
-
-## {background-iframe="http://bbcx-investments.com/risk/sbb" background-interactive="True"}
-
-
-## {background-iframe="http://bbcx-investments.com/risk/sbb" background-interactive="True"}
-
-
-## {background-iframe="http://bbcx-investments.com/risk/asset-classes" background-interactive="True"}
-
+  - buy money market instruments on behalf of fund investors -->

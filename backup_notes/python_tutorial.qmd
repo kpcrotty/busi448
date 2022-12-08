@@ -77,6 +77,20 @@ pd.MultiIndex.from_product(LIST of LISTS)
 - Subsetting data
 df_subset = df[(df.company_symbol==ticker) & (df.DATE==date)]
 
+## Pandas Formatting
+
+- entire dataframe
+`pd.options.display.float_format = '{:.2f}'.format`
+
+# format_mapping = {'price': '${:,.2f}'', 
+#                   'coupon_rate': '{:,.2%}'', 
+#                   'maturity': '{:,.1f}'',
+#                   'face': '${:,.0f}'',
+#                   'period': '{:,.0f}''}
+
+# for key, value in format_mapping.items():
+#     df[key] = df[key].apply(value.format)
+
 ## Working with Data
 - Fetching Data
   - pandas_datareader

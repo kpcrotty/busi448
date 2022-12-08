@@ -27,8 +27,6 @@ jupyter: python3
 
 - Fixed income markets
 
-- Money markets
-
 . . . 
 
 Today, we'll focus on some empirical facts about the stock market.
