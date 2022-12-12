@@ -1,0 +1,355 @@
+---
+title: 'Treasury Markets'
+author: "<br>Kevin Crotty<br>BUSI 448: Investments"
+format: 
+    revealjs:
+        incremental: true
+        logo: RiceLogo.png
+        footer: "BUSI 448"
+        self-contained: true
+        code-fold: true
+        theme: [default, custom.scss]
+        show-slide-number: print
+        menu: 
+            width: wide
+            numbers: true             
+execute:
+    echo: true
+    freeze: auto
+jupyter: python3
+---
+
+
+## Where are we?
+**Last time**:
+
+::: {.nonincremental}
+- Empirical facts about equities
+:::
+
+. . . 
+
+**Today**:
+
+::: {.nonincremental}
+- Treasury market basics
+- Term structure
+- Spot rates
+:::
+
+
+# Treasury Securities
+
+## Bills
+
+- Bills 
+  - Maturity of 1 year or less (1, 3, 6, 12 months)
+  - Usually issued as **discount** securities
+  - Taxes – exempt from state and local income taxes
+  - Small denomination – can purchase in $100 increments from [Treasury Direct](https://www.treasurydirect.gov/)
+
+
+## Bonds and Notes
+- Notes
+  - Maturity between 2 years and 10 years (2, 3, 5, 7, 10 years)
+  - Coupon securities (semiannual)
+- Bonds
+  - Maturity greater than 10 years (20, 30 years)
+  - Coupon securities
+
+## TIPS and STRIPS
+
+- Treasury inflation protection securities (TIPS)
+  - Principal is indexed to consumer price index
+  - Maturities of 5, 10, 30 years
+
+- STRIPS (Separate Trading of Registered Interest and Principal Securities)
+  - Allows individual component of Treasuries to be traded
+  - Improves liquidity for zero-coupon Treasury markets
+
+## Historical yields
+
+- can pull data from FRED at St. Louis Fed
+- [3-month Tbill series](https://fred.stlouisfed.org/series/TB3MS)
+
+. . .
+
+``` {.python}
+import pandas as pd
+from pandas_datareader import DataReader as pdr
+y3mo = pdr("TB3MS", "fred", start="1929-12-01")
+```
+
+
+# Treasury Curve
+## Term structure of rates
+
+- Interest rates (yields) of different maturity bonds are generally different
+  - For instance,  10-year bond may have a different yield than a 2-year note
+- The **yield curve** is the plot of yields as a function of time to maturity
+- The **term structure of rates** is the relation between yields and maturity
+
+## Key aspects of the term structure
+
+1. Level
+2. Slope
+3. Curvature
+
+## Historical Yield Curves 
+
+``` {python}
+#| echo: false
+import pandas as pd
+import numpy as np
+from pandas_datareader import DataReader as pdr
+import plotly.graph_objects as go
+
+tseries = ['DGS'+x for x in ['1MO','3MO','1','2','3','5','10','20','30']]
+df = pdr(tseries, "fred", start="1929-12-01")
+# Convert to monthly and keep last
+df = df.reset_index()
+df['month'] = df.DATE.dt.to_period('M')
+df = df.groupby('month').last()
+
+ttms = [0.0833, 0.25, 1, 2, 3, 5, 10, 20, 30]
+months = ['1983-07', '1992-10', '2000-08', '2020-02', ]
+fig = go.Figure()
+for m in months:
+    yields = df.loc[m, tseries]
+    yields.index = ttms
+    yields=yields.dropna()
+    trace= go.Scatter(
+                    x=yields.index, 
+                    y=yields, 
+                    hovertemplate="<br>" + str(m) +"<br>%{x:.2f} year bond <br>%{y:.1f}%<extra></extra>",
+                    mode="lines+markers", 
+                    name=m)
+    fig.add_trace(trace)
+fig.update_yaxes(title='Yield (%)',tickformat=".0f")
+fig.update_xaxes(title='Maturity', tickformat=".0f")
+fig.show()
+```
+
+
+## {background-iframe="http://bbcx-investments.com/fixed-income/termstructure" background-interactive="True"}
+
+
+## Time-series of yields
+``` {python}
+#| echo: false
+# Pull recession data
+rec = pdr("USREC", "fred", start="1935-12-01")
+starts = rec[(rec.USREC==1) & (rec.USREC.shift()==0)]
+ends   = rec[(rec.USREC==1) & (rec.USREC.shift(-1)==0)]
+dates = pd.merge(starts.reset_index()['DATE'], ends.reset_index()['DATE'],left_index=True,right_index=True )
+dates.columns=['start','end']
+dates.start =dates.start.dt.to_period('M')
+dates.end   =dates.end.dt.to_period('M')
+
+# Create list of dictionaries for shading
+def dict_creator(start,end):
+    d = dict(
+            type="rect",
+            xref="x",
+            yref="paper",
+            x0=str(start),
+            y0=0,
+            x1=str(end),
+            y1=1,
+            fillcolor="DarkGray",
+            opacity=0.5,
+            layer="below",
+            line_width=0,
+        )
+    return d
+dict_list = [dict_creator(dates.loc[i,'start'], dates.loc[i,'end']) for i in dates.index]
+
+# Plot time-series
+fig = go.Figure()
+series_to_plot = ['DGS3MO','DGS1','DGS10']
+
+trace1= go.Scatter(x=df.index.astype(str), y=df['DGS1'], mode="lines", name='1-yr Treasury',
+                hovertemplate="1-yr Treasury<br>%{x}: %{y:.1f}%<extra></extra>")
+fig.add_trace(trace1)
+
+trace10= go.Scatter(x=df.index.astype(str), y=df['DGS10'], mode="lines", name='10-yr Treasury',
+                hovertemplate="10-yr Treasury<br>%{x}: %{y:.1f}%<extra></extra>")
+fig.add_trace(trace10)
+
+fig.update_yaxes(title='Yield (%)',tickformat=".0f")
+fig.update_xaxes(title='Date')
+fig.update_layout(xaxis_range=[str(min(df.index)),str(max(df.index))])
+fig.update_layout(legend=dict(yanchor="top", y =0.99, xanchor="left", x=0.6))
+# add nber recession indicators
+fig.update_layout(shapes=dict_list)
+fig.show()
+```
+
+- What do you notice prior to the shaded recessions?
+
+
+
+# Some fixed income empirical facts
+
+## Size
+
+- [SIFMA link](https://www.sifma.org/resources/research/fixed-income-chart/)
+
+## {background-iframe="http://bbcx-investments.com/risk/sbb" background-interactive="True"}
+
+
+## {background-iframe="http://bbcx-investments.com/risk/asset-classes" background-interactive="True"}
+
+
+
+
+
+# Trading
+
+## Primary markets
+
+- Treasuries sold via sealed-bid, single-price [auctions.](https://www.treasurydirect.gov/auctions/announcements-data-results/announcement-results-press-releases/treasury-marketable/)
+- Competitive bids
+  - Bidder specifies rate or yield that is acceptable
+  - Limited to 35% of the offering amount for each bidder
+- Noncompetitive bids
+  - Bidder agrees to accept rate determined at auction
+  - Limited to purchases of $5 million per auction
+
+## Primary market clearing
+
+- Treasury awards all noncompetitive bids and then accepts competitive bids in ascending order of their rate until the quantity of awarded bids = offering amount.
+- All bidders receive same rate as the highest accepted bid.
+
+
+## Secondary markets
+
+- The secondary market is an over-the-counter dealer market.
+- Extremely liquid market 
+- Trading occurs around the clock – New York, London, Tokyo as main centers
+- Primary dealers are the principal market makers
+- Most of the trading volume occurs in on-the-run issues (most recently issued)
+- Settlement is T+1
+
+## When-Issued Market
+
+- issues trade prior to Treasury issuance
+- trading occurs from the day the auction is announced until the issue date
+
+
+
+
+
+
+
+
+
+
+# Spot rate curve
+## Spot rates
+
+- **Spot rates** are the discount rates associated with CFs of a particular maturity.
+
+. . . 
+
+Two methods to get them:
+
+- Use zero-coupon bonds (i.e., Tbills or STRIPS)
+- Bootstrap them from coupon bonds
+
+
+## Bond pricing revisited  {.smaller}
+
+If $z_1$, $z_2$, ..., $z_T$ are maturity-specific riskless spot rates, then the bond price is:
+
+$$ P(\mathbf{z}) = \frac{C/m}{(1+z_1)} + \frac{C/m}{(1+z_2)^2} + ... + \frac{C+FACE}{(1+z_T)^T} $$
+
+$$ P(\mathbf{z}) = \sum_{t=1}^T\frac{C/m}{(1+z_t)^t} + \frac{FACE}{(1+z_T)^T} $$
+
+where 
+
+::: {.nonincremental}
+
+- $C/m$ is the periodic coupon payment
+- $m$ is the compounding periods per year
+- $T$ is the total number of payments (# years $\cdot m$)
+
+:::
+
+## Spot rates from zero-coupon bonds
+
+- A zero-coupon bond pays no coupons $$ P(z_t) =\frac{FACE}{(1+z_t)^t}$$
+- Using traded prices, we can solve for $z_t$ $$z_t = \left(\frac{Face}{P(z_t)}\right)^{1/t}-1$$
+
+## Spot rates from coupon bonds
+
+- **Bootstrapping**: method of extracting spot rates from coupon bond prices.
+- Iterative procedure: 1st solve for $z_1$, then $z_2$ using $z_1$...
+
+- To get spot rate $z_t$, we must know $z_1$,$z_2$, ..., $z_{t-1}$: $$z_t = \left(\frac{CF_t}{PV(CF_t)}\right)^{1/t}-1$$
+
+- $PV(CF_t) = P_t - \sum_{i=1}^{t-1} \frac{CF_i}{(1+z_i)^i}$
+- $P_t$ is the price of the coupon bond maturing at time $t$.
+
+<!-- - The "trick" is converting a coupon bond into a zero-coupon bond. -->
+## Example
+
+<table border="1">
+  <!-- Row 0 -->
+  <tr> 
+    <td style="text-align:center">Bond</td>
+    <td style="text-align:center">Price</td>
+    <td style="text-align:center">Coupon Rate </td>
+    <td style="text-align:center">Maturity</td>
+    <td style="text-align:center">Face Value</td>    
+  </tr>
+  <!-- Row 1 -->  
+  <tr> 
+    <td style="text-align:center">A</td>
+    <td style="text-align:center">97.5</td>
+    <td style="text-align:center">0%</td>
+    <td style="text-align:center">0.5</td>
+    <td style="text-align:center">100</td>        
+  </tr>
+  <!-- Row 2 -->
+  <tr> 
+    <td style="text-align:center">B</td>
+    <td style="text-align:center">95</td>
+    <td style="text-align:center">0%</td>
+    <td style="text-align:center">1.0</td>
+    <td style="text-align:center">100</td>        
+  </tr>
+  <!-- Row 3 -->
+  <tr> 
+    <td style="text-align:center">C</td>
+    <td style="text-align:center">955</td>
+    <td style="text-align:center">2.5%</td>
+    <td style="text-align:center">1.5</td>
+    <td style="text-align:center">1,000</td>        
+  </tr>
+  <!-- Row 4 -->
+  <tr> 
+    <td style="text-align:center">D</td>
+    <td style="text-align:center">1,000</td>
+    <td style="text-align:center">5.75%</td>
+    <td style="text-align:center">2 </td>
+    <td style="text-align:center">1,000</td>        
+  </tr>  
+</table>
+
+Assume semiannual coupon payments and no credit risk.
+
+1. Determine the spot rates for the four periods
+2. What is the fair price of a 2-year 10% coupon bond with a face value of $1,000 if it pays annual coupons?
+
+
+
+
+# For next time: Arbitrage
+
+<br><br><br><br>
+
+![](RiceLogo.png){fig-align="center"}
+
+
+
