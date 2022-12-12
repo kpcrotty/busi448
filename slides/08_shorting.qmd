@@ -210,21 +210,193 @@ The return is 20% (12,000/10,000).
 - How much interest you get on the cash collateral depends on your broker.  Shop around.
 
 
-## Short-selling and Information
 
-- Short-selling is robustly negatively related to future returns.
-- This suggests shorts, on average, are informed traders.
+# Equity Lending
+
+## Equity lending
+
+![](../images/security_lending.png)
+
+## Security lending vs. cash lending
+
+Two ways to view the transaction
+
+1. The short seller is borrowing equity and putting up cash collateral for the loan to protect the security lender.
+
+2. The security lender is borrowing cash and putting up a security as collateral.
+
+## Rebate rates
+
+- The security lender pays the security borrower interest on the cash collateral at a rate known as the **rebate rate**. $$ \text{rebate rate} = \text{short-term rate} - \text{asset-specific fee} $$
+
+- Stocks with high fees are called **special**.
+  - Fairly rare (<10%).
+  - Unusual, but possible to have negative rebate rates
 
 ## Recall risk
 
-## Rebate rates and special
+- Equity lending programs are handled by brokerages
+- If the original owner wants to sell their shares, the brokerage must **recall** the stock loan.
+- Alternatively, firms and investors may "engineer" recall through technical means
+  - for instance, require physical stock certificate to receive dividends
+- In the event of recall, the short-seller must either cover their short position or locate a new security loan.
+
+
+
+
+
+
+
+# Information
+
+## Short-selling and Information
+
+- Short-selling is robustly negatively related to future returns.
+
+- This suggests shorts, on average, are informed traders.
+
+## Short interest
+
+- **Short interest**: number of shares held short at a point in time
+- **Relative short interest**: $$\text{RSI} = \frac{\text{short interest}}{\text{shares outstanding}}$$
+
+
+
+# Limits to arbitrage
+
+## Arbitrage...and its limits
+- Recall that an **arbitrage** is a trade that generates positive profits in some state of the world and generates losses in **no** state of the world.
+- The mechanism by which there is an absence of arbitrage (free money!) in financial markets is traders monitoring and correcting price discrepancies.
+- Importantly, we need to account for **all** frictions and costs in implementing arbitrage trades.
+
+
+## Carve-outs and spin-offs
+
+- **Equity carve-out**: IPO of a parent's holdings of a subsidiary
+  - usually involves less than 20% of sub's shares (due to tax issues)
+- **Spin-off**: pro-rata distribution of new shares in subsidiary to parent's shareholders
+  - subsidiary becomes new, separate corporate entity
+  - no cash raised (unlike equity carve-out)
+
+## A famous example: Palm-3Com Carve-out
+
+- Palm (maker of Palm Pilots) was owned by 3Com (network systems & services)
+- March 2, 2000: 3Com sells 5% of its stake in Palm to the general public in an IPO for Palm (an equity carve-out)
+- 3Com announces it will spin off its remaining shares of Palm to 3Com shareholders before the end of the year
+- 3Com shareholders would receive 1.5 shares of Palm for each share of Palm they own.
+
+## Palm-3Com Carve-out
+
+The carve-out creates two ways to buy Palm stock:
+
+1. Buy 150 shares of Palm in the market
+2. Buy 100 shares of 3Com, wait for spin-off, then receive 150 shares of Palm + ownership stake in 3Com's other assets
+
+. . . 
+
+- Limited liability ($P_{\text{3Com}} \ge 0$) + Law of One Price: $$ P_{\text{3Com}} \ge 1.5 \cdot P_{\text{Palm}}.$$
+
+## (Mis-)Pricing around Palm IPO
+
+- The day before the Palm IPO, 3Com closes at $104.13 per share. 
+- On the first day of trading, Palm closes at $95.06/share.
+- If Palm is at $95, then 3Com should be at least
+  - 1.5 $\cdot$ 95 = $142.50
+
+- Instead, the price of 3Com dropped to $81.81 (?!?)
+  - What is the implied value of 3Com's non-Palm assets and businesses (so-called **stub value**)?
+  - **-$63/share**
+
+## Arbitrage trade
+
+- How would one take advantage of this obvious and very large mispricing?
+- Buy cheap, short dear
+  - Buy 1 share of 3Com + short 1.5 shares of Palm
+
+. . . 
+
+In theory:
+
+- Buy one share of 3Com: CF = -81.81
+- Short 1.5 shares of Palm: CF = +1.5 $\cdot$ 95.06 = +142.59
+- Net CF =  +60.78 per share; AND, *little* risk in the future
+  - you can cover your Palm short position with spin-off shares from the 3Com holdings.
+
+- What happens as people buy 3Com and short Palm?  
+  - 3Com price should rise, Palm price should fall.  
+
+
+## Palm-3Com "Stub" Value
+
+This mispricing persisted for more than SIX WEEKS.
+
+![](../images/palm_3com.png)
+
+
+## Persistence of negative stubs
+
+- Why did the glaring, obvious, and LARGE mispricing of Palm relative to 3Com persist?
+  - That is, why didn't rational arbitrageurs step in and effect an arbitrage strategy like that discussed above, thus eliminating this mispricing very quickly?
+- It was nearly impossible to short Palm!
+  - majority (95%) of the shares still held by 3Com, who was not willing to lend the shares to short sellers.
+  - over time, this constraint became less binding, and prices began to converge to no-arbitrage levels.  
+- Short interest for Palm went from 19.4% (!) in the first month to 44.9% (!!) in the second month to 147.6% (!!!) at the peak.  
+
+
+## Lending fees for Palm
+
+![](../images/palm_rebate_rates.png)
 
 ## Limits to arbitrage
 
-Palm-3Com example
+- Even with this fairly clean example, there was risk here.
+- It was challening and costly to borrow shares to short.
+- The shorted shares could have been recalled.
+- Prices could have moved against convergence, requiring additional capital
+- IRS may not approve transaction
+
+
+# Regulation
+## Short-sellers are unpopular
+
+- GameStop episode
+- Campaigns for short squeezes
+- Requirements for physical ownership of share certificates for distributions
+- Regulation
 
 ## Short-selling regulation
+- Short sellers make money when prices fall.  
+  - Prices may fall *because* of short selling
+  - or prices may fall *coincident* with short selling
+  - correlation $\neq$ causation!
+- Short sellers due seem to be informed, on average.
+- Because short-selling is perceived to have detrimental effects on market quality, it is a frequent subject of regulation.
 
-- Price tests
-- Short-sale bans
+## Specific regulations
 
+**Prohibiting** short-sales
+
+- Some jurisdictions simply do not allow short-selling for all or some securities
+  - Hong Kong requires security be above market cap and volume thresholds
+
+. . .
+
+**Restricting** short sales
+
+- Restrictions are designed to reduce the possibility that short-sellers will *cause* price declines
+  - Prices tests like requiring last trade to be above the last transaction price 
+  - US Rule 201: uptick rule for rest of day and next day for stocks experiencing intraday price declines of 10% 
+
+
+## Regulatory response to crises
+
+- During the 2008 financial crisis, the SEC temporarily banned short-selling in financial firms.
+- A number of European countries have turned restrictions or prohibitions on or off in response to crises.
+- Because this regulation is not randomly assigned to stocks or countries, it is hard to understand whether short-selling **causes** price drops or increased volatility
+
+
+# For next time: Diversification
+
+<br><br><br><br>
+
+![](RiceLogo.png){fig-align="center"}

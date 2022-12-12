@@ -248,3 +248,69 @@ $$\text{Percent Margin} = \frac{25,000}{75,000} = 33.3\% $$
   - and falling further after that.
 - <a href="https://www.fidelity.com/trading/margin-loans/margin-rates">Fidelity rate schedule</a>
 
+
+# Repurchase agreements
+
+## Repurchase agreements (repos)
+
+- Simultaneously sell a security and agree to repurchase the same, or similar, asset at a later date at an agreed price.
+- A repo can be thought of as a collateralized loan
+  - cash borrower pays the lender interest at the repo rate.
+- Initial collateral is usually greater than the notional loan amount.  
+  - difference is a haircut or repo margin.
+
+## Repo transaction
+
+![](../images/security_lending.png)
+
+## Repo rates
+
+$$ \text{Repo rate} = \text{short-term rate} - \text{collateral-specific fee} $$
+
+- **General collateral**: repo rates slightly below federal funds rate
+- **Special collateral**: repo rates lower because cash lender (security borrower) wants a particular security
+- Repo rates are lower:
+  - higher credit quality bonds
+  - more liquid bonds
+  - harder to find bonds
+
+## Term of repos 
+::: {.nonincremental}
+- Repos are short-term
+- Majority are overnight
+:::
+![Source: Krishnamurthy, Nagel, Orlov ](../images/repo_maturities.png)
+
+
+## Numerical example
+
+- A dealer needs to finance $20 million par value of 10-year Treasury notes for 1 day.  The current market value of the securities is $19,576,026.65.  A corporation is willing to take the other side of the repo at a repo rate of 6% with a 1% haircut.
+
+- At initiation, the dealer surrenders the notes and receives $19,380,266.39 ($19,576,026.65*99%) in cash.
+
+- In 1 day, the corporation returns the notes and is paid $19,383,496.43 in cash.  The interest on the cash loan is calculated $$ 3,230.04 = 19,380,266.39 * 6% * (1/360).$$
+
+## Credit risk and repos
+
+- Both parties are exposed to credit risk.
+- The cash lender is exposed to the possibility of default on the cash borrower's part.
+  - If the market value of the collateral declines, the lender may have a loss.
+- The cash borrower is exposed to the possibility that the cash lender cannot return the collateral (if the market value of the collateral increases)
+
+## Mitigating credit risks
+
+- The haircut is designed to protect the cash lender.  If the collateral market value declines, the lender may still be made whole if the drop is less than the haircut.
+
+- Higher haircuts for 
+  - riskier borrowers
+  - less liquid collateral
+
+- Marking-to-market
+  - if collateral MV declines, cash borrower can send cash or additional securities to the cash lender.
+  - if collateral MV increases, cash lender can send cash or the collateral securities to the cash borrower
+
+## Empirical evidence on haircuts
+
+
+![Source: Krishnamurthy, Nagel, Orlov ](../images/repo_haircuts.png)
+
