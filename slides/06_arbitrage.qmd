@@ -51,9 +51,11 @@ jupyter: python3
 - Two assets that generate the same cash flows should have the same price.
 - We can try to form a **replicating portfolio** with the same cash flows as the security we are trying to value.
 
-. . . 
+# Example #1
 
-Example: suppose we have a 1-year bond with cash flows of $15 in 6 months and $115 in one year that costs $125.
+## Example
+
+Suppose we have a 1-year bond with cash flows of $15 in 6 months and $115 in one year that costs $125.
 
 - What is the spot-rate implied price of this bond?
 
@@ -144,7 +146,7 @@ $$ x_B = \frac{115}{100} = 1.15$$
 
 
 
-
+# Example #2
 ## Replication with coupon bonds
 
 What did we do above?
@@ -261,7 +263,7 @@ in python using `cf @ np.linalg.inv(CF)`!
 
 
 
-# For next time: Markets and Trading
+# For next time: Markets, Trading, & Adverse Selection
 
 <br><br><br><br>
 

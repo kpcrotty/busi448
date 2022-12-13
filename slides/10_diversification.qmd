@@ -1,0 +1,802 @@
+---
+title: 'Diversification'
+author: "<br>Kevin Crotty<br>BUSI 448: Investments"
+format: 
+    revealjs:
+        incremental: true
+        logo: RiceLogo.png
+        footer: "BUSI 448"
+        self-contained: true
+        code-fold: true
+        theme: [default, custom.scss]
+        show-slide-number: print
+execute:
+    echo: true
+    freeze: auto
+jupyter: python3
+---
+
+## Where are we?
+**Last time**:
+
+::: {.nonincremental}
+- Short-selling and margin
+- Equities lending
+- Limits to arbitrage
+- Short-selling regulation
+:::
+
+. . . 
+
+**Today**:
+
+::: {.nonincremental}
+- Diversification
+- Efficient combinations of risky assets
+:::
+
+
+# Diversification
+## What is diversification?
+
+- Diversification is a foundational, and somewhat miraculous, concept in forming portfolios.  
+
+- ``don't put all of your eggs in one basket.''
+
+- By combining assets together, we may be able to build a portfolio that has less risk than even the least risky asset we use as a building block! 
+
+
+## Portfolios of Two Risky Assets 
+
+Let's consider combining a stock market fund and a bond fund.
+
+The return of a two-asset portfolio is the weighted sum of the returns of the underlying assets:
+$$ r_p = w  r_{\text{US}} + (1-w) r_{\text{intl}} \,, $$ 
+where $w$ is the portfolio weight in the stock fund.  
+
+The expected return of the portfolio is:
+$$ E[r_p] =  w  r_{\text{US}} + (1-w) r_{\text{intl}} \,, $$ 
+
+
+## Portfolio Risk (Two Risky Assets) {.smaller}
+
+$$ \text{var}[r_p] = E\big[(r_p-E[r_p])^2\big].$$ 
+We can write the portfolio variance in terms of the individual asset variances and their covariance:
+$$ w^2 \text{var}[r_{\text{US}}] + (1-w)^2 \text{var}[r_{\text{intl}}] + 2 w (1-w) \text{cov}[r_{\text{US}},r_{\text{intl}}] $$
+
+Alternatively, we can express the last term using correlation:
+$$ w^2 \text{var}[r_{\text{US}}] + (1-w)^2 \text{var}[r_{\text{intl}}] + 2 w (1-w) \rho \cdot \text{sd}[r_{\text{US}}]\text{sd}[r_{\text{intl}}]$$
+
+## Diversification in action
+```{python}
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+
+#Based on French data library return series
+# Asset 1: US Equity
+# Asset 2: Developed International
+# Asset 1: Emerging Market
+mn1= 6
+mn2= 6.5
+sd1= 15
+sd2= 16.5 
+corr12 = 75 
+
+
+def data(mn1, mn2, sd1, sd2, c):
+    c = c / 100
+    mns = [mn1, mn2]
+    sds = [sd1, sd2]
+    grid = np.linspace(0, 1, 101)
+    ports = [np.array([w, 1 - w]) for w in grid]
+    means = [p.T @ np.array(mns) for p in ports]
+    df = pd.DataFrame(means)
+    df.columns = ["mean"]
+    cov = np.array(
+        [[sds[0] ** 2, sds[0] * sds[1] * c], [sds[0] * sds[1] * c, sds[1] ** 2]]
+    ).reshape(2, 2)
+    df["stdev"] = [np.sqrt(p.T @ cov @ p) for p in ports]
+    df["wt1"] = grid
+    df["wt2"] = 1 - df.wt1
+    for col in ["mean", "stdev"]:
+        df[col] = df[col] / 100
+    return df
+
+
+def figtbl(mn1, mn2, sd1, sd2, c,asset1_name, asset2_name):
+
+    df = data(mn1, mn2, sd1, sd2, c)
+    string0 = "Correlation = " +str(np.round(c,1)) + "%"
+    trace0 = go.Scatter(
+        x=df["stdev"],
+        y=df["mean"],
+        mode="lines",
+        text=100 * df["wt1"],
+        customdata=100 * df["wt2"],
+        hovertemplate=string0 + "<br>"+asset1_name + ": %{text:.0f}%<br>"+asset2_name + ": %{customdata:.0f}%<extra></extra>",
+        name="Frontier: " + asset1_name + " + " + asset2_name, 
+        line=dict(color="red"), 
+    )
+
+    # Plot the two assets
+    df = df[df.wt1.isin([0, 1])]
+    df["text"] = np.where(df.wt1 == 1, asset1_name, asset2_name)
+    trace1 = go.Scatter(
+        x=df[df.wt1==1]["stdev"],
+        y=df[df.wt1==1]["mean"],
+        mode="markers",
+        text=df[df.wt1==1]["text"],
+        hovertemplate="%{text}<extra></extra>",
+        marker=dict(size=15, color="black"),
+        name=asset1_name
+    )
+    trace2 = go.Scatter(
+        x=df[df.wt1==0]["stdev"],
+        y=df[df.wt1==0]["mean"],
+        mode="markers",
+        text=df[df.wt1==0]["text"],
+        hovertemplate="%{text}<extra></extra>",
+        marker=dict(size=15, color="blue"),
+        name=asset2_name
+    )
+
+
+    fig = go.Figure()
+    fig.add_trace(trace0)
+    fig.add_trace(trace1)
+    fig.add_trace(trace2)
+    fig.layout.xaxis["title"] = "Standard Deviation"
+    fig.layout.yaxis["title"] = "Expected Return"
+    fig.update_xaxes(range=[0.85 * df["stdev"].min(), 1.15 * df["stdev"].max()])
+    fig.update_yaxes(range=[0.85 * df["mean"].min(), 1.15 * df["mean"].max()])
+    fig.update_yaxes(tickformat=".1%")
+    fig.update_xaxes(tickformat=".1%")
+    fig.update_layout(legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))
+    fig.show()
+figtbl(mn1,mn2,sd1,sd2,corr12,"US Equity", "Developed Intl")
+```
+
+
+## Effects of Correlation
+
+Lower correlation between assets results in greater potential diversification benefits.
+
+## {background-iframe="http://bbcx-investments.com/portfolios/two-assets" background-interactive="True"}
+
+
+
+
+
+
+
+## Adding another Risky Asset {.smaller}
+
+Let's also consider investing in an emerging market fund.
+
+**Expected return**:
+$$ E[r_p] = \sum_{i=1}^{N} w_i E[r_i]\,,$$ 
+where $w_i$ is the portfolio weight in asset $i$.
+
+. . . 
+
+**Portfolio variance**:
+$$
+\begin{align*}
+   \text{var}[r_p] =&w_1^2 \text{var}[r_1] + w_2^2 \text{var}[r_2] + w_3^2 \text{var}[r_3] \\
+   &+ 2 w_1 w_2  \text{cov}[r_1, r_2] \\
+   &+ 2 w_1 w_3  \text{cov}[r_1, r_3] \\
+   &+ 2 w_2 w_3  \text{cov}[r_2, r_3] \\
+\end{align*} 
+$$
+
+## Portfolio expected return in Python
+``` p
+import numpy as np
+
+# Expected returns
+mns = np.array([0.10, 0.05, 0.07])
+
+# Portfolio weights
+wgts = np.array([0.25, 0.5, 0.25])
+
+#Portfolio expected return
+port_expret = wgts @ mns
+```
+
+
+
+
+## Three Asset Portfolios {.smaller}
+```{python}
+import pandas as pd
+import numpy as np
+from scipy.stats import uniform
+import plotly.graph_objects as go
+
+#Based on French return series
+# Asset 1: US Equity
+# Asset 2: Developed International
+# Asset 1: Emerging Market
+mn1= 6
+mn2= 6.5
+mn3= 8
+sd1= 15
+sd2= 16.5 
+sd3= 21
+corr12 = 75 
+corr13 = 75 
+corr23 = 75 
+
+def random_wts(num):
+    w = uniform.rvs(0, 1, num)
+    return w / w.sum()
+
+ports = [random_wts(3) for i in range(3000)]
+ports1 = [(0, x, 1 - x) for x in np.linspace(0, 1, 21)]
+ports2 = [(x, 0, 1 - x) for x in np.linspace(0, 1, 21)]
+ports3 = [(x, 1 - x, 0) for x in np.linspace(0, 1, 21)]
+ports = ports + ports1 + ports2 + ports3
+
+ports23 = ports1
+ports13 = ports2
+ports12 = ports3
+
+def is_pos_def(x):
+    if np.all(np.linalg.eigvals(x) > 0):
+        return 'True'
+    else:
+        return 'False'
+
+def data(mn1, mn2, mn3, sd1, sd2, sd3, c12, c13, c23):
+    mns = pd.Series(np.array([mn1, mn2, mn3]), index=["stock1", "stock2", "stock3"])
+    sds = np.array([sd1, sd2, sd3])
+    C = np.diag([1.0, 1.0, 1.0])
+    C[0, 1] = c12 / 100
+    C[0, 2] = c13 / 100
+    C[1, 0] = c12 / 100
+    C[1, 2] = c23 / 100
+    C[2, 0] = c13 / 100
+    C[2, 1] = c23 / 100
+    D = np.diag(sds / 100)
+    C = D @ C @ D
+    
+    # Random investment opportunity set (3-asset)
+    df = pd.DataFrame(
+        dtype=float,
+        index=range(len(ports)),
+        columns=["mean", "stdev", "wt1", "wt2", "wt3"],
+    )
+    df["mean"] = [p @ mns / 100 for p in ports]
+    df["stdev"] = [np.sqrt(p @ C @ p) for p in ports]
+    df["wt1"] = [100 * p[0] for p in ports]
+    df["wt2"] = [100 * p[1] for p in ports]
+    df["wt3"] = [100 * p[2] for p in ports]
+    df = df.sort_values(by="mean")
+    
+    # Dataframes of 2-asset portfolios
+    df12 = pd.DataFrame(dtype=float,index=range(len(ports12)),\
+                    columns=['mean','stdev','wt1','wt2','wt3'])
+    df12['mean'] = [p @ mns/100 for p in ports12]
+    df12['stdev'] = [np.sqrt(p @ C @ p) for p in ports12]
+    df12['wt1'] = [100*p[0] for p in ports12]
+    df12['wt2'] = [100*p[1] for p in ports12]
+    df12['wt3'] = [100*p[2] for p in ports12]
+    df12 = df12.sort_values(by='mean')
+
+    df13 = pd.DataFrame(dtype=float,index=range(len(ports13)),\
+                    columns=['mean','stdev','wt1','wt2','wt3'])
+    df13['mean'] = [p @ mns/100 for p in ports13]
+    df13['stdev'] = [np.sqrt(p @ C @ p) for p in ports13]
+    df13['wt1'] = [100*p[0] for p in ports13]
+    df13['wt2'] = [100*p[1] for p in ports13]
+    df13['wt3'] = [100*p[2] for p in ports13]
+    df13 = df13.sort_values(by='mean')
+
+    df23 = pd.DataFrame(dtype=float,index=range(len(ports23)),\
+                    columns=['mean','stdev','wt1','wt2','wt3'])
+    df23['mean'] = [p @ mns/100 for p in ports23]
+    df23['stdev'] = [np.sqrt(p @ C @ p) for p in ports23]
+    df23['wt1'] = [100*p[0] for p in ports23]
+    df23['wt2'] = [100*p[1] for p in ports23]
+    df23['wt3'] = [100*p[2] for p in ports23]
+    df23 = df23.sort_values(by='mean')   
+    return df, mns / 100, sds / 100, C, df12, df13, df23
+
+
+def figtbl(mn1, mn2, mn3, sd1, sd2, sd3, c12, c13, c23, asset1_name, asset2_name, asset3_name):
+    df, mns, sds, C, df12, df13, df23 = data(mn1, mn2, mn3, sd1, sd2, sd3, c12, c13, c23)
+    cd = np.empty(shape=(df.shape[0], 3, 1), dtype=float)
+    cd[:, 0] = np.array(df.wt1).reshape(-1, 1)
+    cd[:, 1] = np.array(df.wt2).reshape(-1, 1)
+    cd[:, 2] = np.array(df.wt3).reshape(-1, 1)
+    string =  asset1_name +": %{customdata[0]:.0f}%<br>"
+    string += asset2_name +": %{customdata[1]:.0f}%<br>"
+    string += asset3_name +": %{customdata[2]:.0f}%<br>"
+    string += "<extra></extra>"
+    trace1 = go.Scatter(
+        x=df["stdev"], y=df["mean"], mode="markers", customdata=cd, hovertemplate=string, name="Random Portfolios"
+    )
+    trace2 = go.Scatter(
+        x=sds,
+        y=mns,
+        mode="markers",
+        text=[asset1_name,asset2_name,asset3_name],
+        hovertemplate="%{text}<extra></extra>",
+        marker=dict(size=15, color="red"),
+        name="Underlying Assets"
+    )
+    
+    #--------------
+    # 2-asset frontiers
+    #--------------
+    #12
+    cd12 = np.empty(shape=(df12.shape[0],3,1), dtype=float)
+    cd12[:,0] = np.array(df12.wt1).reshape(-1,1)
+    cd12[:,1] = np.array(df12.wt2).reshape(-1,1)
+    cd12[:,2] = np.array(df12.wt3).reshape(-1,1)
+    string12 = asset1_name +": %{customdata[0]:.0f}%<br>"
+    string12+= asset2_name +": %{customdata[1]:.0f}%<br>"
+    string12+= asset3_name +": %{customdata[2]:.0f}%<br>"
+    string12+= '<extra></extra>'
+    trace12 = go.Scatter(x=df12['stdev'],y=df12['mean'],mode='lines',customdata=cd12,hovertemplate=string12, line=dict(color="red"), 
+        name = "Frontier: " + asset1_name + " + " + asset2_name)
+
+    #23
+    cd23 = np.empty(shape=(df23.shape[0],3,1), dtype=float)
+    cd23[:,0] = np.array(df23.wt1).reshape(-1,1)
+    cd23[:,1] = np.array(df23.wt2).reshape(-1,1)
+    cd23[:,2] = np.array(df23.wt3).reshape(-1,1)
+    string23 = asset1_name +": %{customdata[0]:.0f}%<br>"
+    string23+= asset2_name +": %{customdata[1]:.0f}%<br>"
+    string23+= asset3_name +": %{customdata[2]:.0f}%<br>"
+    string23+= '<extra></extra>'
+    trace23 = go.Scatter(x=df23['stdev'],y=df23['mean'],mode='lines',customdata=cd23,hovertemplate=string23, line=dict(color="black"), 
+        name = "Frontier: " + asset2_name + " + "  + asset3_name)
+
+    #13
+    cd13 = np.empty(shape=(df13.shape[0],3,1), dtype=float)
+    cd13[:,0] = np.array(df13.wt1).reshape(-1,1)
+    cd13[:,1] = np.array(df13.wt2).reshape(-1,1)
+    cd13[:,2] = np.array(df13.wt3).reshape(-1,1)
+    string13 = asset1_name +": %{customdata[0]:.0f}%<br>"
+    string13+= asset2_name +": %{customdata[1]:.0f}%<br>"
+    string13+= asset3_name +": %{customdata[2]:.0f}%<br>"
+    string13+= '<extra></extra>'
+    trace13 = go.Scatter(x=df13['stdev'],y=df13['mean'],mode='lines',customdata=cd13,hovertemplate=string13, line=dict(color="orange"), 
+        name = "Frontier: " + asset1_name + " + " + asset3_name)
+
+    fig = go.Figure()
+    fig.add_trace(trace1)
+    fig.add_trace(trace2)
+    fig.add_trace(trace12)
+    fig.add_trace(trace23)
+    fig.add_trace(trace13)
+    fig.layout.xaxis["title"] = "Standard Deviation"
+    fig.layout.yaxis["title"] = "Expected Return"
+    fig.update_xaxes(range=[0.85 * df["stdev"].min(), 1.15 * df["stdev"].max()])
+    fig.update_yaxes(range=[0.85 * df["mean"].min(),  1.15 * df["mean"].max()])    
+    fig.update_yaxes(tickformat=".1%")
+    fig.update_xaxes(tickformat=".1%")
+    fig.update_layout(legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))
+    fig.show()
+    # return largefig(fig), is_pos_def(C)
+figtbl(mn1, mn2, mn3, sd1, sd2, sd3, corr12, corr13, corr23, "US Equity", "Developed Intl", "Emerging Mkt")
+```
+
+## {background-iframe="http://bbcx-investments.com/portfolios/three-assets" background-interactive="True"}
+
+
+# Portfolios with Many Assets
+## Portfolios with Many Assets {.smaller}
+
+::: {.nonincremental}
+
+- Adding more securities to a portfolio results in additional diversification benefits
+
+- The marginal benefit of an additional security decreases with the total number of securities in the portfolio.
+:::
+
+$N$-asset portfolio variance:
+$$ \text{var}[r_p] = \sum_{i=1}^{N} w_i^2 \text{var}[r_i] + 2 \sum_{i=1}^{N} \sum_{j>i} w_i w_j \text{cov}[r_i,r_j]\,, $$ 
+
+
+
+## Portfolio variance: matrix approach {.smaller}
+Given a covariance matrix $V$:
+\begin{equation*}
+    V = 
+    \begin{bmatrix}
+        \text{var}[r_1]     & \text{cov}[r_1,r_2] & \dots  & \text{cov}[r_1,r_N] \\
+        \text{cov}[r_2,r_1] & \text{var}[r_2]     & \dots  & \text{cov}[r_2,r_N] \\
+        \vdots              & \vdots              & \ddots &  \vdots \\
+        \text{cov}[r_N,r_1] & \text{cov}[r_N,r_2] & \dots  & \text{var}[r_N] \\
+    \end{bmatrix}
+\end{equation*}
+and a vector of portfolio weights 
+$$w'=[w_1\, w_2\,...\,w_N]\,,$$
+
+The portfolio variance is the matrix product:
+$$ \text{var}[r_p] = w'Vw \,.$$ 
+
+
+## Portfolio variance in Python: Inputs
+
+``` p
+import numpy as np
+
+##### Inputs
+# Standard deviations
+sds = np.array([0.20, 0.12, 0.15])
+
+# Correlations
+corr12 = 0.3
+corr13 = 0.3
+corr23 = 0.3
+
+# Portfolio weights
+wgts = np.array([0.25, 0.5, 0.25])
+```
+
+## Covariance matrix: method 1
+``` p
+##### Method 1 to calculate covariance matrix
+# Covariances
+cov12 = corr12 * sds[0] * sds[1]
+cov13 = corr13 * sds[0] * sds[2]
+cov23 = corr23 * sds[1] * sds[2]
+# Covariance matrix
+cov = np.array([[sds[0]**2,  cov12,     cov13], \
+                [cov12,      sds[1]**2, cov23], \
+                [cov13,      cov23,     sds[2]**2]])
+```
+
+## Covariance matrix: method 2
+``` p
+##### Method 2 to calculate covariance matrix
+# Correlation matrix
+C  = np.identity(3)
+C[0, 1] = C[1, 0] = corr12
+C[0, 2] = C[2, 0] = corr13
+C[1, 2] = C[2, 1] = corr23
+# Covariance matrix
+cov = np.diag(sds) @ C @ np.diag(sds)
+```
+
+## Portfolio risk in Python
+``` p
+##### Portfolio risk measures
+# Portfolio variance
+port_var = wgts @ cov @ wgts
+
+# Portfolio standard deviation
+port_sd  = np.sqrt(port_var)
+```
+
+
+
+
+## Effects of Diversification
+Claim: The variance of the return of a portfolio with many securities depends more on the covariances between the individual securities than on the variances of the individual securities.
+
+<table border="1">
+  <!-- Row 1 -->
+  <tr> 
+    <td style="text-align:center; background-color:lightblue">$w_1^2 \text{var}[r_1]$</td>
+    <td style="text-align:center">$w_1 w_2 \text{cov}[r_1,r_2]$</td>
+    <td style="text-align:center">$w_1 w_3 \text{cov}[r_1,r_3]$</td>
+  </tr>
+  <!-- Row 2 -->
+  <tr>
+    <td style="text-align:center">$w_2 w_1 \text{cov}[r_2,r_1]$</td>
+    <td style="text-align:center; background-color:lightblue">$w_2^2 \text{var}[r_2]$</td>
+    <td style="text-align:center">$w_2 w_3 \text{cov}[r_2,r_3]$</td>
+  </tr>
+  <!-- Row 3 -->
+  <tr>
+    <td style="text-align:center">$w_3 w_1 \text{cov}[r_3,r_1]$</td>
+    <td style="text-align:center">$w_3 w_2 \text{cov}[r_3,r_2]$</td>
+    <td style="text-align:center; background-color:lightblue">$w_3^2 \text{var}[r_3]$</td>
+  </tr>
+</table>
+
+## Now consider a five-security portfolio  {.smaller}
+<table border="1">
+  <!-- Row 1 -->
+  <tr> 
+    <td style="text-align:center; background-color:lightblue">$w_1^2 \text{var}[r_1]$</td>
+    <td style="text-align:center">$w_1 w_2 \text{cov}[r_1,r_2]$</td>
+    <td style="text-align:center">$w_1 w_3 \text{cov}[r_1,r_3]$</td>
+    <td style="text-align:center">$w_1 w_4 \text{cov}[r_1,r_4]$</td>
+    <td style="text-align:center">$w_1 w_5 \text{cov}[r_1,r_5]$</td>
+  </tr>
+  <!-- Row 2 -->
+  <tr>
+    <td style="text-align:center">$w_2 w_1 \text{cov}[r_2,r_1]$</td>
+    <td style="text-align:center; background-color:lightblue">$w_2^2 \text{var}[r_2]$</td>
+    <td style="text-align:center">$w_2 w_3 \text{cov}[r_2,r_3]$</td>
+    <td style="text-align:center">$w_2 w_4 \text{cov}[r_2,r_4]$</td>
+    <td style="text-align:center">$w_2 w_5 \text{cov}[r_2,r_5]$</td>      
+  </tr>
+  <!-- Row 3 -->
+  <tr>
+    <td style="text-align:center">$w_3 w_1 \text{cov}[r_3,r_1]$</td>
+    <td style="text-align:center">$w_3 w_2 \text{cov}[r_3,r_2]$</td>
+    <td style="text-align:center; background-color:lightblue">$w_3^2 \text{var}[r_3]$</td>
+    <td style="text-align:center">$w_3 w_4 \text{cov}[r_3,r_4]$</td>
+    <td style="text-align:center">$w_3 w_5 \text{cov}[r_3,r_5]$</td>  
+  </tr>
+  <!-- Row 4 -->
+  <tr>
+    <td style="text-align:center">$w_4 w_1 \text{cov}[r_4,r_1]$</td>
+    <td style="text-align:center">$w_4 w_2 \text{cov}[r_4,r_2]$</td>
+    <td style="text-align:center">$w_4 w_3 \text{cov}[r_4,r_3]$</td>
+    <td style="text-align:center; background-color:lightblue">$w_4^2 \text{var}[r_4]$</td>
+    <td style="text-align:center">$w_4 w_5 \text{cov}[r_4,r_5]$</td>  
+  </tr>
+  <!-- Row 5 -->
+  <tr>
+    <td style="text-align:center">$w_5 w_1 \text{cov}[r_5,r_1]$</td>
+    <td style="text-align:center">$w_5 w_2 \text{cov}[r_5,r_2]$</td>
+    <td style="text-align:center">$w_5 w_3 \text{cov}[r_5,r_3]$</td>
+    <td style="text-align:center">$w_5 w_4 \text{cov}[r_5,r_4]$</td>
+    <td style="text-align:center; background-color:lightblue">$w_5^2 \text{var}[r_5]$</td>  
+  </tr>    
+</table>
+
+::: {.fragment fragment-index=0} 
+How many variance terms?
+:::
+
+::: {.fragment fragment-index=1} 
+$$N=5$$
+:::
+ 
+::: {.fragment fragment-index=0} 
+How many covariance terms?
+:::
+
+::: {.fragment fragment-index=2} 
+$$N^2-N = 25-5=20 $$ 
+::: 
+
+
+## Why does covariance dominate with large $N$?  {.smaller}
+
+-Consider an $N$-asset, equal-weighted portfolio $(w=1/N$) \
+-Assume all assets have the same variance $(\sigma^2_{\text{all}})$ \
+-Assume all pairs of assets have the same covariance $(\overline{\text{cov}})$ \
+-What is the variance of the portfolio?
+
+. . .
+
+\begin{align*}
+  \text{var}(r_p) =& N\cdot \left(\frac{1}{N}\right)^2 \sigma^2_{\text{all}} + (N^2-N)\cdot \left(\frac{1}{N}\right)^2 \overline{\text{cov}} \\
+  =& \left(\frac{1}{N}\right) \sigma^2_{\text{all}} + \left(\frac{N-1}{N}\right) \overline{\text{cov}}
+\end{align*}
+
+What happens to this as N gets large?
+
+. . . 
+
+$$ \text{var}(r_p) \underset{N\rightarrow \infty}{\longrightarrow} 0\cdot\sigma^2_{\text{all}}+(1-0)\overline{\text{cov}}=\overline{\text{cov}} $$
+
+
+## Diversification curves
+
+- Diversification eliminates some, but not all, of the risk of individual assets. 
+
+- In large portfolios, $\text{var}[r_i]$'s effectively diversified away, but not $\text{cov}[r_i,r_j]$'s. 
+
+- Diversifiable, non-systematic, idiosyncratic risk vs. non-diversifiable, systematic, market risk
+
+## {background-iframe="http://bbcx-investments.com/portfolios/diversification" background-interactive="True"}
+
+# Short-selling
+## Short-Sales {.smaller}
+
+What is the meaning of a negative portfolio weight?
+
+- Negative portfolio weights correspond to short positions in a portfolio. 
+
+- Short sellers: sell high, then buy low.
+
+- Short-selling involves borrowing a security from another owner and selling it.  
+
+- The short-seller then has a liability to return the security to the security lender (liability=market value).
+
+- Short-sellers hope to purchase the security later for a lower price.  
+
+- Many practical issues we will ignore today (restrictions on using sales proceeds, fee paid to borrow asset, etc.)
+
+## Short-Sales {.smaller}
+
+```{python}
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+
+#Based on French data library return series
+# Asset 1: US Equity
+# Asset 2: Developed International
+# Asset 1: Emerging Market
+mn1= 6
+mn2= 6.5
+sd1= 15
+sd2= 16.5 
+corr12 = 75 
+
+
+def data(mn1, mn2, sd1, sd2, c):
+    c = c / 100
+    mns = [mn1, mn2]
+    sds = [sd1, sd2]
+    grid = np.linspace(-0.5, 1.5, 201)
+    ports = [np.array([w, 1 - w]) for w in grid]
+    means = [p.T @ np.array(mns) for p in ports]
+    df = pd.DataFrame(means)
+    df.columns = ["mean"]
+    cov = np.array(
+        [[sds[0] ** 2, sds[0] * sds[1] * c], [sds[0] * sds[1] * c, sds[1] ** 2]]
+    ).reshape(2, 2)
+    df["stdev"] = [np.sqrt(p.T @ cov @ p) for p in ports]
+    df["wt1"] = grid
+    df["wt2"] = 1 - df.wt1
+    for col in ["mean", "stdev"]:
+        df[col] = df[col] / 100
+    return df
+
+
+def figtbl(mn1, mn2, sd1, sd2, c,asset1_name, asset2_name):
+
+    df = data(mn1, mn2, sd1, sd2, c)
+    string0 = "Correlation = " +str(np.round(c,1)) + "%"
+    trace0 = go.Scatter(
+        x=df["stdev"],
+        y=df["mean"],
+        mode="lines",
+        text=100 * df["wt1"],
+        customdata=100 * df["wt2"],
+        hovertemplate=string0 + "<br>"+asset1_name + ": %{text:.0f}%<br>"+asset2_name + ": %{customdata:.0f}%<extra></extra>",
+        name="Frontier: " + asset1_name + " + " + asset2_name, 
+        line=dict(color="red"), 
+    )
+
+    # Plot the two assets
+    df = df[df.wt1.isin([0, 1])]
+    df["text"] = np.where(df.wt1 == 1, asset1_name, asset2_name)
+    trace1 = go.Scatter(
+        x=df[df.wt1==1]["stdev"],
+        y=df[df.wt1==1]["mean"],
+        mode="markers",
+        text=df[df.wt1==1]["text"],
+        hovertemplate="%{text}<extra></extra>",
+        marker=dict(size=15, color="black"),
+        name=asset1_name
+    )
+    trace2 = go.Scatter(
+        x=df[df.wt1==0]["stdev"],
+        y=df[df.wt1==0]["mean"],
+        mode="markers",
+        text=df[df.wt1==0]["text"],
+        hovertemplate="%{text}<extra></extra>",
+        marker=dict(size=15, color="blue"),
+        name=asset2_name
+    )
+
+
+    fig = go.Figure()
+    fig.add_trace(trace0)
+    fig.add_trace(trace1)
+    fig.add_trace(trace2)
+    fig.layout.xaxis["title"] = "Standard Deviation"
+    fig.layout.yaxis["title"] = "Expected Return"
+    fig.update_xaxes(range=[0.85 * df["stdev"].min(), 1.15 * df["stdev"].max()])
+    fig.update_yaxes(range=[0.85 * df["mean"].min(), 1.15 * df["mean"].max()])
+    fig.update_yaxes(tickformat=".1%")
+    fig.update_xaxes(tickformat=".1%")
+    fig.update_layout(legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))
+    fig.show()
+figtbl(mn1,mn2,sd1,sd2,corr12,"US Equity", "Developed Intl")
+```
+
+# Efficient Frontier
+## Efficient Frontier {.smaller}
+::: {.nonincremental}
+- For a given target return, an efficient portfolio is the set of portfolio weights that minimize the portfolio’s risk (variance or standard deviation).
+:::
+Mathematically, choose portfolio weights to solve the following constrained optimization problem for each target return $\mu_{\text{target}}$:
+
+$$ \underset{w_1,w_2,\dots,w_N}{\text{min}} \text{var}[r_p]$$
+subject to constraints: $E[r_p]=\mu_{\text{target}}$ and $\sum_i w_i=1$
+
+## Optimization in Python
+
+The function `cvxopt.solvers.qp` solves problems of the general form:
+\begin{align}
+    \underset{w}{\text{min  }}& \frac{1}{2} w' Q w + p'x \\
+     \text{subject to  } & Gw \le h \\
+                        & Aw = b \\
+\end{align}
+
+## Finding a Frontier Portfolio: Parameters
+``` p
+##### Inputs
+# Risk-free rate
+r = 0.02
+# Expected returns
+mns = np.array([0.06, 0.065, 0.08])
+# Standard deviations
+sds = np.array([0.15, 0.165, 0.21])
+# Correlations
+corr12 = 0.75
+corr13 = 0.75
+corr23 = 0.75
+# Covariance matrix
+C  = np.identity(3)
+C[0, 1] = C[1, 0] = corr12
+C[0, 2] = C[2, 0] = corr13
+C[1, 2] = C[2, 1] = corr23
+cov = np.diag(sds) @ C @ np.diag(sds)
+```
+
+## Finding a Frontier Portfolio: Optimization
+``` p
+import numpy as np
+from cvxopt import matrix
+from cvxopt.solvers import qp as Solver, options as SolverOptions
+def frontier(means, cov, target):
+    n = len(means)
+    Q = matrix(cov, tc="d")
+    p = matrix(np.zeros(n), (n, 1), tc="d")
+    # Constraint: short-sales allowed
+    G = matrix(np.zeros((n,n)), tc="d")
+    h = matrix(np.zeros(n), (n, 1), tc="d")
+    # Fully-invested constraint + E[r] = target
+    A = matrix(np.vstack((np.ones(n), means)), (2, n), tc="d")
+    b = matrix([1, target], (2, 1), tc="d")
+    sol = Solver(Q, p, G, h, A, b)
+    wgts = np.array(sol["x"]).flatten() if sol["status"] == "optimal" else np.array(n * [np.nan])
+    return wgts
+wgts_frontier = [frontier(mns, cov, m) for m in np.linspace(mns.min(), mns.max(),5)]
+```
+
+# GMV
+## The Global Minimum Variance Problem {.smaller}
+::: {.nonincremental}
+- The GMV portfolio is the risky portfolio with the smallest variance. \
+- It is a set of portfolio weights that minimizes the portfolio variance.
+:::
+
+Mathematically, choose portfolio weights to solve the following constrained optimization problem:
+$$ \underset{w_1,w_2,\dots,w_N}{\text{min}} \text{var}[r_{p}] $$
+subject to constraints: $\sum_i w_i=1$
+
+## GMV in Python
+``` p
+import numpy as np
+from cvxopt import matrix
+from cvxopt.solvers import qp as Solver, options as SolverOptions
+
+n = len(mns)
+Q = matrix(cov, tc="d")
+p = matrix(np.zeros(n), (n, 1), tc="d")
+# Constraint: short-sales allowed
+G = matrix(np.zeros((n,n)), tc="d")
+h = matrix(np.zeros(n), (n, 1), tc="d")
+# Constraint: fully-invested portfolio
+A = matrix(np.ones(n), (1, n), tc="d")
+b = matrix([1], (1, 1), tc="d")
+sol = Solver(Q, p, G, h, A, b)
+wgts_gmv = np.array(sol["x"]).flatten() if sol["status"] == "optimal" else np.array(n * [np.nan])
+```
+
+
+## {background-iframe="http://bbcx-investments.com/portfolios/frontier" background-interactive="True"}
+
+
+# For next time: Theory of Optimal Portfolios
+
+<br><br><br><br>
+
+![](RiceLogo.png){fig-align="center"}

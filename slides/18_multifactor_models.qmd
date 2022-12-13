@@ -1,0 +1,21 @@
+---
+title: 'Multi-factor Models'
+author: "<br>Kevin Crotty<br>BUSI 448: Investments"
+format: 
+    revealjs:
+        incremental: true
+        logo: RiceLogo.png
+        footer: "BUSI 448"
+        self-contained: true
+        code-fold: true
+        theme: [default, custom.scss]
+        show-slide-number: print
+        menu: 
+            width: wide
+            numbers: true             
+execute:
+    echo: true
+    freeze: auto
+jupyter: python3
+---
+

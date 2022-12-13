@@ -20,8 +20,25 @@ jupyter: python3
 ---
 
 
+## Where are we?
+**Last time**:
 
-## Asset Classes
+::: {.nonincremental}
+- Calculating returns
+- Fetching data
+- Summarizing returns
+- Returns of portfolios
+:::
+
+. . . 
+
+**Today**:
+
+::: {.nonincremental}
+- Equity markets
+:::
+
+## Fundamental Asset Classes
 
 - Equity markets
 
@@ -955,7 +972,7 @@ Uncertainty about long-run returns $\Rightarrow$ uncertainty about retirement pl
 
 
 
-# For next time: Fixed Income Markets
+# For next time: Treasury Markets
 
 <br><br><br><br>
 

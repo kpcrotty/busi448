@@ -23,20 +23,22 @@ jupyter: python3
 
 ## Course topics (1)
 
-- Asset Class Overview
+- Financial Markets Overview
   - Stocks + bonds focus
   - Historical performance
-- Financial Markets
-  - Structure
-  - Trading
+  - Markets structures & trading
+  - Arbitrage & its limits
+  - Leverage
+  - Short-selling
 
 
 ## Course topics (2)
 - Optimal Portfolios
 - Equity pricing models
 - Debt pricing models
-- Asset manager performance evaluation
 - Taxes
+- Asset manager performance evaluation
+
 
 
 ## Why study investments?
@@ -250,7 +252,7 @@ where:
 - Use analytical annuity formula $$ P = \frac{C}{DR} \left(1 - \frac{1}{(1+DR)^T} \right) + \frac{FACE}{(1+DR)^T}$$
 
 
-## For next time: Saving for Retirement
+# For next time: Saving for Retirement
 
 <br><br><br><br>
 

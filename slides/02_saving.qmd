@@ -170,7 +170,7 @@ norm.rvs(loc=0.03, scale=0.1, size=50)
 - How often do we run out of money?!?
 
 
-## For next time: Returns, returns, and more returns...
+# For next time: Returns, returns, and more returns...
 
 <br><br><br><br>
 

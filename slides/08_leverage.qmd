@@ -1,0 +1,333 @@
+---
+title: 'Leverage and Margin'
+author: "<br>Kevin Crotty<br>BUSI 448: Investments"
+format: 
+    revealjs:
+        incremental: true
+        logo: RiceLogo.png
+        footer: "BUSI 448"
+        self-contained: true
+        code-fold: true
+        theme: [default, custom.scss]
+        show-slide-number: print
+        menu: 
+            width: wide
+            numbers: true
+        menu: 
+            width: wide
+            numbers: true                 
+execute:
+    echo: true
+    freeze: auto
+jupyter: python3
+---
+
+## Where are we?
+**Last time**:
+
+::: {.nonincremental}
+- Arbitrage
+:::
+
+. . . 
+
+**Today**:
+
+::: {.nonincremental}
+- Leverage
+- Margin
+- Repurchase agreements
+:::
+
+# Leverage
+## Leverage 
+
+**Leverage** is investing borrowed money.
+
+- The return, good or bad, on every $1 of your own money is amplified.
+
+## Example 
+
+- Initial capital to invest of $100,000 + borrow $50,000
+
+- Buy $150,000 of stocks
+
+. . .
+
++---------------+--------+---------------+--------+
+| Assets                 | Liab/Eq                |
++:==============+=======:+:==============+=======:+
+| Stocks        |150,000 | Debt          | 50,000 |
+|               |        | Equity        |100,000 |
++---------------+--------+---------------+--------+
+| Total         |150,000 | Total         |150,000 |
++---------------+--------+---------------+--------+
+
+- Leverage ratio $=\frac{\text{Assets}}{\text{Equity}}$
+- Example is levered 1.5 to 1
+- More jargon: 50% leverage
+
+## One possible future
+
+Suppose the stocks go up 10% and you're charged 2% interest on the loan (rolled into the debt balance)
+
++---------------+--------+---------------+--------+
+| Assets                 | Liab/Eq                |
++:==============+=======:+:==============+=======:+
+| Stocks        |165,000 | Debt          | 51,000 |
+|               |        | Equity        |114,000 |
++---------------+--------+---------------+--------+
+| Total         |165,000 | Total         |165,000 |
++---------------+--------+---------------+--------+
+
+- The return is 14% (114,000/100,000-1).
+
+- You made 10% plus one half of (10% minus 2%) $= 0.10 + 0.5(0.10-0.02) = 0.14$
+- "one-half" because you borrowed 50%.
+
+## Levered return
+
+Let $w = \frac{\text{Debt}}{\text{Initial Equity}}$.
+
+Levered portfolio return is:
+$$ w \cdot r_{\text{borrow}} + (1 + w) \cdot r_{\text{stock}} $$
+
+. . .
+
+We can rewrite this as:
+$$ r_{\text{stock}} + w \cdot (r_{\text{stock}} - r_{\text{borrow}})\,.$$
+
+. . .
+
+The return in the example is:
+$$ 0.10 + 0.5(0.10-0.02) = 0.14$$
+
+## Another possible future
+
+- Suppose the stocks fell by 10%.
+- You lose 10% plus one half of ($-$ 10% $-$ 2% ).
+- So, your loss is 16% on your $100,000 investment.
+
+. . . 
+
++---------------+--------+---------------+--------+
+| Assets                 | Liab/Eq                |
++:==============+=======:+:==============+=======:+
+| Stocks        |135,000 | Debt          | 51,000 |
+|               |        | Equity        | 84,000 |
++---------------+--------+---------------+--------+
+| Total         |135,000 | Total         |135,000 |
++---------------+--------+---------------+--------+
+
+- Check: 84,000/100,000 -1 = -16%.
+
+## The good and the bad
+
+- You always make the stock return plus the fraction borrowed times (stock return minus borrowing rate).
+- With 50% leverage and a 2% interest charge, 
+
+. . .
+
+$$+10\text{%} \rightarrow +14\text{%}$$
+
+. . .
+
+$$-10\text{%} \rightarrow -16\text{%}$$
+
+
+## Levered S&P Returns
+
+- SPY with leverage in today's notebook
+
+# Margin
+## Margin
+
+**Margin**: borrowing from your broker to purchase securities
+
+- Percent margin = $\frac{\text{Equity}}{\text{Total Asset Value}}$
+
+- **Initial margin** requirement set by the Fed's Reg T: 50%
+  - Broker may set a higher initial margin requirement
+
+- **Maintenance margin** requirement set by broker
+  - Protects broker agains default by borrower if asset values drop.
+
+
+## Example with margin 
+
+Initial balance sheet
+
++---------------+--------+----------------------+--------+
+| Assets                 | Liab/Eq                       |
++:==============+=======:+:=====================+=======:+
+| Stocks        |150,000 | Margin loan          | 50,000 |
+|               |        | Equity               |100,000 |
++---------------+--------+----------------------+--------+
+| Total         |150,000 | Total                |150,000 |
++---------------+--------+----------------------+--------+
+
+. . .
+
+$$
+\begin{align*}
+\text{Percent Margin} &= \frac{\text{Equity}}{\text{Total Asset Value}} \\
+&= \frac{100,000}{150,000}  \\
+&= 66.67\% 
+\end{align*}
+$$ 
+
+## Example with price drop of 10%
+
+Balance sheet after stocks drop by 10% (and margin interest of 2% rolled into loan)
+
++---------------+--------+----------------------+--------+
+| Assets                 | Liab/Eq                       |
++:==============+=======:+:=====================+=======:+
+| Stocks        |135,000 | Margin loan          | 51,000 |
+|               |        | Equity               | 84,000 |
++---------------+--------+----------------------+--------+
+| Total         |135,000 | Total                |135,000 |
++---------------+--------+----------------------+--------+
+
+
+. . .
+
+$$
+\begin{align*}
+\text{Percent Margin} &= \frac{\text{Equity}}{\text{Total Asset Value}} \\
+&= \frac{84,000}{135,000}  \\
+&= 62.22\% 
+\end{align*}
+$$ 
+
+## Margin Calls
+
+A **margin call** occurs when the percent margin falls below the maintenance margin set by the broker.
+
+- Suppose the maintenance margin on the account in our example is 35%.
+- How much could the stock value drop before a margin call occurs? (Ignore the interest expense on the margin loan.)
+
+. . .
+
+A margin call occurs when:
+$$ \frac{\text{Equity}}{\text{Total Asset Value}} < \text{Maintenance Margin}\,.$$
+
+## Margin Calls {.smaller}
+
+- $S_0$ = initial stock value
+- $L$ = margin loan amount
+- $MM$ = maintenance margin percentage
+- $r$ = stock return
+
+. . .
+
+A margin call occurs when:
+$$ \frac{S_0(1+r) - L}{S_0(1+r)} < MM\,.$$
+
+. . .
+
+Solving for $r$:
+$$ r < \frac{L}{S_0(1-MM)} - 1.$$ 
+
+## Example {.smaller}
+
+Margin call occurs if stock return is less than:
+
+$$r < \frac{50,000}{150,000(1-0.35)} - 1 = -48.7\%$$
+
+
+. . .
+
+
+Balance sheet with -50% return
+
++---------------+--------+----------------------+--------+
+| Assets                 | Liab/Eq                       |
++:==============+=======:+:=====================+=======:+
+| Stocks        | 75,000 | Margin loan          | 50,000 |
+|               |        | Equity               | 25,000 |
++---------------+--------+----------------------+--------+
+| Total         | 75,000 | Total                | 75,000 |
++---------------+--------+----------------------+--------+
+$$\text{Percent Margin} = \frac{25,000}{75,000} = 33.3\% $$
+
+
+
+## Margin Loan Rates
+
+- It pays to shop around.
+- Interactive Brokers charges
+  - <a href="https://fred.stlouisfed.org/series/FEDFUNDS">Fed Funds rate</a> plus 1.5% on the first $100,000.
+  - and falling further after that.
+- <a href="https://www.fidelity.com/trading/margin-loans/margin-rates">Fidelity rate schedule</a>
+
+
+# Repurchase agreements
+
+## Repurchase agreements (repos)
+
+- Simultaneously sell a security and agree to repurchase the same, or similar, asset at a later date at an agreed price.
+- A repo can be thought of as a collateralized loan
+  - cash borrower pays the lender interest at the repo rate.
+- Initial collateral is usually greater than the notional loan amount.  
+  - difference is a haircut or repo margin.
+
+## Repo transaction
+
+![](../images/security_lending.png)
+
+## Repo rates
+
+$$ \text{Repo rate} = \text{short-term rate} - \text{collateral-specific fee} $$
+
+- **General collateral**: repo rates slightly below federal funds rate
+- **Special collateral**: repo rates lower because cash lender (security borrower) wants a particular security
+- Repo rates are lower:
+  - higher credit quality bonds
+  - more liquid bonds
+  - harder to find bonds
+
+## Term of repos 
+::: {.nonincremental}
+- Repos are short-term
+- Majority are overnight
+:::
+![Source: Krishnamurthy, Nagel, Orlov ](../images/repo_maturities.png)
+
+
+## Numerical example
+
+- A dealer needs to finance $20 million par value of 10-year Treasury notes for 1 day.  The current market value of the securities is $19,576,026.65.  A corporation is willing to take the other side of the repo at a repo rate of 6% with a 1% haircut.
+
+- At initiation, the dealer surrenders the notes and receives $19,380,266.39 ($19,576,026.65*99%) in cash.
+
+- In 1 day, the corporation returns the notes and is paid $19,383,496.43 in cash.  The interest on the cash loan is calculated as 3,230.04 (19,380,266.39 $\cdot$ 6% $\cdot$ (1/360).
+
+## Credit risk and repos
+
+- Both parties are exposed to credit risk.
+- The cash lender is exposed to the possibility of default on the cash borrower's part.
+  - If the market value of the collateral declines, the lender may have a loss.
+- The cash borrower is exposed to the possibility that the cash lender cannot return the collateral (if the market value of the collateral increases)
+
+## Mitigating credit risks
+
+- The haircut is designed to protect the cash lender.  If the collateral market value declines, the lender may still be made whole if the drop is less than the haircut.
+
+- Higher haircuts for riskier borrowers and/or less liquid collateral.
+
+- Marking-to-market
+  - if collateral MV declines, cash borrower can send cash or additional securities to the cash lender.
+  - if collateral MV increases, cash lender can send cash or the collateral securities to the cash borrower
+
+## Empirical evidence on haircuts
+
+
+![Source: Krishnamurthy, Nagel, Orlov ](../images/repo_haircuts.png)
+
+
+# For next time: Short-selling + Limits to arbitrage
+
+<br><br><br><br>
+
+![](RiceLogo.png){fig-align="center"}

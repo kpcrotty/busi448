@@ -19,6 +19,25 @@ execute:
 jupyter: python3
 ---
 
+## Where are we?
+**Last time**:
+
+::: {.nonincremental}
+- Saving for retirement
+- Real and nominal cash flows and rates
+:::
+
+. . . 
+
+**Today**:
+
+::: {.nonincremental}
+- Calculating returns
+- Fetching data
+- Summarizing returns
+- Returns of portfolios
+:::
+
 # Calculating Returns
 
 ## General definition
@@ -441,7 +460,7 @@ $$ \text{corr}[r_i,r_j] = \rho_{ij} = \frac{\text{cov}[r_i,r_j]}{\text{sd}[r_i]\
 - What are the possible values for $\rho$?
 
 
-## For next time: Equity Markets
+# For next time: Equity Markets
 
 <br><br><br><br>
 
