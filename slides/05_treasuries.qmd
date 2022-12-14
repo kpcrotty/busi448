@@ -204,45 +204,6 @@ fig.show()
 
 
 
-# Trading
-
-## Primary markets
-
-- Treasuries sold via sealed-bid, single-price [auctions.](https://www.treasurydirect.gov/auctions/announcements-data-results/announcement-results-press-releases/treasury-marketable/)
-- Competitive bids
-  - Bidder specifies rate or yield that is acceptable
-  - Limited to 35% of the offering amount for each bidder
-- Noncompetitive bids
-  - Bidder agrees to accept rate determined at auction
-  - Limited to purchases of $5 million per auction
-
-## Primary market clearing
-
-- Treasury awards all noncompetitive bids and then accepts competitive bids in ascending order of their rate until the quantity of awarded bids = offering amount.
-- All bidders receive same rate as the highest accepted bid.
-
-
-## Secondary markets
-
-- The secondary market is an over-the-counter dealer market.
-- Extremely liquid market 
-- Trading occurs around the clock – New York, London, Tokyo as main centers
-- Primary dealers are the principal market makers
-- Most of the trading volume occurs in on-the-run issues (most recently issued)
-- Settlement is T+1
-
-## When-Issued Market
-
-- issues trade prior to Treasury issuance
-- trading occurs from the day the auction is announced until the issue date
-
-
-
-
-
-
-
-
 
 
 # Spot rate curve

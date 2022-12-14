@@ -35,18 +35,205 @@ jupyter: python3
 **Today**:
 
 ::: {.nonincremental}
+- Adverse Selection
 - Market structure
 - Liquidity
-- Adverse Selection
 :::
 
 
+# A Simple Market
+
+## Set-up
+- I need volunteers: four "buyers" and one "seller".
+- Market for an asset with true value between $0 and $10
+- The value is written inside each seller's envelope.
+- Buyers: write an offer for some amount (your choice!) to bid on the seller's envelope
+
+## Seller Instructions
+
+- Look at envelope value but do not disclose!
+- Collect all the offers 
+- Evaluate whether you are willing to accept any, and if so, which one
+  - suggestion: accept if and only if the offer exceeds the envelope value
+
+## Our market outcomes
+
+- When all offers are in, compute the profit/loss for the buyer.
+- Who made money and why?
+
+## 
+
+- The **expected value**, based on the full distribution of possible values, is common knowledge to all.
+- For this market, what is the expected value of the envelope?
+- The **realized value**, known only to the seller, is $V$.
+- What happens when a buyer makes an offer, $X$, of:
+  - $X < V$
+  - $X = V$
+  - $X > V$
+  - $X = E[V]$
+
+## Liquidity needs
+
+- Suppose that our seller has an urgent **liquidity** need to trade
+  - Moving to NYC and needs to sell,
+  - In bankruptcy and liquidating to pay off note,
+  - On the run from the law and needs to liquidate my IOU for hard cash
+
+## Offers with liquidity needs
+- What offer would you make if you know for certain that the seller has a liquidity need?
+  - assume that sellers with a liquidity need are willing to sell for as little as half the true value 
+
+- What offer would you make if you know that the seller has a liquidity need with 50% probability (but you do **not** know for sure if a given seller does or does not have a liquidity need)?
+
+
+# Information asymmetry
+## Adverse selection 
+
+- **Adverse selection** occurs when one party to a transaction takes advantage of having better information than the other party
+- Classic examples outside of financial markets:
+  - used car markets
+  - insurance
+
+
+## Information advantages in financial markets
+
+- Macroeconomic news
+  - gov't agencies aggregate important economic stats
+  - policy response: silo information releases
+- Firm-specific information
+  - trades by insiders
+  - policy response #1: ban insider trading
+  - policy response #2: pre-scheduled trading plans
+<!-- - Trading/position information
+  - hedge funds positions may contain information
+  - policy response: allow delayed disclosure of new positions -->
+
+## Solutions to adverse selection
+
+- Market failure
+  - One solution is that an uninformed trader does not participate!
+- Signaling
+  - The informed party tries to convey their information in some way
+  - Ex: used car seller allows the buyer to take the car to a mechanic
+
+## Solutions to adverse selection
+
+- Screening
+  - Uninformed party tries to sort informed agents in order to reveal the information
+  - Ex: low-premium, high-deductible insurance plans
+- Intermediaries
+  - Intermediaries are specialists in information production and evaluation
+  - Reputational capital is at stake for them
+  - Ex: certified used car programs; ratings agencies
+
+
+# Primary + secondary markets
 ## Primary versus secondary markets
 
-- Primary: an issuing institution is interacting with the market and accessing capital
-- Secondary: trades are generally between any interested party
+- Primary market
+  - an issuing institution is interacting with the market and raising capital
+- Secondary markets
+  - trades are generally between any interested party
+  - firm or government need not be involved
+
+## Primary markets: equities
+
+- Firms raise equity capital through
+  - **initial public offerings** (IPOs)
+  - or **seasoned equity offerings** (SEO; sale of shares in already public firm)
+
+. . . 
+
+Some IPO facts
+
+- On average, IPOs  experience a large first day price "pop" relative to offer price
+- Not all IPOs are underpriced, and the allocation of shares in underpriced vs. overpriced IPOs is non-random.
+
+## IPO underpricing
+
+![Source: Jay Ritter (UFlorida)](../images/ipo_underpricing.png)
+
+## A potential reason for underpricing
+
+*Adverse Selection and The Winner's Curse*
+
+- Assume you are a small investor who is asking for an allocation of 1,000 shares in each of two IPOs. 
+  - One overpriced by 20%; the other underpriced by 20%.  
+  - Do you break even? 
+- For overpriced offering, few other people ask for shares and you typically get all 1,000 shares you request. 
+- For underpriced offering, EVERYONE asks for shares, and small investors typically get shares only rarely. 
+
+## 
+- For the sake of argument, assume you get shares half the time in good IPOs, and all the time in bad IPOs. 
+- Expected return: 50% $\cdot$ (+20%) + 100% $\cdot$ (-20%) = -10% 
+- An investor who participates in an IPO expected to be just fairly priced is likely to make a negative return and thus would not wish to participate. 
+- To overcome the adverse selection problem and get investors to participate at all, issuers must set a lower price for the IPO.
+- On average IPO money is left on the table, but the typical investor will not profit much
 
 
+## Secondary markets: equities
+
+- Trading is starts and finishes each day with opening and closing auctions
+- Intraday trading is primarily a continous, limit-order-book market
+
+## Primary markets: Treasuries
+
+- Treasuries sold via sealed-bid, single-price [auctions.](https://www.treasurydirect.gov/auctions/announcements-data-results/announcement-results-press-releases/treasury-marketable/)
+- Competitive bids
+  - Bidder specifies rate or yield that is acceptable
+  - Limited to 35% of the offering amount for each bidder
+- Noncompetitive bids
+  - Bidder agrees to accept rate determined at auction
+  - Limited to purchases of $5 million per auction
+
+## Primary market clearing
+
+- Treasury awards all noncompetitive bids and then accepts competitive bids in ascending order of their rate until the quantity of awarded bids = offering amount.
+- All bidders receive same rate as the highest accepted bid.
+
+## Imperfect information: Winner's Curse
+
+- A Treasury auction is one in which buyer's bid for an asset with common, but unknown value.
+
+- Everyone bidding must estimate the value of the asset
+  - Each uses their own valuation model and information $\rightarrow$ different estimates of value
+
+- The **winner's curse** afflicts a buyer who wins the auction, but is cursed by the price paid
+  - the price paid exceeds the true value of the asset
+- Why? The buyer who wins is also the buyer that likely overestimated the value!
+
+## Avoiding the Winner's Curse
+
+- Condition your bid on both 
+  - your estimate of value 
+  - on what it means if you are the winning bidder.
+
+- Shade your bid down based on the fact that winning means you are on the high side of the estimates
+  - Larger adjustment with more competing bidders
+  - Larger adjustment with more uncertainty about valuation
+
+## Winner's Curse Example
+
+- Oil and Gas Lease Auctions
+- "If one wins a tract against 2 or 3 others, he may feel fine about his good fortune.  But how should he feel if he won against 50 others?"  (Capen, Clapp, Campbell)
+
+
+## Secondary markets: Treasuries
+
+- The secondary market is an over-the-counter dealer market.
+- Extremely liquid market 
+- Trading occurs around the clock – New York, London, Tokyo as main centers
+- Primary dealers are the principal market makers
+- Most of the trading volume occurs in on-the-run issues (most recently issued)
+- Settlement is T+1
+
+## When-Issued Market
+
+- issues trade prior to Treasury issuance
+- trading occurs from the day the auction is announced until the issue date
+
+
+# Types of Markets
 ## Types of Markets
 
 - Limit order book trading (continuous)
@@ -61,13 +248,16 @@ jupyter: python3
   - Sell at price of x or more
   - If not immediately executable, it goes into the "book."
   - Has *execution* risk
+
+##
+
 - **Market orders** are orders to trade "at market," taking whatever price is available.
   - Has *price* risk
 - Your broker is required to route your executable order to the venue offering the best price.
 
 . . .
 
-Examples:
+Examples of LOB markets:
 
 - Equity market intraday trading (NYSE, Nasdaq)
 - Futures, options, FX markets
@@ -80,18 +270,11 @@ Examples:
 - The difference between the best ask and the best bid is called the bid-ask spread or bid-offer spread.
 
 
-## Example of a limit order book
+## Example of a limit order book [(CBOE)](https://www.cboe.com/us/equities/market_statistics/book_viewer/)
 
 ![](../images/LOB.png)
 
-The bid-ask spread is 180.02--180.03.
-
-## {background-iframe="https://www.cboe.com/us/equities/market_statistics/book_viewer/" background-interactive="True"}
-
-
-## Price impact
-
-TBD
+The bid-ask spread is 180.03--180.02.
 
 
 
@@ -137,6 +320,113 @@ Examples:
 ## {background-iframe="https://www.treasurydirect.gov/auctions/announcements-data-results/" background-interactive="True"}
 
 
+# Brokers vs. Dealers
+## Brokers 
+
+- A **broker** is an agent: 
+  - They have no stake in the valuation of the item in the exchange
+  - They receive compensation for bringing buyers and sellers together.
+
+- Brokers:
+   - find counterparties to trades
+   - do not necessarily take a position in the assets for which they help people find counterparties
+   - receive a commission, which is a transactions cost
+
+## Dealers
+
+- Dealers are principals:
+  - valuation of the item matters to their bottom line.
+  - make money both through bringing buyers and sellers together and through changes in the valuation of the items they trade.
+- **Market makers** are traders that take short-term positions in securities in the hopes of earning the bid-ask spread.
+- stand ready to buy or sell to whomever comes along
+- provide liquidity and compensated through bid-ask spread for providing it.
+
+
+# Liquidity and adverse selection
+## A private information example
+
+- Consider a market for an asset which everyone agrees ex ante is either worth $10 or nothing, with equal probability.
+- What is the fair value of the security?
+- Now suppose that some existing asset owners receive **private information** that the *realized* value is $0.
+  - How should they trade if given the chance?
+
+## Market making
+
+- Consider a market maker who believes that some traders will be trading for liquidity purposes and others may receive private information.
+- What should the market maker offer to buy the asset for?
+  - $5? less than $5?
+- The market maker should condition their bid price on the fact that trading at the bid means there is a seller who wants to trade.
+  - Similarly, their ask price should be conditioned on the fact that there is a buyer who wants to trade.
+
+## Example (cont'd)
+
+- Say the market maker chooses to bid $4.95 for the asset.
+- The privately informed trader will be happy to sell the asset for $4.95.
+  - They know they are getting $4.95 above the true value of the asset.
+- We say that the market maker was **adversely selected** by the privately informed trader.
+- What happens next?
+
+## Updating about underlying values
+
+- As privately informed owners continue to dump their shares, the market maker should keep lowering their bid (and ask) price.
+- That is, they are updating their beliefs to think that the $0 outcome is more likely than 50%!
+- Similar intuition applies to the ask price.
+  - As more buyers arrive to trade at the ask price, the market maker should infer that traders are privately informed that the true value is $10!
+
+## Bid-ask spreads and adverse selection
+
+- Bid-ask spreads arise as compensation for potential adverse selection.
+- Formally, the bid price is the expected value of the asset *conditional* on the next trader wanting to sell the security
+  - $E[V | \text{sell}]$
+  - and hence potentially having negative information about the asset value
+
+## 
+- The ask price is the expected value of the asset *conditional* on the next trader wanting to buy the security
+  - $E[V | \text{buy}]$
+  - and hence potentially having positive information about the asset value
+
+. . .
+
+Bid-ask spread = $E[V | \text{buy}] - E[V | \text{sell}]$
+
+
+## So how do market-makers make money?
+
+- But market makers do exist in financial markets!
+- Why aren't they all out of business?
+- As long as there are some uninformed investors or investors that need to trade for reasons unrelated to the true value of the security, market makers can earn the difference between the bid and ask prices.
+
+
+## Liquidity
+
+**Liquidity** is the ease with which one can convert an asset into cash.
+
+- Can you sell the asset quickly?
+- Can you sell it with little loss in value?
+
+. . .
+
+Examples:
+
+- Treasury bills and index ETFs are liquid assets
+- Corporate bonds, private equity, and real estate are illiquid assets
+
+
+## Price impact
+
+- Quoted prices apply to moderate size order only. A large order may not be executed at the same price.
+- Dealers don’t hold arbitrarily large inventories and worry about whether a large trade signals private info.
+- Market impact must be estimated by the investor based on the current perceived liquidity.
+- Why not just split up the trade?
+  - If trading on private information, you may be pressured to act quickly or the information will be incorporated into the price.
+
+## 
+![](../images/LOB.png)
+
+Buying 20,000 shares would push the price to 180.05
+
+
+# Information and Trading
 ## Institutional trading
 
 - Mutual funds etc. typically execute trades over several days, trading a small amount at a time, to minimize the price impacts of their trades.
@@ -166,29 +456,13 @@ Different markets provide differing levels of transparency.
 - Others show entire LOB 
 
 - Equity and options markets are fairly transparent
-- Corporate bond markets are less transparent, but have become more so.
+- Corporate bond markets are less transparent, but have become [more so](https://finra-markets.morningstar.com/BondCenter/).
 
-## Knowledge of most recent pricing is valuable:
+## Knowledge of most recent pricing is valuable!
 
 From 2022 NYSE Proprietary Market Data Pricing Guide:
 
 ![](../images/nyse_fees.png)
-
-
-## {background-iframe="https://finra-markets.morningstar.com/BondCenter/" background-interactive="True"}
-
-
-## Liquidity
-
-**Liquidity** is the ease with which one can convert an asset into cash.
-
-- Can you sell the asset quickly?
-- Can you sell it with little loss in value?
-
-Examples:
-
-- Treasury bills and index ETFs are liquid assets
-- Corporate bonds, private equity, and real estate are illiquid assets
 
 
 

@@ -1,5 +1,5 @@
 ---
-title: 'Tax-advantaged Accounts'
+title: 'Tax-advantaged Assets'
 author: "<br>Kevin Crotty<br>BUSI 448: Investments"
 format: 
     revealjs:
@@ -33,6 +33,35 @@ jupyter: python3
 ::: {.nonincremental}
 - Tax-advantaged assets
 :::
+
+# Municipal Bonds
+
+## Effects of taxes for munis
+
+## After-tax yields
+
+## Clienteles and Market Segmentation
+
+
+# Treasuries
+
+
+# ETFs vs. Mutual Funds
+
+## ETF structure
+
+## Mutual fund structure
+
+
+# Mortgages
+
+## Mortgage primer
+
+## Mortgage interest is tax-deductible
+
+## Mortgage payoff vs. tax-deferred contribution
+
+
 
 
 
