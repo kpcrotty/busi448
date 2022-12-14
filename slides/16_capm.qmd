@@ -199,21 +199,55 @@ What if this weren't the case?
 
 ## {background-iframe="http://bbcx-investments.com/capm/mrp_estimation" background-interactive="True"}
 
-## Simulation of estimating betas
+<!-- ## Simulation of estimating betas -->
 
 <!-- SIMULATION WITH 10 ASSETS WITH RETURNS GENERATED UNDER  -->
+
+## Security market line
+
+The **security market line** is the visual representation of the CAPM and the cross-section of expected returns
+
+``` {python}
+#| echo: false
+import numpy as np
+import pandas as pd
+from pandas_datareader import DataReader as pdr
+import plotly.graph_objects as go
+import statsmodels.api as sm
+from scipy.stats import norm
+betas = norm.rvs(loc=1, scale=0.5, size=10,random_state=10)
+mrp = 0.05
+rf  = 0.02
+expret = rf + betas*mrp
+
+# Plot SML with no alpha
+trace  = go.Scatter(x=betas, y=expret, mode="markers", name='Assets', marker=dict(size=10),)
+minval = 0.0
+maxval = 2.0
+trace_sml = go.Scatter(x= np.linspace(minval,maxval,100), y = rf+mrp*np.linspace(minval,maxval,100), mode='lines',name='SML',
+    hovertemplate="SML<br>y-intercept: risk-free rate<br>slope: market risk premium<extra></extra>")
+
+fig = go.Figure()
+fig.add_trace(trace)
+fig.add_trace(trace_sml)
+fig.update_xaxes(title='Beta',tickformat=".2f", range=[minval,maxval])
+fig.update_yaxes(title='Expected Return',tickformat=".1%", range=[0, 0.2])
+fig.update_layout(title='Security Market Line (no alpha)')
+fig.update_layout(legend=dict(yanchor="top", y =0.99, xanchor="left", x=0.01))
+fig.show()
+
+```
+
 
 ## The CAPM and cross-sectional data 
 
 - The CAPM doesn't fit realized returns in the cross-section of stocks very well.
 
-- The **security market line** is the visual representation of the CAPM and the cross-section of expected returns
-
-- INSERT PLOT OF THEORETICAL SML HERE
-
 - Theoretically, the slope of the SML should be: 
   - $E[r_m-r_f]$
 - Empirically, the slope is much flatter than the realized market risk premium.  
+
+
 
 ## Industry returns example
 
