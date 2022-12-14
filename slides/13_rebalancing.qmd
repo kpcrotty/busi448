@@ -140,11 +140,14 @@ class portfolio:
 **Today**:
 
 ::: {.nonincremental}
+- Midterm discussion
 - Investing over multiple periods
 - Rebalancing
 :::
 
+# Midterm comments
 
+# Rebalancing
 ## 60-40 Stock-Bond Portfolio
 
 ```{python}
