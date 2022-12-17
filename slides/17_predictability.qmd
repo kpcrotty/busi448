@@ -19,3 +19,131 @@ execute:
 jupyter: python3
 ---
 
+
+## Where are we?
+**Last time**:
+
+::: {.nonincremental}
+- CAPM and the Market Model Regression
+- CAPM: Theory
+- CAPM: Practice
+:::
+
+. . . 
+
+**Today**:
+
+::: {.nonincremental}
+- The cross-section of expected stock returns
+- Portfolio sorts
+- Cross-sectional regression
+:::
+
+# Expected returns
+
+## Estimating a stock's expected return
+
+- How should we think about estimating $E[r_i]$?
+- Core finance: use CAPM $$ E[r_i]=r_f + \beta_i E[r_{\text{mkt}}-r_f] $$
+- But we saw last time that this does poorly empirically
+  - as does using historical returns
+- Today, we'll discuss some firm characteristics and how they relate to expected returns
+
+
+
+# Portfolio sorts
+## Sorting stocks
+
+- Consider a characteristic of a firm, like its beta.
+- How can we test if high beta firms have high expected returns?
+- One method: 
+  - sort stocks on betas
+  - form portfolios (b/c stock returns are noisy)
+  - test if high beta portfolios have higher ex post returns than low beta portfolios
+
+
+
+## A litle history on sorting stocks
+
+- Market beta (Black, Jensen, Scholes 1972)
+  - If anything, high beta firms *underperform* low beta
+- Size (Banz 1981)
+  - Small firms outperform large firms
+- Book-to-market ratio (Fama-French 1992)
+  - High B/M (value) outperform low B/M (growth)
+
+## Is the CAPM dead?
+
+![Source: Fama-French 1992](../images/fama_french_1992.png)
+
+## More history on sorting stocks
+
+- Liquidity (Amihud and Mendelson 1986)
+  - less liquid $\rightarrow$ high $r_{t+1}$
+- Momentum (Jegadeesh-Titman 1993)
+  - past winners beat past losers
+- Idiosyncratic volatility (Ang, Hodrick, Xing, Zhang 2006)
+  - High `idiovol` $\rightarrow$ low $r_{t+1}$
+
+## {background-iframe="http://bbcx-investments.com/factor-investing/quintiles" background-interactive="True"}
+
+## {background-iframe="http://bbcx-investments.com/factor-investing/ghz-sorts" background-interactive="True"}
+
+## Sorting in python
+
+``` {.python}
+# Sorting function
+def cut(x):
+    try:
+        out = pd.qcut(x, 5, labels=labels)
+    except:
+        out = pd.Series(np.nan, index=x.index)
+    return out
+char = 'beta'
+df["quintile"] = df.groupby("date")[char].apply(cut)
+```
+
+
+# Cross-sectional regressions
+
+## Cross-sectional regression
+
+- An alternative approach to sorting is a cross-sectional regression
+
+. . .
+
+Regress each stock's average return (a time-series average) on its average characteristic:$$ \overline{r}_{i} = a + b \cdot \text{characteristic}_{i} + e_{i} $$
+
+- If the characteristic is associated with higher returns, $\hat{b}$ should be different from zero!
+
+## Fama-MacBeth
+
+- Characteristics are often time-varying, so it is preferable to use a series of cross-sectional regressions.
+
+. . .
+
+For each time period, run a cross-sectional regression:$$ r_{i,t} = a_t + b_t \cdot \text{characteristic}_{i,t-1} + e_{i,t} $$
+
+- This produces a time-series of coefficients $b_t$.  If the characteristic is associated with higher returns, the time-series average of $\hat{b}_t$ should be different from zero!
+
+
+## Regressions or sorts?
+
+- Regression restricts the relation between returns and the characteristic to be linear
+- Sorting allows for a nonlinear relation across stocks
+  - It is more flexible, but it is reassuring if the relation is monotonically increasing or decreasing.
+
+
+## Persistence of anomalies
+
+- What should happen as market participants become aware of these results?
+- They should trade until the differences disappear.
+- Anomalies that do not go away may be compensation for risk and should be accounted for as part of the asset's risk premium $$ E[r] = r_f + \text{risk premium} $$
+- More on this next time...
+
+
+# For next time: Multi-factor Models
+
+<br><br><br><br>
+
+![](RiceLogo.png){fig-align="center"}

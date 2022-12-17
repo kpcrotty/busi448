@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>multifactor_models</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="18_multifactor_models_files/libs/clipboard/clipboard.min.js"></script>
+<script src="18_multifactor_models_files/libs/quarto-html/quarto.js"></script>
+<script src="18_multifactor_models_files/libs/quarto-html/popper.min.js"></script>
+<script src="18_multifactor_models_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="18_multifactor_models_files/libs/quarto-html/anchor.min.js"></script>
+<link href="18_multifactor_models_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="18_multifactor_models_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="18_multifactor_models_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="18_multifactor_models_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="18_multifactor_models_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="equity-asset-pricing-models" class="level1">
+<h1>Equity asset pricing models</h1>
+<div class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pandas_datareader <span class="im">import</span> DataReader <span class="im">as</span> pdr</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pull data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ff3 <span class="op">=</span> pdr(<span class="st">"F-F_Research_Data_Factors"</span>, <span class="st">"famafrench"</span>, start<span class="op">=</span><span class="dv">1926</span>)[<span class="dv">0</span>]<span class="op">/</span><span class="dv">100</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>ff5 <span class="op">=</span> pdr(<span class="st">"F-F_Research_Data_5_Factors_2x3"</span>, <span class="st">"famafrench"</span>, start<span class="op">=</span><span class="dv">1964</span>)[<span class="dv">0</span>]<span class="op">/</span><span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cumulative returns</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cum_rets <span class="op">=</span> ff3 <span class="op">+</span><span class="dv">1</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">vars</span> <span class="op">=</span> [<span class="st">'Mkt-RF'</span>, <span class="st">'SMB'</span>, <span class="st">'HML'</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> v <span class="kw">in</span> <span class="bu">vars</span>:</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    cum_rets[v] <span class="op">=</span> cum_rets[v].cumprod()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot cumulative returns</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>cum_rets.index <span class="op">=</span> cum_rets.index.astype(<span class="bu">str</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> v <span class="kw">in</span> <span class="bu">vars</span>:</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    trace  <span class="op">=</span> go.Scatter(x<span class="op">=</span>cum_rets.index, y<span class="op">=</span>cum_rets[v], mode<span class="op">=</span><span class="st">"lines"</span>, name<span class="op">=</span>v,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    hovertemplate<span class="op">=</span> v <span class="op">+</span> <span class="st">"&lt;br&gt;Date: %</span><span class="sc">{x}</span><span class="st">&lt;br&gt;Accumulation: %</span><span class="sc">{y:.0f}</span><span class="st">&lt;extra&gt;&lt;/extra&gt;"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    fig.add_trace(trace)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    xaxis_title<span class="op">=</span><span class="st">"Date"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    yaxis_title<span class="op">=</span><span class="st">"Accumulation from $1"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    yaxis_tickformat<span class="op">=</span><span class="st">",.0f"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    width<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    height<span class="op">=</span><span class="dv">460</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    legend<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        yanchor<span class="op">=</span><span class="st">"top"</span>, </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="fl">0.99</span>, </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        xanchor<span class="op">=</span><span class="st">"left"</span>, </span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="fl">0.01</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    yaxis_type<span class="op">=</span><span class="st">"log"</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Unable to display output for mime type(s): application/vnd.plotly.v1+json</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="60">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> sm.OLS(ff3.HML, sm.add_constant(ff3[<span class="st">'Mkt-RF'</span>])).fit()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(results.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                    HML   R-squared:                       0.054
+Model:                            OLS   Adj. R-squared:                  0.053
+Method:                 Least Squares   F-statistic:                     65.27
+Date:                Thu, 15 Dec 2022   Prob (F-statistic):           1.63e-15
+Time:                        13:35:35   Log-Likelihood:                -3077.6
+No. Observations:                1156   AIC:                             6159.
+Df Residuals:                    1154   BIC:                             6169.
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.2557      0.103      2.486      0.013       0.054       0.458
+Mkt-RF         0.1541      0.019      8.079      0.000       0.117       0.192
+==============================================================================
+Omnibus:                      466.551   Durbin-Watson:                   1.616
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             5980.118
+Skew:                           1.497   Prob(JB):                         0.00
+Kurtosis:                      13.733   Cond. No.                         5.44
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="61">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> sm.OLS(ff3.SMB, sm.add_constant(ff3[<span class="st">'Mkt-RF'</span>])).fit()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(results.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                    SMB   R-squared:                       0.100
+Model:                            OLS   Adj. R-squared:                  0.099
+Method:                 Least Squares   F-statistic:                     128.0
+Date:                Thu, 15 Dec 2022   Prob (F-statistic):           3.17e-28
+Time:                        13:35:38   Log-Likelihood:                -2912.8
+No. Observations:                1156   AIC:                             5830.
+Df Residuals:                    1154   BIC:                             5840.
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0676      0.089      0.758      0.449      -0.107       0.243
+Mkt-RF         0.1872      0.017     11.315      0.000       0.155       0.220
+==============================================================================
+Omnibus:                      498.430   Durbin-Watson:                   2.029
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            12118.035
+Skew:                           1.430   Prob(JB):                         0.00
+Kurtosis:                      18.601   Cond. No.                         5.44
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</code></pre>
+</div>
+</div>
+<section id="momentum" class="level2">
+<h2 class="anchored" data-anchor-id="momentum">Momentum</h2>
+<div class="cell" data-execution_count="75">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>umd <span class="op">=</span> pdr(<span class="st">'F-F_Momentum_Factor'</span>,<span class="st">'famafrench'</span>, start<span class="op">=</span><span class="dv">1900</span>)[<span class="dv">0</span>]<span class="op">/</span><span class="dv">100</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>ffc <span class="op">=</span> ff3.merge(umd,how<span class="op">=</span><span class="st">'inner'</span>, left_index<span class="op">=</span><span class="va">True</span>,right_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>ffc.columns <span class="op">=</span> [<span class="st">'Mkt-RF'</span>, <span class="st">'SMB'</span>, <span class="st">'HML'</span>, <span class="st">'RF'</span>, <span class="st">'Mom'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="76">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cumulative returns</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>cum_rets <span class="op">=</span> ffc <span class="op">+</span><span class="dv">1</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">vars</span> <span class="op">=</span> [<span class="st">'Mkt-RF'</span>, <span class="st">'SMB'</span>, <span class="st">'HML'</span>,<span class="st">'Mom'</span>]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> v <span class="kw">in</span> <span class="bu">vars</span>:</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    cum_rets[v] <span class="op">=</span> cum_rets[v].cumprod()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="77">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot cumulative returns</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure()</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>cum_rets.index <span class="op">=</span> cum_rets.index.astype(<span class="bu">str</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> v <span class="kw">in</span> <span class="bu">vars</span>:</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    trace  <span class="op">=</span> go.Scatter(x<span class="op">=</span>cum_rets.index, y<span class="op">=</span>cum_rets[v], mode<span class="op">=</span><span class="st">"lines"</span>, name<span class="op">=</span>v,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    hovertemplate<span class="op">=</span> v <span class="op">+</span> <span class="st">"&lt;br&gt;Date: %</span><span class="sc">{x}</span><span class="st">&lt;br&gt;Accumulation: %</span><span class="sc">{y:.0f}</span><span class="st">&lt;extra&gt;&lt;/extra&gt;"</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    fig.add_trace(trace)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    xaxis_title<span class="op">=</span><span class="st">"Date"</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    yaxis_title<span class="op">=</span><span class="st">"Accumulation from $1"</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    yaxis_tickformat<span class="op">=</span><span class="st">",.0f"</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    width<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    height<span class="op">=</span><span class="dv">460</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    legend<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        yanchor<span class="op">=</span><span class="st">"top"</span>, </span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="fl">0.99</span>, </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        xanchor<span class="op">=</span><span class="st">"left"</span>, </span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="fl">0.01</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    yaxis_type<span class="op">=</span><span class="st">"log"</span>,</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Unable to display output for mime type(s): application/vnd.plotly.v1+json</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="78">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> sm.OLS(ffc.Mom, sm.add_constant(ffc[<span class="st">'Mkt-RF'</span>])).fit()</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(results.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                    Mom   R-squared:                       0.118
+Model:                            OLS   Adj. R-squared:                  0.117
+Method:                 Least Squares   F-statistic:                     153.7
+Date:                Thu, 15 Dec 2022   Prob (F-statistic):           3.21e-33
+Time:                        13:56:10   Log-Likelihood:                 1958.6
+No. Observations:                1150   AIC:                            -3913.
+Df Residuals:                    1148   BIC:                            -3903.
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0085      0.001      6.466      0.000       0.006       0.011
+Mkt-RF        -0.3007      0.024    -12.398      0.000      -0.348      -0.253
+==============================================================================
+Omnibus:                      612.537   Durbin-Watson:                   1.924
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            12234.065
+Skew:                          -2.005   Prob(JB):                         0.00
+Kurtosis:                      18.468   Cond. No.                         18.7
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="factor-models-and-expected-returns" class="level1">
+<h1>Factor models and expected returns</h1>
+<p>Estimate factor risk premia</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pull data</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>ff3 <span class="op">=</span> pdr(<span class="st">"F-F_Research_Data_Factors"</span>, <span class="st">"famafrench"</span>, start<span class="op">=</span><span class="dv">1926</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>ff5 <span class="op">=</span> pdr(<span class="st">"F-F_Research_Data_5_Factors_2x3"</span>, <span class="st">"famafrench"</span>, start<span class="op">=</span><span class="dv">1964</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>dgs <span class="op">=</span> pdr(<span class="st">"DGS10"</span>, <span class="st">"fred"</span>, start<span class="op">=</span><span class="dv">1920</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate factor risk premia as time-series average returns</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># annual 3 factors from 1926</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>ff3 <span class="op">=</span> ff3[<span class="dv">1</span>]</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>fprem <span class="op">=</span> ff3[[<span class="st">"Mkt-RF"</span>, <span class="st">"SMB"</span>, <span class="st">"HML"</span>]].mean()</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># add annual 5 factors from 1964</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>fprem <span class="op">=</span> pd.concat((fprem, ff5[<span class="dv">1</span>][[<span class="st">"RMW"</span>, <span class="st">"CMA"</span>]].mean()))</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>fprem <span class="op">=</span> fprem.<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>factors <span class="op">=</span> fprem.index.to_list()</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>fprem</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>Mkt-RF    8.87
+SMB       3.02
+HML       4.22
+RMW       3.49
+CMA       3.44
+dtype: float64</code></pre>
+</div>
+</div>
+<p>Estimate factor loadings</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pull stock return data</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>TICKER <span class="op">=</span> <span class="st">'IBM'</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>ret <span class="op">=</span> pdr(TICKER, <span class="st">"yahoo"</span>, start<span class="op">=</span><span class="dv">2016</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>ret <span class="op">=</span> ret[<span class="st">"Adj Close"</span>].resample(<span class="st">"M"</span>).last()</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>ret <span class="op">=</span> ret.pct_change()</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>ret.index <span class="op">=</span> ret.index.to_period(<span class="st">"M"</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>ret.name <span class="op">=</span> <span class="st">"ret"</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>ret</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>Date
+2016-01         NaN
+2016-02    0.060729
+2016-03    0.155842
+2016-04   -0.036382
+2016-05    0.063613
+             ...   
+2022-08   -0.005517
+2022-09   -0.075049
+2022-10    0.163959
+2022-11    0.089560
+2022-12   -0.000201
+Freq: M, Name: ret, Length: 84, dtype: float64</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pull factor returns and risk-free rate for last 60 months</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>ff <span class="op">=</span> ff5[<span class="dv">0</span>].iloc[<span class="op">-</span><span class="dv">60</span>:] <span class="op">/</span> <span class="dv">100</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># rf = dgs.iloc[-1].item()</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># rf = round(rf, 2)</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>ff</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine with stock returns</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> ff.join(ret, how<span class="op">=</span><span class="st">"left"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate excess returns</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"ret"</span>] <span class="op">=</span> df.ret <span class="op">-</span> df.RF</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[factors <span class="op">+</span> [<span class="st">"ret"</span>]].reset_index()</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>df.columns <span class="op">=</span> [<span class="st">"date"</span>] <span class="op">+</span> factors <span class="op">+</span> [<span class="st">"ret"</span>]</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"date"</span>] <span class="op">=</span> df.date.astype(<span class="bu">str</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate factor loadings</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> sm.OLS(df.ret, sm.add_constant(df[factors])).fit()</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>betas <span class="op">=</span> result.params[<span class="dv">1</span>:]</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>betas <span class="op">=</span> np.<span class="bu">round</span>(betas, <span class="dv">2</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>betas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>Mkt-RF    0.84
+SMB       0.14
+HML       0.05
+RMW       0.41
+CMA       0.63
+dtype: float64</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>fprem</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>Mkt-RF    8.87
+SMB       3.02
+HML       4.22
+RMW       3.49
+CMA       3.44
+dtype: float64</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Risk-free rate (in %)</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> ff.RF[<span class="op">-</span><span class="dv">1</span>]<span class="op">*</span><span class="dv">100</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>rf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>0.22999999999999998</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Expected return</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>expret <span class="op">=</span> rf <span class="op">+</span> betas <span class="op">@</span> fprem</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>expret</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>11.9127</code></pre>
+</div>
+</div>
+</section>
+<section id="fama-macbeth-characteristic-regressions" class="level1">
+<h1>Fama-MacBeth Characteristic Regressions</h1>
+<p>(Based on Lewellen’s Critical Finance Review article)</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.parse</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sqlalchemy <span class="im">import</span> create_engine</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install pymssql</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Requirement already satisfied: pymssql in d:\bbcx-investments-quarto\quarto\venv\lib\site-packages (2.2.6)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+[notice] A new release of pip available: 22.2.1 -&gt; 22.3.1
+[notice] To update, run: python.exe -m pip install --upgrade pip</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>chars <span class="op">=</span> [</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"bm"</span>,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ep"</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cashpr"</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dy"</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"lev"</span>,</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sp"</span>,</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"roic"</span>,</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rd_sale"</span>,</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rd_mve"</span>,</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"agr"</span>,</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gma"</span>,</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"chcsho"</span>,</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"lgr"</span>,</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"acc"</span>,</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pctacc"</span>,</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cfp"</span>,</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"absacc"</span>,</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>,</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"chinv"</span>,</span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"hire"</span>,</span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sgr"</span>,</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pchsale_pchinvt"</span>,</span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pchsale_pchrect"</span>,</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pchgm_pchsale"</span>,</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pchsale_pchxsga"</span>,</span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"depr"</span>,</span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pchdepr"</span>,</span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"invest"</span>,</span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">"egr"</span>,</span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a>    <span class="st">"grcapx"</span>,</span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a>    <span class="st">"tang"</span>,</span>
+<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sin"</span>,</span>
+<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a>    <span class="st">"currat"</span>,</span>
+<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pchcurrat"</span>,</span>
+<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a>    <span class="st">"quick"</span>,</span>
+<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pchquick"</span>,</span>
+<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">"salecash"</span>,</span>
+<span id="cb33-39"><a href="#cb33-39" aria-hidden="true" tabindex="-1"></a>    <span class="st">"salerec"</span>,</span>
+<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a>    <span class="st">"saleinv"</span>,</span>
+<span id="cb33-41"><a href="#cb33-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pchsaleinv"</span>,</span>
+<span id="cb33-42"><a href="#cb33-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cashdebt"</span>,</span>
+<span id="cb33-43"><a href="#cb33-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">"realestate"</span>,</span>
+<span id="cb33-44"><a href="#cb33-44" aria-hidden="true" tabindex="-1"></a>    <span class="st">"divi"</span>,</span>
+<span id="cb33-45"><a href="#cb33-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">"divo"</span>,</span>
+<span id="cb33-46"><a href="#cb33-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">"securedind"</span>,</span>
+<span id="cb33-47"><a href="#cb33-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">"secured"</span>,</span>
+<span id="cb33-48"><a href="#cb33-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">"convind"</span>,</span>
+<span id="cb33-49"><a href="#cb33-49" aria-hidden="true" tabindex="-1"></a>    <span class="st">"grltnoa"</span>,</span>
+<span id="cb33-50"><a href="#cb33-50" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rd"</span>,</span>
+<span id="cb33-51"><a href="#cb33-51" aria-hidden="true" tabindex="-1"></a>    <span class="st">"operprof"</span>,</span>
+<span id="cb33-52"><a href="#cb33-52" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ps"</span>,</span>
+<span id="cb33-53"><a href="#cb33-53" aria-hidden="true" tabindex="-1"></a>    <span class="st">"chpmia"</span>,</span>
+<span id="cb33-54"><a href="#cb33-54" aria-hidden="true" tabindex="-1"></a>    <span class="st">"chatoia"</span>,</span>
+<span id="cb33-55"><a href="#cb33-55" aria-hidden="true" tabindex="-1"></a>    <span class="st">"chempia"</span>,</span>
+<span id="cb33-56"><a href="#cb33-56" aria-hidden="true" tabindex="-1"></a>    <span class="st">"bm_ia"</span>,</span>
+<span id="cb33-57"><a href="#cb33-57" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pchcapx_ia"</span>,</span>
+<span id="cb33-58"><a href="#cb33-58" aria-hidden="true" tabindex="-1"></a>    <span class="st">"tb"</span>,</span>
+<span id="cb33-59"><a href="#cb33-59" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cfp_ia"</span>,</span>
+<span id="cb33-60"><a href="#cb33-60" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mve_ia"</span>,</span>
+<span id="cb33-61"><a href="#cb33-61" aria-hidden="true" tabindex="-1"></a>    <span class="st">"herf"</span>,</span>
+<span id="cb33-62"><a href="#cb33-62" aria-hidden="true" tabindex="-1"></a>    <span class="st">"orgcap"</span>,</span>
+<span id="cb33-63"><a href="#cb33-63" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mve"</span>,</span>
+<span id="cb33-64"><a href="#cb33-64" aria-hidden="true" tabindex="-1"></a>    <span class="st">"chtx"</span>,</span>
+<span id="cb33-65"><a href="#cb33-65" aria-hidden="true" tabindex="-1"></a>    <span class="st">"roaq"</span>,</span>
+<span id="cb33-66"><a href="#cb33-66" aria-hidden="true" tabindex="-1"></a>    <span class="st">"roeq"</span>,</span>
+<span id="cb33-67"><a href="#cb33-67" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rsup"</span>,</span>
+<span id="cb33-68"><a href="#cb33-68" aria-hidden="true" tabindex="-1"></a>    <span class="st">"stdacc"</span>,</span>
+<span id="cb33-69"><a href="#cb33-69" aria-hidden="true" tabindex="-1"></a>    <span class="st">"roavol"</span>,</span>
+<span id="cb33-70"><a href="#cb33-70" aria-hidden="true" tabindex="-1"></a>    <span class="st">"stdcf"</span>,</span>
+<span id="cb33-71"><a href="#cb33-71" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cash"</span>,</span>
+<span id="cb33-72"><a href="#cb33-72" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cinvest"</span>,</span>
+<span id="cb33-73"><a href="#cb33-73" aria-hidden="true" tabindex="-1"></a>    <span class="st">"nincr"</span>,</span>
+<span id="cb33-74"><a href="#cb33-74" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sue"</span>,</span>
+<span id="cb33-75"><a href="#cb33-75" aria-hidden="true" tabindex="-1"></a>    <span class="st">"aeavol"</span>,</span>
+<span id="cb33-76"><a href="#cb33-76" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ear"</span>,</span>
+<span id="cb33-77"><a href="#cb33-77" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ms"</span>,</span>
+<span id="cb33-78"><a href="#cb33-78" aria-hidden="true" tabindex="-1"></a>    <span class="st">"disp"</span>,</span>
+<span id="cb33-79"><a href="#cb33-79" aria-hidden="true" tabindex="-1"></a>    <span class="st">"chfeps"</span>,</span>
+<span id="cb33-80"><a href="#cb33-80" aria-hidden="true" tabindex="-1"></a>    <span class="st">"fgr5yr"</span>,</span>
+<span id="cb33-81"><a href="#cb33-81" aria-hidden="true" tabindex="-1"></a>    <span class="st">"nanalyst"</span>,</span>
+<span id="cb33-82"><a href="#cb33-82" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sfe"</span>,</span>
+<span id="cb33-83"><a href="#cb33-83" aria-hidden="true" tabindex="-1"></a>    <span class="st">"chnanalyst"</span>,</span>
+<span id="cb33-84"><a href="#cb33-84" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mom6m"</span>,</span>
+<span id="cb33-85"><a href="#cb33-85" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mom12m"</span>,</span>
+<span id="cb33-86"><a href="#cb33-86" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mom36m"</span>,</span>
+<span id="cb33-87"><a href="#cb33-87" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mom1m"</span>,</span>
+<span id="cb33-88"><a href="#cb33-88" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dolvol"</span>,</span>
+<span id="cb33-89"><a href="#cb33-89" aria-hidden="true" tabindex="-1"></a>    <span class="st">"chmom"</span>,</span>
+<span id="cb33-90"><a href="#cb33-90" aria-hidden="true" tabindex="-1"></a>    <span class="st">"turn"</span>,</span>
+<span id="cb33-91"><a href="#cb33-91" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ipo"</span>,</span>
+<span id="cb33-92"><a href="#cb33-92" aria-hidden="true" tabindex="-1"></a>    <span class="st">"indmom"</span>,</span>
+<span id="cb33-93"><a href="#cb33-93" aria-hidden="true" tabindex="-1"></a>    <span class="st">"maxret"</span>,</span>
+<span id="cb33-94"><a href="#cb33-94" aria-hidden="true" tabindex="-1"></a>    <span class="st">"retvol"</span>,</span>
+<span id="cb33-95"><a href="#cb33-95" aria-hidden="true" tabindex="-1"></a>    <span class="st">"baspread"</span>,</span>
+<span id="cb33-96"><a href="#cb33-96" aria-hidden="true" tabindex="-1"></a>    <span class="st">"std_dolvol"</span>,</span>
+<span id="cb33-97"><a href="#cb33-97" aria-hidden="true" tabindex="-1"></a>    <span class="st">"std_turn"</span>,</span>
+<span id="cb33-98"><a href="#cb33-98" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ill"</span>,</span>
+<span id="cb33-99"><a href="#cb33-99" aria-hidden="true" tabindex="-1"></a>    <span class="st">"zerotrade"</span>,</span>
+<span id="cb33-100"><a href="#cb33-100" aria-hidden="true" tabindex="-1"></a>    <span class="st">"beta"</span>,</span>
+<span id="cb33-101"><a href="#cb33-101" aria-hidden="true" tabindex="-1"></a>    <span class="st">"betasq"</span>,</span>
+<span id="cb33-102"><a href="#cb33-102" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pricedelay"</span>,</span>
+<span id="cb33-103"><a href="#cb33-103" aria-hidden="true" tabindex="-1"></a>    <span class="st">"idiovol"</span>,</span>
+<span id="cb33-104"><a href="#cb33-104" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb33-105"><a href="#cb33-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-106"><a href="#cb33-106" aria-hidden="true" tabindex="-1"></a>intchars <span class="op">=</span> [</span>
+<span id="cb33-107"><a href="#cb33-107" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>,</span>
+<span id="cb33-108"><a href="#cb33-108" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sin"</span>,</span>
+<span id="cb33-109"><a href="#cb33-109" aria-hidden="true" tabindex="-1"></a>    <span class="st">"divi"</span>,</span>
+<span id="cb33-110"><a href="#cb33-110" aria-hidden="true" tabindex="-1"></a>    <span class="st">"divo"</span>,</span>
+<span id="cb33-111"><a href="#cb33-111" aria-hidden="true" tabindex="-1"></a>    <span class="st">"securedind"</span>,</span>
+<span id="cb33-112"><a href="#cb33-112" aria-hidden="true" tabindex="-1"></a>    <span class="st">"convind"</span>,</span>
+<span id="cb33-113"><a href="#cb33-113" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rd"</span>,</span>
+<span id="cb33-114"><a href="#cb33-114" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ps"</span>,</span>
+<span id="cb33-115"><a href="#cb33-115" aria-hidden="true" tabindex="-1"></a>    <span class="st">"nincr"</span>,</span>
+<span id="cb33-116"><a href="#cb33-116" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ms"</span>,</span>
+<span id="cb33-117"><a href="#cb33-117" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ipo"</span>,</span>
+<span id="cb33-118"><a href="#cb33-118" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb33-119"><a href="#cb33-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-120"><a href="#cb33-120" aria-hidden="true" tabindex="-1"></a>chars <span class="op">=</span> [x <span class="cf">for</span> x <span class="kw">in</span> chars <span class="cf">if</span> x <span class="kw">not</span> <span class="kw">in</span> intchars]</span>
+<span id="cb33-121"><a href="#cb33-121" aria-hidden="true" tabindex="-1"></a>chars <span class="op">=</span> np.sort(chars)</span>
+<span id="cb33-122"><a href="#cb33-122" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> [<span class="st">"Lo 20"</span>, <span class="st">"Qnt 2"</span>, <span class="st">"Qnt 3"</span>, <span class="st">"Qnt 4"</span>, <span class="st">"Hi 20"</span>]</span>
+<span id="cb33-123"><a href="#cb33-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-124"><a href="#cb33-124" aria-hidden="true" tabindex="-1"></a>server <span class="op">=</span> <span class="st">"eu-az-sql-serv1.database.windows.net:1433"</span></span>
+<span id="cb33-125"><a href="#cb33-125" aria-hidden="true" tabindex="-1"></a>database <span class="op">=</span> <span class="st">"dgn022k6348dcyh"</span></span>
+<span id="cb33-126"><a href="#cb33-126" aria-hidden="true" tabindex="-1"></a>username <span class="op">=</span> <span class="st">"uhgrque4d8p77hf"</span></span>
+<span id="cb33-127"><a href="#cb33-127" aria-hidden="true" tabindex="-1"></a>password <span class="op">=</span> <span class="st">"FfWrgFcK$Vnk@9BAgKH4nbEDF"</span></span>
+<span id="cb33-128"><a href="#cb33-128" aria-hidden="true" tabindex="-1"></a>password <span class="op">=</span> urllib.parse.quote_plus(password)</span>
+<span id="cb33-129"><a href="#cb33-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-130"><a href="#cb33-130" aria-hidden="true" tabindex="-1"></a>string <span class="op">=</span> <span class="st">"mssql+pymssql://"</span> <span class="op">+</span> username <span class="op">+</span> <span class="st">":"</span> <span class="op">+</span> password <span class="op">+</span> <span class="st">"@"</span> <span class="op">+</span> server <span class="op">+</span> <span class="st">"/"</span> <span class="op">+</span> database</span>
+<span id="cb33-131"><a href="#cb33-131" aria-hidden="true" tabindex="-1"></a>conn <span class="op">=</span> create_engine(string).<span class="ex">connect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Pull the data from SQL server</p>
+<div class="cell" data-execution_count="61">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>char <span class="op">=</span> <span class="st">'mve, beta, mom12m, bm'</span>        <span class="co"># example characteristics</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_sql(</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">" select ticker, date, ret, "</span> <span class="op">+</span> char <span class="op">+</span> <span class="st">" from ghz where date&gt;='2000-01-01' "</span>, conn</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.dropna()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(df.index)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>df.date.<span class="bu">min</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="44">
+<pre><code>datetime.date(2000, 1, 31)</code></pre>
+</div>
+</div>
+<section id="cross-sectional-method-1-sorting" class="level2">
+<h2 class="anchored" data-anchor-id="cross-sectional-method-1-sorting">Cross-sectional Method #1: Sorting</h2>
+<div class="cell" data-execution_count="62">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sorting function</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cut(x):</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> pd.qcut(x, <span class="dv">5</span>, labels<span class="op">=</span>labels)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span>:</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> pd.Series(np.nan, index<span class="op">=</span>x.index)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="63">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Characteristic to sort on</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>char <span class="op">=</span> <span class="st">'beta'</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"quintile"</span>] <span class="op">=</span> df.groupby(<span class="st">"date"</span>)[char].<span class="bu">apply</span>(cut)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="58">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check to see we have about the same number of observations in each bin</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>df.quintile.value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="58">
+<pre><code>Lo 20    91573
+Hi 20    91524
+Qnt 3    91431
+Qnt 2    91418
+Qnt 4    91418
+Name: quintile, dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="64">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Time-series of EW average portfolio across stocks</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.dropna(subset<span class="op">=</span>[<span class="st">"quintile"</span>])</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>rets <span class="op">=</span> df.groupby([<span class="st">"date"</span>, <span class="st">"quintile"</span>]).ret.mean().unstack()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="65">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Time-series average of each portfolio</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>mns <span class="op">=</span> rets.mean()</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mns)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>hilo <span class="op">=</span> mns[<span class="st">'Hi 20'</span>]<span class="op">-</span>mns[<span class="st">'Lo 20'</span>]</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Hi-Lo average return is: </span><span class="sc">{</span>hilo<span class="sc">: .2%}</span><span class="ss">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>quintile
+Lo 20    0.010107
+Qnt 2    0.010880
+Qnt 3    0.011299
+Qnt 4    0.010744
+Hi 20    0.008246
+dtype: float64
+Hi-Lo average return is: -0.19%</code></pre>
+</div>
+</div>
+</section>
+<section id="cross-sectional-method-2-regression" class="level2">
+<h2 class="anchored" data-anchor-id="cross-sectional-method-2-regression">Cross-sectional Method #2: Regression</h2>
+<p>Example #1: Single characteristic</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run a cross-sectional regression for each date</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>coefs <span class="op">=</span> df.groupby(<span class="st">'date'</span>).<span class="bu">apply</span>(<span class="kw">lambda</span> d: sm.OLS(d.ret,sm.add_constant(d[<span class="st">'beta'</span>])).fit().params) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>coefs.mean()</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> <span class="bu">len</span>(coefs.beta)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>tsreg <span class="op">=</span> sm.OLS(coefs.beta,np.ones(T)).fit()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(tsreg.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   beta   R-squared:                       0.000
+Model:                            OLS   Adj. R-squared:                  0.000
+Method:                 Least Squares   F-statistic:                       nan
+Date:                Wed, 16 Nov 2022   Prob (F-statistic):                nan
+Time:                        09:53:41   Log-Likelihood:                 412.61
+No. Observations:                 264   AIC:                            -823.2
+Df Residuals:                     263   BIC:                            -819.6
+Df Model:                           0                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         -0.0002      0.003     -0.050      0.960      -0.006       0.006
+==============================================================================
+Omnibus:                       59.053   Durbin-Watson:                   1.892
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              212.407
+Skew:                           0.894   Prob(JB):                     7.52e-47
+Kurtosis:                       7.014   Cond. No.                         1.00
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot coefficient on beta</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>trace  <span class="op">=</span> go.Scatter(x<span class="op">=</span>coefs.index, y<span class="op">=</span>coefs[<span class="st">'beta'</span>], mode<span class="op">=</span><span class="st">"lines"</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure()</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>fig.add_trace(trace)</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>fig.update_yaxes(title<span class="op">=</span><span class="st">'Coefficient on Beta'</span>,tickformat<span class="op">=</span><span class="st">".4f"</span>)</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>fig.update_xaxes(title<span class="op">=</span><span class="st">'Date'</span>)</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Unable to display output for mime type(s): application/vnd.plotly.v1+json</code></pre>
+</div>
+</div>
+<p>Example #2: Multiple characteristics</p>
+<div class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>chars <span class="op">=</span> [<span class="st">'beta'</span>,<span class="st">'mve'</span>, <span class="st">'bm'</span>,<span class="st">'mom12m'</span>]</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>coefs <span class="op">=</span> df.groupby(<span class="st">'date'</span>).<span class="bu">apply</span>(<span class="kw">lambda</span> d: sm.OLS(d.ret,sm.add_constant(d[chars])).fit().params) </span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> <span class="bu">len</span>(coefs)</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> chars:</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    tsreg <span class="op">=</span> sm.OLS(coefs.beta,np.ones(T)).fit()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>stats <span class="op">=</span> pd.DataFrame(dtype<span class="op">=</span><span class="bu">float</span>,index<span class="op">=</span>coefs.columns,columns<span class="op">=</span>[<span class="st">'mean'</span>,<span class="st">'tstat'</span>,<span class="st">'pval'</span>])</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> coef <span class="kw">in</span> coefs.columns :</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    tsreg <span class="op">=</span> sm.OLS(coefs[coef],np.ones(T)).fit()</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    stats.loc[coef,<span class="st">'mean'</span>] <span class="op">=</span> coefs[coef].mean()</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    stats.loc[coef,<span class="st">'tstat'</span>] <span class="op">=</span> tsreg.tvalues[<span class="st">'const'</span>]</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>    stats.loc[coef,<span class="st">'pval'</span>] <span class="op">=</span> tsreg.pvalues[<span class="st">'const'</span>]</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>stats.<span class="bu">round</span>(<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="50">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>mean</th>
+      <th>tstat</th>
+      <th>pval</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>const</th>
+      <td>0.0270</td>
+      <td>3.3916</td>
+      <td>0.0008</td>
+    </tr>
+    <tr>
+      <th>beta</th>
+      <td>-0.0016</td>
+      <td>-0.6105</td>
+      <td>0.5420</td>
+    </tr>
+    <tr>
+      <th>mve</th>
+      <td>-0.0011</td>
+      <td>-2.2353</td>
+      <td>0.0262</td>
+    </tr>
+    <tr>
+      <th>bm</th>
+      <td>-0.0010</td>
+      <td>-0.6026</td>
+      <td>0.5473</td>
+    </tr>
+    <tr>
+      <th>mom12m</th>
+      <td>-0.0004</td>
+      <td>-0.1419</td>
+      <td>0.8872</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot a chosen characteristic's coefficients over time</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>coef <span class="op">=</span> <span class="st">'mom12m'</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>trace  <span class="op">=</span> go.Scatter(x<span class="op">=</span>coefs.index, y<span class="op">=</span>coefs[coef], mode<span class="op">=</span><span class="st">"lines"</span>)</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure()</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>fig.add_trace(trace)</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>fig.update_yaxes(title<span class="op">=</span><span class="st">'Coefficient on '</span><span class="op">+</span>coef,tickformat<span class="op">=</span><span class="st">".4f"</span>)</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>fig.update_xaxes(title<span class="op">=</span><span class="st">'Date'</span>)</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Unable to display output for mime type(s): application/vnd.plotly.v1+json</code></pre>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
