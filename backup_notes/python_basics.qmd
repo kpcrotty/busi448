@@ -1,0 +1,274 @@
+---
+title: "Python Basics"
+format: html
+---
+
+This is a brief introduction to the primary Python functionalities we will use in the course.  We will discuss these in class together, but this will be a useful reference for you as we proceed through the semester.  The examples in this document can be run interactively in the *00_python_basics.ipynb* notebook in the [Course Code Binder](https://mybinder.org/v2/gh/kpcrotty/busi448_binder/HEAD).
+
+# Getting Started
+## Packages
+
+Some software comes with everything pre-installed.  Python allows the user to customize how much of the software is loaded.  Here's an example of the command used to load the `numpy` package:
+
+``` {.python}
+# Load numpy package
+import numpy
+
+# Alternative with abbreviated reference or alias
+import numpy as np
+```
+The most commonly used packages for the course are:
+
+- `numpy`: numerical python package (alias: `np`)
+- `scipy`: scientific computing package (alias: `scipy`)
+- `pandas`: panel data package (alias: `pd`)
+- `numpy_financial`: financial calculations package (alias: `npf`)
+- `plotly.graph_objects`: graphing package (alias: `go`)
+
+## Jupyter Notebooks
+
+You can interact with Python in various ways.  In class, we will use Jupyter notebooks run through the course binder site.  Jupyter notebooks allow for an interactive experience running Python code.
+
+Here are some useful key commands that we will use frequently:
+
+- `ctrl` + `enter`: run current cell
+- `esc`: exit current cell
+- `esc` + `m`: make current cell a markdown cell
+- `esc` + `y`: make current cell a code cell
+- `ctrl` + `shift` + `_`: split current cell into two cells
+- `esc` + `a`: add cell above
+- `esc` + `b`: add cell below
+- `esc` + `dd`: delete current cell
+- `ctrl` + `/`: comment or uncomment current line
+
+It is good practice to provide some comments as to what code is trying to do, so that you or other users can easily see the purpose of code snippets.  Starting a line with `#` tells Python that the rest of the line is a comment.  In the course binder, you can use `ctrl` + `/` to toggle the current line between being a comment or not.
+
+### Markdown basics
+
+Jupyter notebooks are useful because they allow us to switch back and forth between a text editor and code snippets.  In particular, the text editor allows for some basic mathematical typesetting.  The text editor format is called Markdown.  To make a current cell of a Jupyter notebook into a Markdown cell, type `esc` + `m`.  Here are some basic typesetting formats.
+
+- `#   ` is biggest font
+- `##` is a bit smaller
+- `###` is even smaller
+
+We can also write math expressions (using LaTeX style type-setting).  Math expressions are enclosed in `$`s.  For example: `$a_t$` becomes $a_t$.
+
+- To get subscripts on variables, add a `_` after the variable: `a_t` for $a_t$
+- To get superscripts on variables, add a `^` after the variable: `a^2` for $a^2$
+- For sub- or superscripts of more than one character, you must use braces around the expression:  `a_{i,t}` is $a_{i,t}$
+
+
+# Basic Python Structures
+
+## Lists
+
+Lists are collections of python objects.  Lists are enclosed in brackets, with list elements separated by commas.  We will usually use collections of numbers or string variables.  
+
+``` {.python}
+# This is a list of numbers assigned to a variable x
+x = [1,2,3,4]
+
+# this is a list of strings assigned to a variable y
+y = ['a','b','c','d']
+```
+
+We can access elements of the list by the index of that element.  In Python, indexing starts with 0 (rather than 1).  So the first element of `x` is accessed with `x[0]`.  So, `x[2]` will return the 3rd element of the list `x`.
+
+## Numpy arrays
+
+We will often use `numpy` arrays rather than lists.  Numpy arrays requires the elements to be of the same type, among other things.  To convert a list `x` to a numpy array called `np_x`, we would run:
+
+``` {.python}
+# This is a list of numbers assigned to a variable x
+np_x = np.array(x)
+```
+
+There are some very useful built-in `numpy` functions.  For instance, the command `np.arange(start, stop, step)` returns an array of evenly-spaced values starting at `start` and ending at `stop-step` (That is, it excludes the `stop` value.)  The `start` and `step` inputs are optional. By default, `arange` starts at 0 and uses a step size of 1. 
+
+
+## Dicts
+
+Another type of Python structure is a Dict.  Dicts map a set of keys into values, as in a dictionary.
+
+``` {.python}
+# This is a dict mapping ['a','b','c'] to [1,2,3]
+new_dict = {'a': 1, 'b': 2, 'c': 3}
+```
+
+If we provide an argument of `'a'` to the dict above using `new_dict['a']`, it will return the value `1`.
+
+
+## Pandas
+
+### DataFrames
+
+A pandas DataFrame allows us to handle datasets and perform spreadsheet-like calculations.  A DataFrame is an array of rows and columns.  The rows and columns are indexed by a pandas `Index` object.  You can initialize empty dataframes with set column and rows as follows.
+
+``` {.python}
+# An empty dataframe
+df = pd.DataFrame(dtype=float,
+            columns = ['Column A','Column B'] ,
+            index = np.arange(5)
+            )
+```
+
+Alternatively, you can assign existing data to a dataframe.
+
+``` {.python}
+# Make some existing data
+x = np.array([1, 2, 2, 4, 3, 6, 4, 8, 5, 10])
+x = x.reshape([5,2])
+
+# Assign it to a dataframe
+df = pd.DataFrame(x, 
+            columns=['Column A','ColumnB'],
+            index = np.arange(5))
+```
+
+### Accessing data
+
+In the example above, we could access a single column using `df['Column A']`.  If a column title is a string containing no spaces (as in the 2nd column above), we can also access a column using the syntax `df.ColumnB`.
+
+To access a single row, we can use the `.loc` method of the dataframe.  For example, `df.loc[4]` accesses the row labeled by `4`.  
+
+If we want a single element of the dataframe, we can also use the `.loc` method.  For exmple, `df.loc[4,'ColumnB']` pulls the datapoint from row index `4` and column index `'ColumnB'`.
+
+### Subsetting dataframes
+
+We will sometimes want to filter datasets based on various criteria.  This can be accomplished using the following syntax.
+
+``` {.python}
+# Subset on a single column's value
+df_subset = df[df.ColumnB >= 4]
+
+# Subset on a multiple column's values (use & for AND)
+df_subset = df[(df.ColumnB >= 4 ) & (df['Column A'] <=2 )]
+
+# Subset on a multiple column's values (use | for OR)
+df_subset = df[(df.ColumnB >= 4 ) & (df['Column A'] >=2 )]
+```
+
+
+## Writing Functions
+
+We will often want to be able to apply the same calculation for different inputs.  We can build this functionality by writing functions.  Functions take arguments, do something, and then usually return some output.  Here is a simple example that calculates the appropriate discount factor based on a rate and number of discounting periods.
+
+``` {.python}
+def discount_factor(rate,num_periods):
+    '''
+    rate: a discount rate input in decimal notation
+    num_periods: how many periods to discoun
+    '''
+    factor = 1/((1+rate)**num_periods)
+    return factor
+```
+
+To calculate the discount factor if the rate is 2.5% with 5 discounting periods, we would call the function using `discount_factor(0.025,5)`.
+
+
+## Loops 
+
+Sometimes, we will want to perform the same calculation for each element of a list.  For instance, we might have a list of discounting periods and want to calculation the discount factor for each one.  We can accomplish this using a `for` loop.  A `for` loop simply executes all of the commands for each element of the list indicated at the top of the loop.  Here's a simple example.
+
+``` {.python}
+loop_list = [5, 10, 20]
+for t in loop_list:
+    print(discount_factor(0.025, t))
+```
+
+Another useful python tool is the `enumerate` command.  Applying this to a list allows us to have two running variables in the list: the first tells us which element in the list the loop is on (i.e., 0, 1, 2, 3, ...), while the second variable is the actual list element.
+
+``` {.python}
+for i, t in enumerate(loop_list):
+    print(i)
+    print(discount_factor(0.025, t))
+```
+
+Finally, python allows loops to be used within other structures.  For instance, we can use a loop to generate a list as follows. 
+
+``` {.python}
+x = [1 / ((1.025)**t) for t in loop_list]
+```
+
+
+## Plots
+
+We will use the ``plotly.graph_objects` graphing package to plot data.  To make a simple line plot with markers for each data point, we can use the following.
+
+``` {.python}
+fig = go.Figure()
+trace = go.Scatter(x = df['Column A'], y = df['ColumnB'])
+fig.add_trace(trace)
+fig.show()
+```
+
+Plots can handle multiple data series being plotting on the same figure.  For instance, the code below plots the same data, but one plots it as a line and the other only plots the data markers.
+
+``` {.python}
+fig = go.Figure()
+# plot line connecting data points
+trace0 = go.Scatter(
+    x = df['Column A'], 
+    y = df['ColumnB'],
+    mode='lines',
+    name='with lines')
+fig.add_trace(trace0)
+# plot data markers
+trace1 = go.Scatter(
+    x = df['Column A'], 
+    y = df['ColumnB'],
+    mode='markers',
+    name='with markers')
+fig.add_trace(trace1)
+fig.show()
+```
+
+
+<!-- ## Simulating random variables
+- univariate normal
+- multivariate normal
+## Numpy financial
+
+## Intro to Pandas
+- DataFrames
+  - creating dataframes
+  - columns
+  - index
+- Accessing rows, columns, and cells
+.loc vs .iloc
+- Heirarchical indexing
+pd.MultiIndex.from_product(LIST of LISTS)
+
+- Subsetting data
+df_subset = df[(df.company_symbol==ticker) & (df.DATE==date)]
+
+## Pandas Formatting
+
+- entire dataframe
+`pd.options.display.float_format = '{:.2f}'.format`
+
+# format_mapping = {'price': '${:,.2f}'', 
+#                   'coupon_rate': '{:,.2%}'', 
+#                   'maturity': '{:,.1f}'',
+#                   'face': '${:,.0f}'',
+#                   'period': '{:,.0f}''}
+
+# for key, value in format_mapping.items():
+#     df[key] = df[key].apply(value.format)
+
+## Working with Data
+- Fetching Data
+  - pandas_datareader
+    - FRED
+    - Fama-French
+    - FactSet
+
+- 
+- Summarizing Data
+  - describe
+  - 
+- Plotting Data
+- Regression
+- Sorting
+- Grouping Data
+  - lambda functions and apply -->

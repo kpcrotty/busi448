@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Python Basics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="python_basics_files/libs/clipboard/clipboard.min.js"></script>
+<script src="python_basics_files/libs/quarto-html/quarto.js"></script>
+<script src="python_basics_files/libs/quarto-html/popper.min.js"></script>
+<script src="python_basics_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="python_basics_files/libs/quarto-html/anchor.min.js"></script>
+<link href="python_basics_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="python_basics_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="python_basics_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="python_basics_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="python_basics_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Python Basics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>This is a brief introduction to the primary Python functionalities we will use in the course. We will discuss these in class together, but this will be a useful reference for you as we proceed through the semester. The examples in this document can be run interactively in the <em>00_python_basics.ipynb</em> notebook in the <a href="https://mybinder.org/v2/gh/kpcrotty/busi448_binder/HEAD">Course Code Binder</a>.</p>
+<section id="getting-started" class="level1">
+<h1>Getting Started</h1>
+<section id="packages" class="level2">
+<h2 class="anchored" data-anchor-id="packages">Packages</h2>
+<p>Some software comes with everything pre-installed. Python allows the user to customize how much of the software is loaded. Here’s an example of the command used to load the <code>numpy</code> package:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load numpy package</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternative with abbreviated reference or alias</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The most commonly used packages for the course are:</p>
+<ul>
+<li><code>numpy</code>: numerical python package (alias: <code>np</code>)</li>
+<li><code>scipy</code>: scientific computing package (alias: <code>scipy</code>)</li>
+<li><code>pandas</code>: panel data package (alias: <code>pd</code>)</li>
+<li><code>numpy_financial</code>: financial calculations package (alias: <code>npf</code>)</li>
+<li><code>plotly.graph_objects</code>: graphing package (alias: <code>go</code>)</li>
+</ul>
+</section>
+<section id="jupyter-notebooks" class="level2">
+<h2 class="anchored" data-anchor-id="jupyter-notebooks">Jupyter Notebooks</h2>
+<p>You can interact with Python in various ways. In class, we will use Jupyter notebooks run through the course binder site. Jupyter notebooks allow for an interactive experience running Python code.</p>
+<p>Here are some useful key commands that we will use frequently:</p>
+<ul>
+<li><code>ctrl</code> + <code>enter</code>: run current cell</li>
+<li><code>esc</code>: exit current cell</li>
+<li><code>esc</code> + <code>m</code>: make current cell a markdown cell</li>
+<li><code>esc</code> + <code>y</code>: make current cell a code cell</li>
+<li><code>ctrl</code> + <code>shift</code> + <code>_</code>: split current cell into two cells</li>
+<li><code>esc</code> + <code>a</code>: add cell above</li>
+<li><code>esc</code> + <code>b</code>: add cell below</li>
+<li><code>esc</code> + <code>dd</code>: delete current cell</li>
+<li><code>ctrl</code> + <code>/</code>: comment or uncomment current line</li>
+</ul>
+<p>It is good practice to provide some comments as to what code is trying to do, so that you or other users can easily see the purpose of code snippets. Starting a line with <code>#</code> tells Python that the rest of the line is a comment. In the course binder, you can use <code>ctrl</code> + <code>/</code> to toggle the current line between being a comment or not.</p>
+<section id="markdown-basics" class="level3">
+<h3 class="anchored" data-anchor-id="markdown-basics">Markdown basics</h3>
+<p>Jupyter notebooks are useful because they allow us to switch back and forth between a text editor and code snippets. In particular, the text editor allows for some basic mathematical typesetting. The text editor format is called Markdown. To make a current cell of a Jupyter notebook into a Markdown cell, type <code>esc</code> + <code>m</code>. Here are some basic typesetting formats.</p>
+<ul>
+<li><code>#</code> is biggest font</li>
+<li><code>##</code> is a bit smaller</li>
+<li><code>###</code> is even smaller</li>
+</ul>
+<p>We can also write math expressions (using LaTeX style type-setting). Math expressions are enclosed in <code>$</code>s. For example: <code>$a_t$</code> becomes <span class="math inline">\(a_t\)</span>.</p>
+<ul>
+<li>To get subscripts on variables, add a <code>_</code> after the variable: <code>a_t</code> for <span class="math inline">\(a_t\)</span></li>
+<li>To get superscripts on variables, add a <code>^</code> after the variable: <code>a^2</code> for <span class="math inline">\(a^2\)</span></li>
+<li>For sub- or superscripts of more than one character, you must use braces around the expression: <code>a_{i,t}</code> is <span class="math inline">\(a_{i,t}\)</span></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="basic-python-structures" class="level1">
+<h1>Basic Python Structures</h1>
+<section id="lists" class="level2">
+<h2 class="anchored" data-anchor-id="lists">Lists</h2>
+<p>Lists are collections of python objects. Lists are enclosed in brackets, with list elements separated by commas. We will usually use collections of numbers or string variables.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is a list of numbers assigned to a variable x</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>]</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># this is a list of strings assigned to a variable y</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> [<span class="st">'a'</span>,<span class="st">'b'</span>,<span class="st">'c'</span>,<span class="st">'d'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We can access elements of the list by the index of that element. In Python, indexing starts with 0 (rather than 1). So the first element of <code>x</code> is accessed with <code>x[0]</code>. So, <code>x[2]</code> will return the 3rd element of the list <code>x</code>.</p>
+</section>
+<section id="numpy-arrays" class="level2">
+<h2 class="anchored" data-anchor-id="numpy-arrays">Numpy arrays</h2>
+<p>We will often use <code>numpy</code> arrays rather than lists. Numpy arrays requires the elements to be of the same type, among other things. To convert a list <code>x</code> to a numpy array called <code>np_x</code>, we would run:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is a list of numbers assigned to a variable x</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>np_x <span class="op">=</span> np.array(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>There are some very useful built-in <code>numpy</code> functions. For instance, the command <code>np.arange(start, stop, step)</code> returns an array of evenly-spaced values starting at <code>start</code> and ending at <code>stop-step</code> (That is, it excludes the <code>stop</code> value.) The <code>start</code> and <code>step</code> inputs are optional. By default, <code>arange</code> starts at 0 and uses a step size of 1.</p>
+</section>
+<section id="dicts" class="level2">
+<h2 class="anchored" data-anchor-id="dicts">Dicts</h2>
+<p>Another type of Python structure is a Dict. Dicts map a set of keys into values, as in a dictionary.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is a dict mapping ['a','b','c'] to [1,2,3]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>new_dict <span class="op">=</span> {<span class="st">'a'</span>: <span class="dv">1</span>, <span class="st">'b'</span>: <span class="dv">2</span>, <span class="st">'c'</span>: <span class="dv">3</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If we provide an argument of <code>'a'</code> to the dict above using <code>new_dict['a']</code>, it will return the value <code>1</code>.</p>
+</section>
+<section id="pandas" class="level2">
+<h2 class="anchored" data-anchor-id="pandas">Pandas</h2>
+<section id="dataframes" class="level3">
+<h3 class="anchored" data-anchor-id="dataframes">DataFrames</h3>
+<p>A pandas DataFrame allows us to handle datasets and perform spreadsheet-like calculations. A DataFrame is an array of rows and columns. The rows and columns are indexed by a pandas <code>Index</code> object. You can initialize empty dataframes with set column and rows as follows.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># An empty dataframe</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(dtype<span class="op">=</span><span class="bu">float</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>            columns <span class="op">=</span> [<span class="st">'Column A'</span>,<span class="st">'Column B'</span>] ,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            index <span class="op">=</span> np.arange(<span class="dv">5</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>            )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Alternatively, you can assign existing data to a dataframe.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make some existing data</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">10</span>])</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> x.reshape([<span class="dv">5</span>,<span class="dv">2</span>])</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign it to a dataframe</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(x, </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            columns<span class="op">=</span>[<span class="st">'Column A'</span>,<span class="st">'ColumnB'</span>],</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>            index <span class="op">=</span> np.arange(<span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="accessing-data" class="level3">
+<h3 class="anchored" data-anchor-id="accessing-data">Accessing data</h3>
+<p>In the example above, we could access a single column using <code>df['Column A']</code>. If a column title is a string containing no spaces (as in the 2nd column above), we can also access a column using the syntax <code>df.ColumnB</code>.</p>
+<p>To access a single row, we can use the <code>.loc</code> method of the dataframe. For example, <code>df.loc[4]</code> accesses the row labeled by <code>4</code>.</p>
+<p>If we want a single element of the dataframe, we can also use the <code>.loc</code> method. For exmple, <code>df.loc[4,'ColumnB']</code> pulls the datapoint from row index <code>4</code> and column index <code>'ColumnB'</code>.</p>
+</section>
+<section id="subsetting-dataframes" class="level3">
+<h3 class="anchored" data-anchor-id="subsetting-dataframes">Subsetting dataframes</h3>
+<p>We will sometimes want to filter datasets based on various criteria. This can be accomplished using the following syntax.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset on a single column's value</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>df_subset <span class="op">=</span> df[df.ColumnB <span class="op">&gt;=</span> <span class="dv">4</span>]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset on a multiple column's values (use &amp; for AND)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>df_subset <span class="op">=</span> df[(df.ColumnB <span class="op">&gt;=</span> <span class="dv">4</span> ) <span class="op">&amp;</span> (df[<span class="st">'Column A'</span>] <span class="op">&lt;=</span><span class="dv">2</span> )]</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset on a multiple column's values (use | for OR)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>df_subset <span class="op">=</span> df[(df.ColumnB <span class="op">&gt;=</span> <span class="dv">4</span> ) <span class="op">&amp;</span> (df[<span class="st">'Column A'</span>] <span class="op">&gt;=</span><span class="dv">2</span> )]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="writing-functions" class="level2">
+<h2 class="anchored" data-anchor-id="writing-functions">Writing Functions</h2>
+<p>We will often want to be able to apply the same calculation for different inputs. We can build this functionality by writing functions. Functions take arguments, do something, and then usually return some output. Here is a simple example that calculates the appropriate discount factor based on a rate and number of discounting periods.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> discount_factor(rate,num_periods):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">    rate: a discount rate input in decimal notation</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">    num_periods: how many periods to discoun</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    factor <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>((<span class="dv">1</span><span class="op">+</span>rate)<span class="op">**</span>num_periods)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> factor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To calculate the discount factor if the rate is 2.5% with 5 discounting periods, we would call the function using <code>discount_factor(0.025,5)</code>.</p>
+</section>
+<section id="loops" class="level2">
+<h2 class="anchored" data-anchor-id="loops">Loops</h2>
+<p>Sometimes, we will want to perform the same calculation for each element of a list. For instance, we might have a list of discounting periods and want to calculation the discount factor for each one. We can accomplish this using a <code>for</code> loop. A <code>for</code> loop simply executes all of the commands for each element of the list indicated at the top of the loop. Here’s a simple example.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>loop_list <span class="op">=</span> [<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> t <span class="kw">in</span> loop_list:</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(discount_factor(<span class="fl">0.025</span>, t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Another useful python tool is the <code>enumerate</code> command. Applying this to a list allows us to have two running variables in the list: the first tells us which element in the list the loop is on (i.e., 0, 1, 2, 3, …), while the second variable is the actual list element.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, t <span class="kw">in</span> <span class="bu">enumerate</span>(loop_list):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(i)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(discount_factor(<span class="fl">0.025</span>, t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Finally, python allows loops to be used within other structures. For instance, we can use a loop to generate a list as follows.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="dv">1</span> <span class="op">/</span> ((<span class="fl">1.025</span>)<span class="op">**</span>t) <span class="cf">for</span> t <span class="kw">in</span> loop_list]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="plots" class="level2">
+<h2 class="anchored" data-anchor-id="plots">Plots</h2>
+<p>We will use the `<code>plotly.graph_objects</code> graphing package to plot data. To make a simple line plot with markers for each data point, we can use the following.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure()</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>trace <span class="op">=</span> go.Scatter(x <span class="op">=</span> df[<span class="st">'Column A'</span>], y <span class="op">=</span> df[<span class="st">'ColumnB'</span>])</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>fig.add_trace(trace)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Plots can handle multiple data series being plotting on the same figure. For instance, the code below plots the same data, but one plots it as a line and the other only plots the data markers.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure()</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># plot line connecting data points</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>trace0 <span class="op">=</span> go.Scatter(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> df[<span class="st">'Column A'</span>], </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> df[<span class="st">'ColumnB'</span>],</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    mode<span class="op">=</span><span class="st">'lines'</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">'with lines'</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>fig.add_trace(trace0)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># plot data markers</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>trace1 <span class="op">=</span> go.Scatter(</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> df[<span class="st">'Column A'</span>], </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> df[<span class="st">'ColumnB'</span>],</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    mode<span class="op">=</span><span class="st">'markers'</span>,</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">'with markers'</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>fig.add_trace(trace1)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<!-- ## Simulating random variables
+- univariate normal
+- multivariate normal
+## Numpy financial
+
+## Intro to Pandas
+- DataFrames
+  - creating dataframes
+  - columns
+  - index
+- Accessing rows, columns, and cells
+.loc vs .iloc
+- Heirarchical indexing
+pd.MultiIndex.from_product(LIST of LISTS)
+
+- Subsetting data
+df_subset = df[(df.company_symbol==ticker) & (df.DATE==date)]
+
+## Pandas Formatting
+
+- entire dataframe
+`pd.options.display.float_format = '{:.2f}'.format`
+
+# format_mapping = {'price': '${:,.2f}'', 
+#                   'coupon_rate': '{:,.2%}'', 
+#                   'maturity': '{:,.1f}'',
+#                   'face': '${:,.0f}'',
+#                   'period': '{:,.0f}''}
+
+# for key, value in format_mapping.items():
+#     df[key] = df[key].apply(value.format)
+
+## Working with Data
+- Fetching Data
+  - pandas_datareader
+    - FRED
+    - Fama-French
+    - FactSet
+
+- 
+- Summarizing Data
+  - describe
+  - 
+- Plotting Data
+- Regression
+- Sorting
+- Grouping Data
+  - lambda functions and apply -->
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
