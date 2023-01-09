@@ -1,6 +1,10 @@
 ---
 title: "Python Basics"
-format: html
+format:
+  html:
+    theme: cosmo
+    code-fold: true
+    self-contained: true
 ---
 
 This is a brief introduction to the primary Python functionalities we will use in the course.  We will discuss these in class together, but this will be a useful reference for you as we proceed through the semester.  The examples in this document can be run interactively in the *00_python_basics.ipynb* notebook in the [Course Code Binder](https://mybinder.org/v2/gh/kpcrotty/busi448_binder/HEAD).
@@ -193,7 +197,7 @@ x = [1 / ((1.025)**t) for t in loop_list]
 
 ## Plots
 
-We will use the ``plotly.graph_objects` graphing package to plot data.  To make a simple line plot with markers for each data point, we can use the following.
+We will use the `plotly.graph_objects` graphing package to plot data.  To make a simple line plot with markers for each data point, we can use the following.
 
 ``` {.python}
 fig = go.Figure()
