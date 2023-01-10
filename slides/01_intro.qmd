@@ -173,7 +173,7 @@ Zero coupon bond:
 $$ P = \frac{FACE}{(1+YTM)^T} $$
 
 Annual coupon bond:
-$$ P = \sum_{t=1}^T\frac{COUPON}{(1+YTM)^T} + \frac{FACE}{(1+YTM)^T} $$
+$$ P = \sum_{t=1}^T\frac{COUPON}{(1+YTM)^t} + \frac{FACE}{(1+YTM)^T} $$
 
 - YTM: rate that sets the price of the bond equal to PV(future CFs)
 
@@ -236,11 +236,11 @@ fig.show()
 
 ## Bond pricing - multiple payments per year
 
-$$ P = \sum_{t=1}^T\frac{C}{(1+DR)^T} + \frac{FACE}{(1+DR)^T} $$
+$$ P = \sum_{t=1}^T\frac{C}{(1+DR)^t} + \frac{FACE}{(1+DR)^T} $$
 where:
 
 - $DR = \frac{YTM}{NOP}=$ periodic discount rate
-- $C = \frac{CR\cdot FACE}{NOP}=$ periodic coupon paymnet ($)
+- $C = \frac{CR\cdot FACE}{NOP}=$ periodic coupon payment ($)
 - $T=MATURITY \cdot NOP=$ total number of payments (compounding periods)
 
 ## Pricing a Bond in Python
