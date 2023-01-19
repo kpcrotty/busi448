@@ -82,11 +82,12 @@ $$ R_t = \frac{P_t + AI_t + C_t - (P_{t-1}+AI_{t-1})}{P_{t-1}+AI_{t-1}} $$
 
 - Prices quoted as **clean prices**, which exclude accrued interest.
 - Trades between coupon payments transact at **dirty price**
-  - dirty price = clean price plus accrued interest
+  - dirty price = clean price plus accrued interest [(BBCX)](http://bbcx-investments.com/fixed-income/clean-dirty)
+  - [sample price paths](http://bbcx-investments.com/fixed-income/clean-dirty-paths)
 
-## {background-iframe="http://bbcx-investments.com/fixed-income/clean-dirty" background-interactive="True"}
+<!-- ## {background-iframe="http://bbcx-investments.com/fixed-income/clean-dirty" background-interactive="True"} -->
 
-## {background-iframe="http://bbcx-investments.com/fixed-income/clean-dirty-paths" background-interactive="True"}
+<!-- ## {background-iframe="http://bbcx-investments.com/fixed-income/clean-dirty-paths" background-interactive="True"} -->
 
 
 ## Compounding returns
@@ -279,7 +280,11 @@ $$\sqrt{1.5 \times 0.5}-1=-0.134$$
 
 $$\sqrt{2 \times 0.5}-1=0$$
 
-## {background-iframe="http://bbcx-investments.com/risk/geometric" background-interactive="True"}
+. . . 
+
+[Some historical data](http://bbcx-investments.com/risk/geometric)
+
+<!-- ## {background-iframe="http://bbcx-investments.com/risk/geometric" background-interactive="True"} -->
 
 
 ## Average Returns in Python
@@ -443,7 +448,10 @@ $$ \text{var}[r_p] = \sum_{i=1}^{N} w_i^2 \text{var}[r_i]+ 2 \sum_{j>i} w_i w_j 
                     =& 0.25 \text{var}[r_1]+ 0.25 \text{var}[r_2]+  0.5 \text{cov}[r_1,r_2] \\
 \end{align}
 
-## {background-iframe="http://bbcx-investments.com/portfolios/two-assets" background-interactive="True"}
+. . . 
+
+- [BBCX: general weights and correlations](http://bbcx-investments.com/portfolios/two-assets)
+<!-- ## {background-iframe="http://bbcx-investments.com/portfolios/two-assets" background-interactive="True"} -->
 
 
 ## Variance of Portfolio of $N$ Assets: Matrices {.smaller}
