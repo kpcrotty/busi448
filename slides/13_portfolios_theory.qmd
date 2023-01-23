@@ -1,0 +1,1487 @@
+---
+title: 'Optimal Portfolios: Theory'
+author: "<br>Kevin Crotty<br>BUSI 448: Investments"
+format: 
+    revealjs:
+        incremental: true
+        logo: RiceLogo.png
+        footer: "BUSI 448"
+        self-contained: true
+        code-fold: true
+        theme: [default, custom.scss]
+        show-slide-number: print
+execute:
+    echo: true
+    freeze: auto
+jupyter: python3
+---
+
+
+## Where are we?
+**Last time**:
+
+
+```{python}
+#| echo: false
+#| execute: true
+import numpy as np
+from cvxopt import matrix
+from cvxopt.solvers import qp as Solver, options as SolverOptions
+from scipy.optimize import minimize_scalar
+
+SolverOptions["show_progress"] = False
+
+class portfolio:
+    def __init__(self, means, cov, Shorts):
+        self.means = np.array(means)
+        self.cov = np.array(cov)
+        self.Shorts = Shorts
+        self.n = len(means)
+        if Shorts:
+            w = np.linalg.solve(cov, np.ones(self.n))
+            self.GMV = w / np.sum(w)
+            w = np.linalg.solve(cov, means)
+            self.piMu = w / np.sum(w)
+        else:
+            n = self.n
+            Q = matrix(cov, tc="d")
+            p = matrix(np.zeros(n), (n, 1), tc="d")
+            G = matrix(-np.identity(n), tc="d")
+            h = matrix(np.zeros(n), (n, 1), tc="d")
+            A = matrix(np.ones(n), (1, n), tc="d")
+            b = matrix([1], (1, 1), tc="d")
+            sol = Solver(Q, p, G, h, A, b)
+            self.GMV = np.array(sol["x"]).flatten() if sol["status"] == "optimal" else np.array(n * [np.nan])
+
+    def frontier(self, m):
+        if self.Shorts:
+            gmv = self.GMV
+            piMu = self.piMu
+            m1 = gmv @ self.means
+            m2 = piMu @ self.means
+            a = (m - m2) / (m1 - m2)
+            return a * gmv + (1 - a) * piMu
+        else:
+            n = self.n
+            Q = matrix(self.cov, tc="d")
+            p = matrix(np.zeros(n), (n, 1), tc="d")
+            G = matrix(-np.identity(n), tc="d")
+            h = matrix(np.zeros(n), (n, 1), tc="d")
+            A = matrix(np.vstack((np.ones(n), self.means)), (2, n), tc="d")
+            b = matrix([1, m], (2, 1), tc="d")
+            sol = Solver(Q, p, G, h, A, b)
+            return np.array(sol["x"]).flatten() if sol["status"] == "optimal" else np.array(n * [np.nan])
+
+    def tangency(self, r):
+        if self.Shorts:
+            w = np.linalg.solve(self.cov, self.means - r)
+            return w / np.sum(w)
+        else:
+            def f(m):
+                w = self.frontier(m)
+                mn = w @ self.means
+                sd = np.sqrt(w.T @ self.cov @ w)
+                return - (mn - r) / sd
+            m = minimize_scalar(f, bounds=[max(r, np.min(self.means)), max(r, np.max(self.means))], method="bounded").x
+            return self.frontier(m)
+
+    def optimal(self, raver, rs=None, rb=None):
+        n = self.n
+        if self.Shorts:
+            if (rs or rs==0) and (rb or rb==0):
+                Q = np.zeros((n + 2, n + 2))
+                Q[2:, 2:] = raver * self.cov
+                Q = matrix(Q, tc="d")
+                p = np.array([-rs, rb] + list(-self.means))
+                p = matrix(p, (n + 2, 1), tc="d")
+                G = np.zeros((2, n + 2))
+                G[0, 0] = G[1, 1] = -1
+                G = matrix(G, (2, n+2), tc="d")
+                h = matrix([0, 0], (2, 1), tc="d")
+                A = matrix([1, -1] + n*[1], (1, n+2), tc="d")
+                b = matrix([1], (1, 1), tc="d")
+                sol = Solver(Q, p, G, h, A, b)
+                return np.array(sol["x"]).flatten()[2:] if sol["status"] == "optimal" else None
+            else:
+                w = np.linalg.solve(self.cov, self.means)
+                a = np.sum(w)
+                return (a/raver)*self.piMu + (1-a/raver)*self.GMV
+        else:
+           if (rs or rs==0) and (rb or rb==0):
+                Q = np.zeros((n + 2, n + 2))
+                Q[2:, 2:] = raver * self.cov
+                Q = matrix(Q, tc="d")
+                p = np.array([-rs, rb] + list(-self.means))
+                p = matrix(p, (n+2, 1), tc="d")
+                G = matrix(-np.identity(n + 2), tc="d")
+                h = matrix(np.zeros(n+2), (n+2, 1), tc="d")
+                A = matrix([1, -1] + n * [1], (1, n+2), tc="d")
+                b = matrix([1], (1, 1), tc="d")
+                sol = Solver(Q, p, G, h, A, b)
+                return np.array(sol["x"]).flatten()[2:] if sol["status"] == "optimal" else None
+           else:
+                Q = matrix(raver * self.cov, tc="d")
+                p = matrix(-self.means, (n, 1), tc="d")
+                G = matrix(-np.identity(n), tc="d")
+                h = matrix(np.zeros(n), (n, 1), tc="d")
+                A = matrix(np.ones(n), (1, n), tc="d")
+                b = matrix([1], (1, 1), tc="d")
+                sol = Solver(Q, p, G, h, A, b)
+                return np.array(sol["x"]).flatten() if sol["status"] == "optimal" else None
+```
+
+
+## Where are we?
+**Last time**:
+
+::: {.nonincremental}
+- Diversification: possible reduction in risk at no cost in expected return!
+- Efficient frontier: set of risky asset portfolios with least risk
+:::
+
+. . . 
+
+**Today**:
+
+::: {.nonincremental}
+- Capital Allocation: Risk-free + Risky
+- Preferences over risk and return
+- Optimal portfolios
+:::
+
+
+
+## Which return series do you prefer? 
+
+```{python}
+#| execute: true
+import numpy as np
+import pandas as pd
+from scipy.stats import norm
+import plotly.express as px
+def random_returns(mn1, sd1, mn2, sd2, T):
+    # Generate data
+    rv1   = norm(loc=mn1, scale=sd1).rvs(T)
+    rv2   = norm(loc=mn2, scale=sd2).rvs(T)
+    time  = np.arange(T)
+    df = pd.DataFrame(data={'time': time, 'ret1': rv1, 'ret2': rv2})
+
+    # Plot data
+    fig = px.line(df,x='time', y=['ret1', 'ret2'])
+    fig.update_layout(yaxis_title='Return',xaxis_title='Time')
+    fig.show()
+random_returns(mn1=0.15, sd1=0.10, mn2=0.35, sd2=0.10,T=50)
+```
+
+## Which return series do you prefer?
+```{python}
+#| execute: true
+random_returns(mn1=0.20, sd1=0.10, mn2=0.20, sd2=0.40,T=50)
+```
+
+## Which return series do you prefer?
+```{python}
+#| execute: true
+random_returns(mn1=0.20, sd1=0.10, mn2=0.40, sd2=0.40,T=50)
+```
+
+## Where would you like your portfolio to live?
+```{python}
+#| echo: false
+import plotly.graph_objects as go
+
+fig = go.Figure()
+fig.update_yaxes(range=[0,20], title_font_size=30, tickformat=".0f", ticksuffix="%")
+fig.update_xaxes(range=[0,50], title_font_size=30, tickformat=".0f", ticksuffix="%")
+fig.update_layout(title='',
+                   xaxis_title='Standard Deviation',
+                   yaxis_title='Expected Return')
+fig.show()
+```
+
+
+
+# Capital Allocation
+## Adding a risk-free asset {.smaller}
+What does the set of possible portfolios look like if we combine a risky asset with a risk-free asset? 
+
+Example: a money market savings account with a stock fund.
+
+**Expected Return**:
+$$ E[r_p] = w E[r_{\text{risky}}]+ (1-w) r_f \,.$$
+
+. . . 
+
+**Variance**:
+$$\text{var}[r_p]=w^2 \text{var}[r_{\text{risky}}]+ (1-w)^2 \text{var}[r_f]+ 2 w(1-w) \text{cov}[r_{\text{risky}},r_f]\,. $$
+
+. . . 
+
+What is true of $\text{var}[r_f]$ and $\text{cov}[r_{\text{risky}},r_f]$?
+
+. . . 
+
+$$ \text{sd}[r_p] = w \cdot \text{sd}[r_{\text{risky}}] $$
+
+## Capital Allocation Line {.smaller}
+We can solve for $w$ and substitute into the expected return def'n to obtain:
+$$ \text{E}[r_p] = r_f + \bigg[ \frac{E[r_{\text{risky}}]-r_f}{\text{sd}[r_{\text{risky}}] }\bigg] \cdot \text{sd}[r_p] $$
+
+. . . 
+
+The CAL for a risky asset is a set of portfolios combining the risky asset with the risk-free asset.
+
+. . . 
+
+The term in brackets is called the Sharpe ratio!
+
+## Capital Allocation Line {.smaller}
+```{python}
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+
+# Parameter values (in percent)
+mn = 6
+sd = 15
+s = 2
+extra = 0    #incremental borrowing rate
+
+def data(mn, sd, s, b):
+    grid = np.linspace(0, 2, 201)
+    mns = [(s + w * (mn - s) if w <= 1 else b + w * (mn - b)) for w in grid]
+    sds = [w * sd for w in grid]
+    return grid, mns, sds
+
+def figtbl(mn, sd, s, extra):
+    mn /= 100
+    sd /= 100
+    b = s+extra
+    s /= 100
+    b /= 100
+    grid, mns, sds = data(mn, sd, s, b)
+    df = pd.DataFrame({'grid': grid, 'mns': mns, 'sds': sds})
+    string = "wealth in market = %{text:.0f}%<extra></extra>"
+    trace1 = go.Scatter(
+        x=df[grid<=1].sds, y=df[grid<=1].mns, mode="lines", text=100 * df[grid<=1].grid, hovertemplate=string, name='CAL (saving)', line=dict(color="blue"),
+    )
+    string = "wealth in market = %{text:.0f}%<extra></extra>"
+    trace1a = go.Scatter(
+        x=df[grid>1].sds, y=df[grid>1].mns, mode="lines", text=100 * df[grid>1].grid, hovertemplate=string, name='CAL (borrowing)', line=dict(color="blue",dash='dot'),
+    )
+    string = "wealth in market = 100%<extra></extra>"
+    trace2 = go.Scatter(
+        x=[sd], y=[mn], mode="markers", hovertemplate=string, marker=dict(size=15), name='Market'
+    )
+    string = "wealth in market = 0%<extra></extra>"
+    trace3 = go.Scatter(
+        x=[0], y=[s], mode="markers", hovertemplate=string, marker=dict(size=15), name='Risk-free'
+    )  
+    # string = "Borrowing rate<extra></extra>"
+    # trace4 = go.Scatter(
+    #     x=[0], y=[b], mode="markers", hovertemplate=string, marker=dict(size=15), name='Risk-free (Borrowing)'
+    # )       
+    fig = go.Figure()
+    fig.add_trace(trace1)
+    fig.add_trace(trace1a)
+    fig.add_trace(trace2)
+    fig.add_trace(trace3)
+    # fig.add_trace(trace4)
+    fig.layout.xaxis["title"] = "Standard Deviation"
+    fig.layout.yaxis["title"] = "Expected Return"
+    fig.update_yaxes(tickformat=".0%")
+    fig.update_xaxes(tickformat=".0%")
+    fig.update_layout(legend=dict(yanchor="top", y =0.99, xanchor="left", x=0.01))
+    fig.show()
+figtbl(mn, sd, s, extra)
+```
+
+
+# Tangency Portfolio
+## Risk-free + Multiple Risky Assets {.smaller}
+
+Let's assume that in addition to the US stock market fund, we are also considering investing in a long-term bond fund.
+
+```{python}
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+
+mn_stock = 6 
+mn_bond  = 3.5
+sd_stock = 15
+sd_bond  = 3.5
+corr = -5
+
+rs = 2
+extra = 0
+
+def data(mn1, mn2, sd1, sd2, c, rs, extra):
+    c = c / 100
+    rb = rs + extra   
+    rs = rs/100
+    rb = rb/100
+    mns = [mn1, mn2]
+    sds = [sd1, sd2]
+    grid = np.linspace(-0.20, 1, 121)
+    ports = [np.array([w, 1 - w]) for w in grid]
+    means = [p.T @ np.array(mns) for p in ports]
+    df = pd.DataFrame(means)
+    df.columns = ["mean"]
+    cov = np.array(
+        [[sds[0] ** 2, sds[0] * sds[1] * c], [sds[0] * sds[1] * c, sds[1] ** 2]]
+    ).reshape(2, 2)
+    df["stdev"] = [np.sqrt(p.T @ cov @ p) for p in ports]
+    df["wt1"] = grid
+    df["wt2"] = 1 - df.wt1
+    for col in ["mean", "stdev"]:
+        df[col] = df[col] / 100
+    df["sr_s"]= (df["mean"] - rs)/df["stdev"]
+    df["sr_b"]= (df["mean"] - rb)/df["stdev"]
+   
+    return df
+
+def rf_plus_risky(mn, sd, rs, rb, w_min, w_max):
+    mn /= 100
+    sd /= 100
+    rs /= 100
+    rb /= 100
+    grid = np.linspace(w_min, w_max, 201)
+    mns = [(rs + w * (mn - rs) if w <= 1 else rb + w * (mn - rb)) for w in grid]
+    sds = [w * sd for w in grid]
+    srs = (mn - rs)/sd
+    srb = (mn - rb)/sd
+    return grid, mns, sds, srs, srb
+
+def rf_plus_risky_nokink(mn, sd, rf, w_min, w_max):
+    mn /= 100
+    sd /= 100
+    rf /= 100
+    grid = np.linspace(w_min, w_max, 201)
+    mns = [(rf + w * (mn - rf)) for w in grid]
+    sds = [w * sd for w in grid]
+    return grid, mns, sds
+
+
+def figtbl(mn1, mn2, sd1, sd2, c, rs, extra, asset1_name, asset2_name):
+    df = data(mn1, mn2, sd1, sd2, c, rs, extra)
+    
+    #Plot the portfolios of the two assets
+    trace1 = go.Scatter(
+        x=df["stdev"],
+        y=df["mean"],
+        mode="lines",
+        # line={'color': green},
+        text=100 * df["wt1"],
+        customdata=100 * df["wt2"],
+        hovertemplate=asset1_name+": %{text:.0f}%<br>"+asset2_name+": %{customdata:.0f}%<extra></extra>",
+        line=dict(color="black"),
+        name="Stock & Bond Frontier"
+    )
+    
+    # Plot the two assets
+    df = df[df.wt1.isin([0, 1])]
+    df["text"] = np.where(df.wt1 == 1, asset1_name, asset2_name)
+    trace2a = go.Scatter(
+        x=df[df.wt1==1]["stdev"],
+        y=df[df.wt1==1]["mean"],
+        mode="markers",
+        text=df[df.wt1==1]["text"],
+        hovertemplate="%{text}<extra></extra>",
+        marker=dict(size=10, color="orange"),
+        name=asset1_name
+    )
+    trace2b = go.Scatter(
+        x=df[df.wt1==0]["stdev"],
+        y=df[df.wt1==0]["mean"],
+        mode="markers",
+        text=df[df.wt1==0]["text"],
+        hovertemplate="%{text}<extra></extra>",
+        marker=dict(size=10, color="red"),
+        name=asset2_name
+    )
+
+    fig = go.Figure()
+    fig.add_trace(trace2a)
+    fig.add_trace(trace2b)
+    fig.add_trace(trace1)
+
+    # Plot the combination of the risk-free and each asset (CAL for each asset)
+    grid, mns_cal, sds_cal, srs_cal, srb_cal = rf_plus_risky(mn1, sd1, rs, rs + extra, 0, 1.0)
+    string = "wealth in "+asset1_name+"= %{text:.0f}%<br>" + "Sharpe ratio: " + "{:.4f}".format(srs_cal) +"<extra></extra>"
+    trace3 = go.Scatter(
+        x=sds_cal, 
+        y=mns_cal, 
+        mode="lines", 
+        text=100 * grid, 
+        hovertemplate=string, 
+        line=dict(color="orange"),
+        name="CAL: "+asset1_name
+    )
+    grid, mns_cal, sds_cal, srs_cal, srb_cal = rf_plus_risky(mn2, sd2, rs, rs + extra, 0, 2.7)
+    string = "wealth in "+asset2_name+"= %{text:.0f}%<br>" + "Sharpe ratio : " + "{:.4f}".format(srs_cal) +"<extra></extra>"
+    trace4 = go.Scatter(
+        x=sds_cal, 
+        y=mns_cal, 
+        mode="lines", 
+        text=100 * grid, 
+        hovertemplate=string, 
+        line=dict(color="red"),
+        name="CAL: "+asset2_name
+    )
+    fig.add_trace(trace3)
+    fig.add_trace(trace4)  
+
+
+    def custom(string, ports,srTang,borrow_flag):
+        # borrow_flag=1 adds statement about "relative to borrowing rate"
+        cd = np.empty(shape=(len(ports), N+1, 1), dtype=float)
+        for i in range(N):
+            cd[:, i] = np.array([w[i] for w in ports]).reshape(-1, 1)
+        cd[:,N] = np.round(srTang,4)
+        # print(cd)
+        string += "<br>"
+        for i in range(N):
+            if i ==0:
+                string += asset1_name
+            elif i==1:
+                string += asset2_name
+            else:
+                string += "asset " + str(i + 1)
+            string += ": %{customdata["
+            string += str(i)
+            string += "]:.1%}<br>"
+        if borrow_flag==1:
+            string += "Sharpe ratio (relative to borrowing rate): %{customdata[" +  str(N) + "]:.4f}<br>"    
+        else:
+            string += "Sharpe ratio: %{customdata[" +  str(N) + "]:.4f}<br>"
+        string += "<extra></extra>"
+        return string, cd  
+
+    # Plot the tangency portfolios
+    c = c / 100
+    rb = rs + extra     
+    rs = rs/100
+    rb = rb/100
+    mns = [mn1, mn2]
+    mns = np.array(mns) / 100
+    sds = [sd1, sd2]
+    sds = np.array(sds) / 100
+    cov = np.array(
+        [[sds[0] ** 2, sds[0] * sds[1] * c], [sds[0] * sds[1] * c, sds[1] ** 2]]
+    ).reshape(2, 2)
+    
+    Shorts = 0.0     
+    N = len(mns)
+    P = portfolio(mns, cov, Shorts)    
+    gmv = P.GMV @ mns
+    # print('GMV return is: ',gmv)
+    if (rs < gmv) or (not Shorts):
+        portTang = P.tangency(rs)
+        mnTang = portTang @ mns
+        if mnTang < np.max(mns):
+            sdTang = np.sqrt(portTang @ cov @ portTang)
+            srTang = (mnTang - rs)/sdTang
+            string0 = 'tangency portfolio' if rb == rs else 'efficient low risk portfolio' if rb != rs else 'tangency portfolio'
+            string, cd = custom(string0, [portTang], srTang,0)
+            trace = go.Scatter(
+                x=[sdTang],
+                y=[mnTang],
+                mode="markers",
+                customdata=cd,
+                hovertemplate=string,
+                marker=dict(size=10, color="blue"),
+                name=string0
+            )
+            fig.add_trace(trace)
+            
+            #Plot CAL (no leverage)
+            grid, mns_cal, sds_cal = rf_plus_risky_nokink(mnTang*100, sdTang*100, rs*100,0, 2.2)
+            portlabel = 'tangency portfolio' if rb == rs else 'efficient low risk portfolio' if rb != rs else 'tangency portfolio'
+            string = "wealth in "+portlabel + " = %{text:.0f}%<br>" + "Sharpe ratio: " +  "{:.4f}".format(srTang) +"<extra></extra>"
+            trace5 = go.Scatter(
+                x=sds_cal, 
+                y=mns_cal, 
+                mode="lines", 
+                text=100 * grid, 
+                hovertemplate=string, 
+                line=dict(color="blue"),
+                name="CAL: " + portlabel
+            )           
+            fig.add_trace(trace5)
+            
+            #Plot CAL (with leverage)
+            grid, mns_cal, sds_cal = rf_plus_risky_nokink(mnTang*100, sdTang*100, rs*100,1.0, 2.5)
+            trace5a = go.Scatter(
+                x=sds_cal, 
+                y=mns_cal, 
+                mode="lines", 
+                text=100 * grid, 
+                hovertemplate=string, 
+                line=dict(color="blue",dash='dot'),
+                name="CAL: "  + portlabel + " (levered)"
+                # showlegend=False
+            )           
+            # fig.add_trace(trace5a)           
+
+    if (rb != rs) and ((gmv > rb) or (not Shorts)):
+        portTang = P.tangency(rb)
+        mnTang = portTang @ mns
+        if mnTang < np.max(mns):
+            sdTang = np.sqrt(portTang @ cov @ portTang)
+            srTang = (mnTang - rb)/sdTang
+            string = 'efficient high mean portfolio'
+            string, cd = custom(string, [portTang], srTang,1)
+            trace = go.Scatter(
+                x=[sdTang],
+                y=[mnTang],
+                mode="markers",
+                customdata=cd,
+                hovertemplate=string,
+                marker=dict(size=10, color="blue"),
+                name="efficient high mean portfolio"
+            )
+            fig.add_trace(trace)
+            
+            #Plot CAL (with leverage)            
+            grid, mns_cal, sds_cal = rf_plus_risky_nokink(mnTang*100, sdTang*100, rb*100, 1.0, 1.5)
+            string = "wealth in efficient high mean portfolio = %{text:.0f}%<br>" + "Sharpe ratio (relative to borrowing rate): " + "{:.4f}".format(srTang) +"<extra></extra>"
+            trace6 = go.Scatter(
+                x=sds_cal, 
+                y=mns_cal, 
+                mode="lines", 
+                text=100 * grid, 
+                hovertemplate=string,
+                line=dict(color="blue"),
+                name = "CAL: efficient high mean"
+            )           
+            fig.add_trace(trace6)   
+            
+            #Plot CAL (without leverage) 
+            grid, mns_cal, sds_cal = rf_plus_risky_nokink(mnTang*100, sdTang*100, rb*100, 0, 1)
+            trace6a = go.Scatter(
+                x=sds_cal, 
+                y=mns_cal, 
+                mode="lines", 
+                text=100 * grid, 
+                hovertemplate=string, 
+                line=dict(color="blue", dash='dot'),
+                name = "CAL: efficient high mean (unlevered)"
+            )           
+            fig.add_trace(trace6a)      
+
+
+ 
+    
+    fig.layout.xaxis["title"] = "Standard Deviation"
+    fig.layout.yaxis["title"] = "Expected Return"
+    fig.update_xaxes(range=[0, 1.05 * df["stdev"].max()])
+    fig.update_yaxes(range=[0, 1.05 * df["mean"].max()])
+    fig.update_yaxes(tickformat=".0%")
+    fig.update_xaxes(tickformat=".0%")
+    fig.update_layout(legend=dict(yanchor="top", y =0.5, xanchor="left", x=0.65))
+    fig.show()
+figtbl(mn_stock,mn_bond,sd_stock,sd_bond,corr,rs,extra,"Stock","Bond")
+```
+
+
+## {background-iframe="http://bbcx-investments.com/portfolios/sharpe" background-interactive="True"}
+
+
+## The Tangency Portfolio Problem
+::: {.nonincremental}
+- Given a risk-free asset, the optimal risky portfolio is the set of weights that maximizes the portfolio's Sharpe ratio.
+:::
+
+Mathematically, choose portfolio weights to solve the following constrained optimization problem:
+
+$$ \underset{w_1,w_2,\dots,w_N}{\text{max}}  \frac{E[r_p]-r_f}{\text{sd}[r_p]} $$
+subject to constraints: $\sum_i w_i=1$
+
+## The Tangency Portfolio Problem in Python
+
+``` p
+import numpy as np
+from scipy.optimize import minimize
+
+n = len(mns)
+def f(w):
+    mn = w @ mns
+    sd = np.sqrt(w @ cov @ w)
+    return -(mn - r) / sd
+# Initial guess (equal-weighted)
+w0 = (1/n)*np.ones(n)
+# Constraint: fully-invested portfolio
+A = np.ones(n)
+b = 1
+cons = [{"type": "eq", "fun": lambda x: A @ x - b}]
+# No short-sale constraint
+bnds = [(None, None) for i in range(n)] 
+# Optimization
+wgts_tangency = minimize(f, w0, bounds=bnds, constraints=cons).x
+```
+
+## The Tangency Portfolio Problem {.smaller}
+
+Allowing short sales, the tangency portfolio weights satisfy a system of equations:
+\begin{align*}
+    \sum_{i=1}^N \text{cov}[r_1,r_i] w_i &= \delta (E[r_1] - r_f) \\
+    \sum_{i=1}^N \text{cov}[r_2,r_i] w_i &= \delta (E[r_2] - r_f) \\
+    & \vdots \\
+    \sum_{i=1}^N \text{cov}[r_N,r_i] w_i &= \delta (E[r_N] - r_f) 
+\end{align*}
+where $\delta$ is a constant (it is a Lagrange multiplier from the optimization problem)
+
+## Intuition
+<!-- ::: {.nonincremental} -->
+- The LHS terms are the contributions of each asset to overall portfolio risk.  
+- The RHS terms are proportional to each asset's risk premium.
+- **The ratio of an asset's excess return to its contribution to overall portfolio risk is the same across all assets for the optimal combination of risky assets!**
+<!-- ::: -->
+
+## The Tangency Portfolio Problem in Python
+
+``` p
+import numpy as np
+
+# Tangency: theoretical solution without short-sale constraint
+w = np.linalg.solve(cov, means - r)
+wgts_tangency = w / np.sum(w)
+```
+
+## {background-iframe="http://bbcx-investments.com/portfolios/tangency" background-interactive="True"}
+
+## {background-iframe="http://bbcx-investments.com/portfolios/optimal-N" background-interactive="True"}
+
+# Preferences
+## Preferences and the Capital Allocation Line
+
+- Consider the tangency portfolio's capital allocation line.  
+
+- Would you ever invest in portfolios to the right of this line?
+
+- Where on this CAL would you invest?
+
+- **Location on CAL depends on risk aversion!**
+
+## Mean-Variance Preferences
+
+::: {.nonincremental}
+- We will assume that we like expected returns and dislike risk.
+
+- Risk aversion $A$ measures `how much' we dislike risk
+:::
+
+$$ U(r_p)=E[r_p] - 0.5\cdot A \cdot \text{var}[r_p]\,.$$
+
+## Different risk aversions
+
+When risk aversion is higher, a higher expected return is required to reach the utility for a given level of risk, and the extra expected return increases when risk increases.
+
+```{python}
+import numpy as np
+import pandas as pd
+from scipy.stats import norm
+import plotly.express as px
+
+# Parameters
+raver1 = 2
+raver2 = 5
+raver3 = 10
+u1 = 0.10
+u2 = 0.10
+u3 = 0.10
+string1='Risk Aversion='+str(raver1)
+string2='Risk Aversion='+str(raver2)
+string3='Risk Aversion='+str(raver3)
+
+# Generate data
+sd = np.arange(0,0.405,0.005)
+U1 = u1 + 0.5*raver1* (sd**2)
+U2 = u2 + 0.5*raver2* (sd**2) 
+U3 = u3 + 0.5*raver3* (sd**2)
+df = pd.DataFrame(data={'Standard Deviation': sd, string1: U1, string2: U2,string3: U3})
+df = df*100
+
+# Plot data
+fig = px.line(df,x='Standard Deviation', y=[string1, string2, string3])
+fig.update_layout(title='',
+                   xaxis_title='Standard Deviation',
+                   yaxis_title='Expected Return',
+    legend_title_text='',)
+fig.update_yaxes(tickformat=".0f", ticksuffix="%")
+fig.update_xaxes(tickformat=".0f", ticksuffix="%")
+fig.update_layout(legend=dict(yanchor="top", y =0.99, xanchor="left", x=0.01))
+fig.show()
+```
+
+
+## Indifference Curves
+
+::: {.nonincremental}
+- Investors are indifferent between portfolios that generate the same utility. 
+
+- Higher utility is achieved with either a higher expected return or lower risk or both.
+:::
+
+```{python}
+import numpy as np
+import pandas as pd
+from scipy.stats import norm
+import plotly.express as px
+# import plotly.io as pio
+# pio.renderers.default='notebook'
+
+# Parameters
+raver = 10
+u1 = 0.05
+u2 = 0.075
+u3 = 0.10
+string1='Utility='+str(np.round(u1*100,1))+'%'
+string2='Utility='+str(np.round(u2*100,1))+'%'
+string3='Utility='+str(np.round(u3*100,1))+'%'
+
+# Generate data
+sd = np.arange(0,0.405,0.005)
+U1 = u1 + 0.5*raver* (sd**2)
+U2 = u2 + 0.5*raver* (sd**2) 
+U3 = u3 + 0.5*raver* (sd**2)
+df = pd.DataFrame(data={'Standard Deviation': sd, string1: U1, string2: U2,string3: U3})
+df = df*100
+
+# Plot data
+fig = px.line(df,x='Standard Deviation', y=[string1, string2, string3])
+fig.update_layout(title='',
+                   xaxis_title='Standard Deviation',
+                   yaxis_title='Expected Return',
+    legend_title_text='',)
+fig.update_yaxes(tickformat=".0f", ticksuffix="%")
+fig.update_xaxes(tickformat=".0f", ticksuffix="%")
+fig.update_layout(legend=dict(yanchor="top", y =0.99, xanchor="left", x=0.01))
+fig.show()
+```
+
+
+## Preferences and the Capital Allocation Line
+
+A mean-variance investor chooses $w$ to solve:
+$$ \underset{w}\max E[r_p] - 0.5\cdot A \cdot \text{var}[r_p]\,. $$  
+with $r_p = w r_{\text{risky}} + (1-w) r_{\text{risky} r_f}$.
+
+The optimal allocation to the risky portfolio is:
+$$ w^* = \frac{E[r_{\text{risky}}-r_f]}{A \cdot \text{var}_{\text{risky}}}\,.$$ 
+
+Investors with different risk aversion will choose different combinations of the risky asset and the risk-free asset.
+
+## Preferences and the Capital Allocation Line
+```{python}
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+
+mn_stock = 6
+mn_bond  = 3.5
+sd_stock = 15
+sd_bond  = 3.5
+corr = -5
+
+rs = 2
+extra = 0
+
+raver1 = 6
+raver2 = 10
+
+def data(mn1, mn2, sd1, sd2, c, rs, extra):
+    c = c / 100
+    rb = rs + extra   
+    rs = rs/100
+    rb = rb/100
+    mns = [mn1, mn2]
+    sds = [sd1, sd2]
+    grid = np.linspace(-0.2, 1, 121)
+    ports = [np.array([w, 1 - w]) for w in grid]
+    means = [p.T @ np.array(mns) for p in ports]
+    df = pd.DataFrame(means)
+    df.columns = ["mean"]
+    cov = np.array(
+        [[sds[0] ** 2, sds[0] * sds[1] * c], [sds[0] * sds[1] * c, sds[1] ** 2]]
+    ).reshape(2, 2)
+    df["stdev"] = [np.sqrt(p.T @ cov @ p) for p in ports]
+    df["wt1"] = grid
+    df["wt2"] = 1 - df.wt1
+    for col in ["mean", "stdev"]:
+        df[col] = df[col] / 100
+    df["sr_s"]= (df["mean"] - rs)/df["stdev"]
+    df["sr_b"]= (df["mean"] - rb)/df["stdev"]
+   
+    return df
+
+def rf_plus_risky(mn, sd, rs, rb, w_min, w_max):
+    mn /= 100
+    sd /= 100
+    rs /= 100
+    rb /= 100
+    grid = np.linspace(w_min, w_max, 201)
+    mns = [(rs + w * (mn - rs) if w <= 1 else rb + w * (mn - rb)) for w in grid]
+    sds = [w * sd for w in grid]
+    srs = (mn - rs)/sd
+    srb = (mn - rb)/sd
+    return grid, mns, sds, srs, srb
+
+def opt_utility(mns, cov, Shorts, s, b, A):
+    # P is a portfolio object based on expected returns, covariance matrix, and shorts
+    P = portfolio(mns, cov, Shorts) 
+    gmv = P.GMV @ mns
+    if s==b:
+        #tangency exp ret and sd
+        if (s < gmv) or (not Shorts):
+            portTang = P.tangency(s)
+            mnTang = portTang @ mns
+            if mnTang < np.max(mns):
+                sdTang = np.sqrt(portTang @ cov @ portTang)
+
+                #optimal weight in tangency based on risk-aversion
+                wgt = (mnTang - s) / (A * (sdTang**2))
+                expret= wgt*mnTang + (1-wgt)*s
+                sdret = wgt*sdTang 
+                wgt_rf = 1-wgt
+                wgt_lo = wgt
+                wgt_hi = 0.0
+    else:
+        #efficient low-risk portfolio
+        if (s < gmv) or (not Shorts):
+            portTangLowRisk = P.tangency(s)
+            mnTangLowRisk = portTangLowRisk @ mns
+            if mnTangLowRisk < np.max(mns):
+                sdTangLowRisk = np.sqrt(portTangLowRisk @ cov @ portTangLowRisk)
+
+        #efficient high-risk portfolio
+        if ((b<gmv) or (not Shorts)):
+            portTangHighRisk = P.tangency(b)
+            mnTangHighRisk = portTangHighRisk @ mns
+            if mnTangHighRisk < np.max(mns):
+                sdTangHighRisk = np.sqrt(portTangHighRisk @ cov @ portTangHighRisk)
+
+        #1st: efficient low risk CAL
+        wgt = (mnTangLowRisk - s) / (A * (sdTangLowRisk**2))
+        expret= wgt*mnTangLowRisk + (1-wgt)*s
+        sdret = wgt*sdTangLowRisk 
+        wgt_rf = 1-wgt
+        wgt_lo = wgt
+        wgt_hi = 0.0
+        # print('Weight low risk CAL: ', wgt)
+        if wgt > 1.0:
+            #2nd: efficient high risk CAL
+            wgt = (mnTangHighRisk - b) / (A * (sdTangHighRisk**2))
+            expret= wgt*mnTangHighRisk + (1-wgt)*b
+            sdret = wgt*sdTangHighRisk 
+            wgt_rf = 1-wgt
+            wgt_lo = 0.0
+            wgt_hi = wgt
+            # print('Weight high risk CAL: ', wgt)
+            if wgt < 1.0:
+                #3rd: risky asset frontier
+                wgt = 1 #This is should be interpreted as total weight in risky assets.
+                # Method 1: solve analytically for utility-maximizing mix of efficient low and high risk portfolios
+                cov_hilo = portTangLowRisk.T @cov @ portTangHighRisk
+                wgt_lo = (mnTangLowRisk - mnTangHighRisk - A *(cov_hilo  - sdTangHighRisk**2))/(A*(sdTangLowRisk**2 + sdTangHighRisk**2 - 2*cov_hilo))
+                expret = wgt_lo*mnTangLowRisk + (1-wgt_lo)* mnTangHighRisk
+                sdret = np.sqrt((wgt_lo**2) *sdTangLowRisk**2 + ((1-wgt_lo)**2) * sdTangHighRisk**2 + 2*wgt_lo*(1-wgt_lo)*portTangLowRisk.T @cov @ portTangHighRisk)
+                wgt_hi = 1-wgt_lo
+                wgt_rf = 0.0
+
+                # #Method 2: calculate frontier manually and choose max utility
+                # eret_grid = np.linspace(mnTangLowRisk, mnTangHighRisk, 100)
+                # df = pd.DataFrame(dtype='float', columns=['mn','sd','u'],index=np.arange(0,100))
+                # for i,m in enumerate(eret_grid):
+                #     portFrontier = P.frontier(m)
+                #     df.loc[i,'mn'] = portFrontier @ mns
+                #     df.loc[i,'sd'] = np.sqrt(portFrontier @ cov @ portFrontier)
+                # df['u']  = df['mn'] - 0.5*A* df['sd']**2
+                # opt_mn = df.loc[df['u'].idxmax(),'mn']
+                # portFrontier = P.frontier(opt_mn)
+                # expret = portFrontier @ mns
+                # sdret  = np.sqrt(portFrontier @ cov @ portFrontier)
+                # print('Weight frontier: ', wgt)
+
+    u = expret - 0.5*A*sdret**2
+    return u, wgt, wgt_rf, wgt_lo, wgt_hi
+
+
+
+def figtbl(mn1, mn2, sd1, sd2, c, rs, extra, raver1, raver2, asset1_name, asset2_name):
+    df = data(mn1, mn2, sd1, sd2, c, rs, extra)
+    
+    #Plot the portfolios of the two assets
+    trace1 = go.Scatter(
+        x=df["stdev"],
+        y=df["mean"],
+        mode="lines",
+        # line={'color': green},
+        text=100 * df["wt1"],
+        customdata=100 * df["wt2"],
+        hovertemplate=asset1_name+": %{text:.0f}%<br>"+asset2_name+": %{customdata:.0f}%<extra></extra>",
+        line=dict(color="black"),
+        name="Stock & Bond Frontier"
+    )
+    
+    # Plot the two assets
+    df = df[df.wt1.isin([0, 1])]
+    df["text"] = np.where(df.wt1 == 1, asset1_name, asset2_name)
+    trace2a = go.Scatter(
+        x=df[df.wt1==1]["stdev"],
+        y=df[df.wt1==1]["mean"],
+        mode="markers",
+        text=df[df.wt1==1]["text"],
+        hovertemplate="%{text}<extra></extra>",
+        marker=dict(size=10, color="orange"),
+        name=asset1_name
+    )
+    trace2b = go.Scatter(
+        x=df[df.wt1==0]["stdev"],
+        y=df[df.wt1==0]["mean"],
+        mode="markers",
+        text=df[df.wt1==0]["text"],
+        hovertemplate="%{text}<extra></extra>",
+        marker=dict(size=10, color="red"),
+        name=asset2_name
+    )
+
+    fig = go.Figure()
+    fig.add_trace(trace2a)
+    fig.add_trace(trace2b)
+    fig.add_trace(trace1)
+
+
+
+    def custom(string, ports,srTang,borrow_flag):
+        # borrow_flag=1 adds statement about "relative to borrowing rate"
+        cd = np.empty(shape=(len(ports), N+1, 1), dtype=float)
+        for i in range(N):
+            cd[:, i] = np.array([w[i] for w in ports]).reshape(-1, 1)
+        cd[:,N] = np.round(srTang,4)
+        # print(cd)
+        string += "<br>"
+        for i in range(N):
+            string += "asset " + str(i + 1)
+            string += ": %{customdata["
+            string += str(i)
+            string += "]:.1%}<br>"
+        if borrow_flag==1:
+            string += "Sharpe ratio (relative to borrowing rate): %{customdata[" +  str(N) + "]:.4f}<br>"    
+        else:
+            string += "Sharpe ratio: %{customdata[" +  str(N) + "]:.4f}<br>"
+        string += "<extra></extra>"
+        return string, cd  
+
+    # Plot the tangency portfolios
+    c = c / 100
+    rb = rs + extra     
+    rs = rs/100
+    rb = rb/100
+    mns = [mn1, mn2]
+    mns = np.array(mns) / 100
+    sds = [sd1, sd2]
+    sds = np.array(sds) / 100
+    cov = np.array(
+        [[sds[0] ** 2, sds[0] * sds[1] * c], [sds[0] * sds[1] * c, sds[1] ** 2]]
+    ).reshape(2, 2)
+    
+    Shorts = 0.0     
+    N = len(mns)
+    P = portfolio(mns, cov, Shorts)    
+    gmv = P.GMV @ mns
+    # print('GMV return is: ',gmv)
+    if (rs < gmv) or (not Shorts):
+        portTang = P.tangency(rs)
+        mnTang = portTang @ mns
+        if mnTang < np.max(mns):
+            sdTang = np.sqrt(portTang @ cov @ portTang)
+            srTang = (mnTang - rs)/sdTang
+            string0 = 'tangency portfolio' if rb == rs else 'efficient low risk portfolio' if rb != rs else 'tangency portfolio'
+            string, cd = custom(string0, [portTang], srTang,0)
+            trace = go.Scatter(
+                x=[sdTang],
+                y=[mnTang],
+                mode="markers",
+                customdata=cd,
+                hovertemplate=string,
+                marker=dict(size=10, color="blue"),
+                name=string0
+            )
+            fig.add_trace(trace)
+            
+            #Plot CAL (no leverage)
+            if rb==rs:
+                max_wgt = 4.0
+            else:
+                max_wgt = 1.0
+            grid, mns_cal, sds_cal, srs_cal, srb_cal = rf_plus_risky(mnTang*100, sdTang*100, rs*100,rb*100,0, max_wgt)
+            portlabel = 'tangency portfolio' if rb == rs else 'efficient low risk portfolio' if rb != rs else 'tangency portfolio'
+            string = "wealth in "+portlabel + " = %{text:.0f}%<br>" + "Sharpe ratio: " +  "{:.4f}".format(srTang) +"<extra></extra>"
+            trace5 = go.Scatter(
+                x=sds_cal, 
+                y=mns_cal, 
+                mode="lines", 
+                text=100 * grid, 
+                hovertemplate=string, 
+                line=dict(color="blue"),
+                name="CAL: " + portlabel
+            )           
+            fig.add_trace(trace5)
+              
+            
+            
+
+    if (rb != rs) and ((gmv > rb) or (not Shorts)):
+        portTang = P.tangency(rb)
+        mnTang = portTang @ mns
+        if mnTang < np.max(mns):
+            sdTang = np.sqrt(portTang @ cov @ portTang)
+            srTang = (mnTang - rb)/sdTang
+            string = 'efficient high mean portfolio'
+            string, cd = custom(string, [portTang], srTang,1)
+            trace = go.Scatter(
+                x=[sdTang],
+                y=[mnTang],
+                mode="markers",
+                customdata=cd,
+                hovertemplate=string,
+                marker=dict(size=10, color="blue"),
+                name="efficient high mean portfolio"
+            )
+            fig.add_trace(trace)
+            
+            #Plot CAL (with leverage)            
+            grid, mns_cal, sds_cal, srs_cal, srb_cal = rf_plus_risky(mnTang*100, sdTang*100, rs*100,rb*100, 1.0, 1.5)
+            string = "wealth in efficient high mean portfolio = %{text:.0f}%<br>" + "Sharpe ratio (relative to borrowing rate): " + "{:.4f}".format(srTang) +"<extra></extra>"
+            trace6 = go.Scatter(
+                x=sds_cal, 
+                y=mns_cal, 
+                mode="lines", 
+                text=100 * grid, 
+                hovertemplate=string,
+                line=dict(color="blue"),
+                name = "CAL: efficient high mean"
+            )           
+            fig.add_trace(trace6)   
+ 
+
+
+    # Utility plot info
+    u1, wgt1, wgt_rf1, wgt_lo1, wgt_hi1 = opt_utility(mns, cov, Shorts, rs, rb, raver1)
+    u2, wgt2, wgt_rf2, wgt_lo2, wgt_hi2 = opt_utility(mns, cov, Shorts, rs, rb, raver2)
+    string1='Risk Aversion='+str(raver1)
+    string2='Risk Aversion='+str(raver2)
+    grid = np.linspace(0,1.4,100)
+    sds = [w*np.max(sds) for w in grid]
+    eret1 = [u1 + 0.5*raver1* (sd**2) for sd in sds]
+    eret2 = [u2 + 0.5*raver2* (sd**2) for sd in sds] 
+    # df = pd.DataFrame(data={'Standard Deviation': sds, string1: U1, string2: U2})
+    string = "indifference curve for <br> optimal utility for risk aversion of "+str(np.round(raver1,1))+"<extra></extra>"
+    trace7 = go.Scatter(
+        x=sds, y=eret1, mode="lines", hovertemplate=string, name=string1, line=dict(color="purple",dash='dot'),
+    )  
+    string = "indifference curve for <br> optimal utility for risk aversion of "+str(np.round(raver2,1))+"<extra></extra>"
+    trace8 = go.Scatter(
+        x=sds, y=eret2, mode="lines", hovertemplate=string, name=string2, line=dict(color="purple"),
+    )  
+    fig.add_trace(trace7) 
+    fig.add_trace(trace8) 
+ 
+    
+    fig.layout.xaxis["title"] = "Standard Deviation"
+    fig.layout.yaxis["title"] = "Expected Return"
+    fig.update_xaxes(range=[0, 1.25 * df["stdev"].max()])
+    fig.update_yaxes(range=[0, 1.25 * df["mean"].max()])
+    fig.update_yaxes(tickformat=".0%")
+    fig.update_xaxes(tickformat=".0%")
+    fig.update_layout(legend=dict(yanchor="top", y =0.5, xanchor="left", x=0.6))
+    fig.show()
+
+figtbl(mn_stock,mn_bond,sd_stock,sd_bond,corr,rs,extra,raver1, raver2, "Stock","Bond")
+```
+
+
+## Risk aversion and allocation to Risky Assets
+```{python}
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+
+mn_stock = 6
+mn_bond  = 3.5
+sd_stock = 15
+sd_bond  = 3.5
+corr = -5
+
+rs = 2
+extra = 0
+
+raver1 = 2
+raver2 = 5
+
+def data(mn1, mn2, sd1, sd2, c, rs, extra):
+    c = c / 100
+    rb = rs + extra   
+    rs = rs/100
+    rb = rb/100
+    mns = [mn1, mn2]
+    sds = [sd1, sd2]
+    grid = np.linspace(0, 1, 101)
+    ports = [np.array([w, 1 - w]) for w in grid]
+    means = [p.T @ np.array(mns) for p in ports]
+    df = pd.DataFrame(means)
+    df.columns = ["mean"]
+    cov = np.array(
+        [[sds[0] ** 2, sds[0] * sds[1] * c], [sds[0] * sds[1] * c, sds[1] ** 2]]
+    ).reshape(2, 2)
+    df["stdev"] = [np.sqrt(p.T @ cov @ p) for p in ports]
+    df["wt1"] = grid
+    df["wt2"] = 1 - df.wt1
+    for col in ["mean", "stdev"]:
+        df[col] = df[col] / 100
+    df["sr_s"]= (df["mean"] - rs)/df["stdev"]
+    df["sr_b"]= (df["mean"] - rb)/df["stdev"]
+   
+    return df
+
+def rf_plus_risky(mn, sd, rs, rb, w_min, w_max):
+    mn /= 100
+    sd /= 100
+    rs /= 100
+    rb /= 100
+    grid = np.linspace(w_min, w_max, 201)
+    mns = [(rs + w * (mn - rs) if w <= 1 else rb + w * (mn - rb)) for w in grid]
+    sds = [w * sd for w in grid]
+    srs = (mn - rs)/sd
+    srb = (mn - rb)/sd
+    return grid, mns, sds, srs, srb
+
+def opt_utility(mns, cov, Shorts, s, b, A):
+    # P is a portfolio object based on expected returns, covariance matrix, and shorts
+    P = portfolio(mns, cov, Shorts) 
+    gmv = P.GMV @ mns
+    if s==b:
+        #tangency exp ret and sd
+        if (s < gmv) or (not Shorts):
+            portTang = P.tangency(s)
+            mnTang = portTang @ mns
+            if mnTang < np.max(mns):
+                sdTang = np.sqrt(portTang @ cov @ portTang)
+
+                #optimal weight in tangency based on risk-aversion
+                wgt = (mnTang - s) / (A * (sdTang**2))
+                expret= wgt*mnTang + (1-wgt)*s
+                sdret = wgt*sdTang 
+                wgt_rf = 1-wgt
+                wgt_lo = wgt
+                wgt_hi = 0.0
+    else:
+        #efficient low-risk portfolio
+        if (s < gmv) or (not Shorts):
+            portTangLowRisk = P.tangency(s)
+            mnTangLowRisk = portTangLowRisk @ mns
+            if mnTangLowRisk < np.max(mns):
+                sdTangLowRisk = np.sqrt(portTangLowRisk @ cov @ portTangLowRisk)
+
+        #efficient high-risk portfolio
+        if ((b<gmv) or (not Shorts)):
+            portTangHighRisk = P.tangency(b)
+            mnTangHighRisk = portTangHighRisk @ mns
+            if mnTangHighRisk < np.max(mns):
+                sdTangHighRisk = np.sqrt(portTangHighRisk @ cov @ portTangHighRisk)
+
+        #1st: efficient low risk CAL
+        wgt = (mnTangLowRisk - s) / (A * (sdTangLowRisk**2))
+        expret= wgt*mnTangLowRisk + (1-wgt)*s
+        sdret = wgt*sdTangLowRisk 
+        wgt_rf = 1-wgt
+        wgt_lo = wgt
+        wgt_hi = 0.0
+        # print('Weight low risk CAL: ', wgt)
+        if wgt > 1.0:
+            #2nd: efficient high risk CAL
+            wgt = (mnTangHighRisk - b) / (A * (sdTangHighRisk**2))
+            expret= wgt*mnTangHighRisk + (1-wgt)*b
+            sdret = wgt*sdTangHighRisk 
+            wgt_rf = 1-wgt
+            wgt_lo = 0.0
+            wgt_hi = wgt
+            # print('Weight high risk CAL: ', wgt)
+            if wgt < 1.0:
+                #3rd: risky asset frontier
+                wgt = 1 #This is should be interpreted as total weight in risky assets.
+                # Method 1: solve analytically for utility-maximizing mix of efficient low and high risk portfolios
+                cov_hilo = portTangLowRisk.T @cov @ portTangHighRisk
+                wgt_lo = (mnTangLowRisk - mnTangHighRisk - A *(cov_hilo  - sdTangHighRisk**2))/(A*(sdTangLowRisk**2 + sdTangHighRisk**2 - 2*cov_hilo))
+                expret = wgt_lo*mnTangLowRisk + (1-wgt_lo)* mnTangHighRisk
+                sdret = np.sqrt((wgt_lo**2) *sdTangLowRisk**2 + ((1-wgt_lo)**2) * sdTangHighRisk**2 + 2*wgt_lo*(1-wgt_lo)*portTangLowRisk.T @cov @ portTangHighRisk)
+                wgt_hi = 1-wgt_lo
+                wgt_rf = 0.0
+
+                # #Method 2: calculate frontier manually and choose max utility
+                # eret_grid = np.linspace(mnTangLowRisk, mnTangHighRisk, 100)
+                # df = pd.DataFrame(dtype='float', columns=['mn','sd','u'],index=np.arange(0,100))
+                # for i,m in enumerate(eret_grid):
+                #     portFrontier = P.frontier(m)
+                #     df.loc[i,'mn'] = portFrontier @ mns
+                #     df.loc[i,'sd'] = np.sqrt(portFrontier @ cov @ portFrontier)
+                # df['u']  = df['mn'] - 0.5*A* df['sd']**2
+                # opt_mn = df.loc[df['u'].idxmax(),'mn']
+                # portFrontier = P.frontier(opt_mn)
+                # expret = portFrontier @ mns
+                # sdret  = np.sqrt(portFrontier @ cov @ portFrontier)
+                # print('Weight frontier: ', wgt)
+
+    u = expret - 0.5*A*sdret**2
+    return u, wgt, wgt_rf, wgt_lo, wgt_hi
+
+
+
+def figtbl(mn1, mn2, sd1, sd2, c, rs, extra, raver1, raver2, asset1_name, asset2_name):
+    df = data(mn1, mn2, sd1, sd2, c, rs, extra)
+    
+    #Plot the portfolios of the two assets
+    trace1 = go.Scatter(
+        x=df["stdev"],
+        y=df["mean"],
+        mode="lines",
+        # line={'color': green},
+        text=100 * df["wt1"],
+        customdata=100 * df["wt2"],
+        hovertemplate=asset1_name+": %{text:.0f}%<br>"+asset2_name+": %{customdata:.0f}%<extra></extra>",
+        line=dict(color="black"),
+        name="Stock & Bond Frontier"
+    )
+    
+    # Plot the two assets
+    df = df[df.wt1.isin([0, 1])]
+    df["text"] = np.where(df.wt1 == 1, asset1_name, asset2_name)
+    trace2a = go.Scatter(
+        x=df[df.wt1==1]["stdev"],
+        y=df[df.wt1==1]["mean"],
+        mode="markers",
+        text=df[df.wt1==1]["text"],
+        hovertemplate="%{text}<extra></extra>",
+        marker=dict(size=10, color="orange"),
+        name=asset1_name
+    )
+    trace2b = go.Scatter(
+        x=df[df.wt1==0]["stdev"],
+        y=df[df.wt1==0]["mean"],
+        mode="markers",
+        text=df[df.wt1==0]["text"],
+        hovertemplate="%{text}<extra></extra>",
+        marker=dict(size=10, color="red"),
+        name=asset2_name
+    )
+
+    fig = go.Figure()
+    fig.add_trace(trace2a)
+    fig.add_trace(trace2b)
+    fig.add_trace(trace1)
+
+
+
+    def custom(string, ports,srTang,borrow_flag):
+        # borrow_flag=1 adds statement about "relative to borrowing rate"
+        cd = np.empty(shape=(len(ports), N+1, 1), dtype=float)
+        for i in range(N):
+            cd[:, i] = np.array([w[i] for w in ports]).reshape(-1, 1)
+        cd[:,N] = np.round(srTang,4)
+        # print(cd)
+        string += "<br>"
+        for i in range(N):
+            string += "asset " + str(i + 1)
+            string += ": %{customdata["
+            string += str(i)
+            string += "]:.1%}<br>"
+        if borrow_flag==1:
+            string += "Sharpe ratio (relative to borrowing rate): %{customdata[" +  str(N) + "]:.4f}<br>"    
+        else:
+            string += "Sharpe ratio: %{customdata[" +  str(N) + "]:.4f}<br>"
+        string += "<extra></extra>"
+        return string, cd  
+
+    # Plot the tangency portfolios
+    c = c / 100
+    rb = rs + extra     
+    rs = rs/100
+    rb = rb/100
+    mns = [mn1, mn2]
+    mns = np.array(mns) / 100
+    sds = [sd1, sd2]
+    sds = np.array(sds) / 100
+    cov = np.array(
+        [[sds[0] ** 2, sds[0] * sds[1] * c], [sds[0] * sds[1] * c, sds[1] ** 2]]
+    ).reshape(2, 2)
+    
+    Shorts = 0.0     
+    N = len(mns)
+    P = portfolio(mns, cov, Shorts)    
+    gmv = P.GMV @ mns
+    # print('GMV return is: ',gmv)
+    if (rs < gmv) or (not Shorts):
+        portTang = P.tangency(rs)
+        mnTang = portTang @ mns
+        if mnTang < np.max(mns):
+            sdTang = np.sqrt(portTang @ cov @ portTang)
+            srTang = (mnTang - rs)/sdTang
+            string0 = 'tangency portfolio' if rb == rs else 'efficient low risk portfolio' if rb != rs else 'tangency portfolio'
+            string, cd = custom(string0, [portTang], srTang,0)
+            trace = go.Scatter(
+                x=[sdTang],
+                y=[mnTang],
+                mode="markers",
+                customdata=cd,
+                hovertemplate=string,
+                marker=dict(size=10, color="blue"),
+                name=string0
+            )
+            fig.add_trace(trace)
+            
+            #Plot CAL (no leverage)
+            if rb==rs:
+                max_wgt = 4.0
+            else:
+                max_wgt = 1.0
+            grid, mns_cal, sds_cal, srs_cal, srb_cal = rf_plus_risky(mnTang*100, sdTang*100, rs*100,rb*100,0, max_wgt)
+            portlabel = 'tangency portfolio' if rb == rs else 'efficient low risk portfolio' if rb != rs else 'tangency portfolio'
+            string = "wealth in "+portlabel + " = %{text:.0f}%<br>" + "Sharpe ratio: " +  "{:.4f}".format(srTang) +"<extra></extra>"
+            trace5 = go.Scatter(
+                x=sds_cal, 
+                y=mns_cal, 
+                mode="lines", 
+                text=100 * grid, 
+                hovertemplate=string, 
+                line=dict(color="blue"),
+                name="CAL: " + portlabel
+            )           
+            fig.add_trace(trace5)
+              
+            
+            
+
+    if (rb != rs) and ((gmv > rb) or (not Shorts)):
+        portTang = P.tangency(rb)
+        mnTang = portTang @ mns
+        if mnTang < np.max(mns):
+            sdTang = np.sqrt(portTang @ cov @ portTang)
+            srTang = (mnTang - rb)/sdTang
+            string = 'efficient high mean portfolio'
+            string, cd = custom(string, [portTang], srTang,1)
+            trace = go.Scatter(
+                x=[sdTang],
+                y=[mnTang],
+                mode="markers",
+                customdata=cd,
+                hovertemplate=string,
+                marker=dict(size=10, color="blue"),
+                name="efficient high mean portfolio"
+            )
+            fig.add_trace(trace)
+            
+            #Plot CAL (with leverage)            
+            grid, mns_cal, sds_cal, srs_cal, srb_cal = rf_plus_risky(mnTang*100, sdTang*100, rs*100,rb*100, 1.0, 1.5)
+            string = "wealth in efficient high mean portfolio = %{text:.0f}%<br>" + "Sharpe ratio (relative to borrowing rate): " + "{:.4f}".format(srTang) +"<extra></extra>"
+            trace6 = go.Scatter(
+                x=sds_cal, 
+                y=mns_cal, 
+                mode="lines", 
+                text=100 * grid, 
+                hovertemplate=string,
+                line=dict(color="blue"),
+                name = "CAL: efficient high mean"
+            )           
+            fig.add_trace(trace6)   
+ 
+
+
+
+
+    # Utility plot info
+    u1, wgt1, wgt_rf1, wgt_lo1, wgt_hi1 = opt_utility(mns, cov, Shorts, rs, rb, raver1)
+    u2, wgt2, wgt_rf2, wgt_lo2, wgt_hi2 = opt_utility(mns, cov, Shorts, rs, rb, raver2)
+    string1='Risk Aversion='+str(raver1)
+    string2='Risk Aversion='+str(raver2)
+    grid = np.linspace(0,1.4,100)
+    sds = [w*np.max(sds) for w in grid]
+    eret1 = [u1 + 0.5*raver1* (sd**2) for sd in sds]
+    eret2 = [u2 + 0.5*raver2* (sd**2) for sd in sds] 
+    # df = pd.DataFrame(data={'Standard Deviation': sds, string1: U1, string2: U2})
+    string = "indifference curve for <br> optimal utility for risk aversion of "+str(np.round(raver1,1))+"<extra></extra>"
+    trace7 = go.Scatter(
+        x=sds, y=eret1, mode="lines", hovertemplate=string, name=string1, line=dict(color="purple",dash='dot'),
+    )  
+    string = "indifference curve for <br> optimal utility for risk aversion of "+str(np.round(raver2,1))+"<extra></extra>"
+    trace8 = go.Scatter(
+        x=sds, y=eret2, mode="lines", hovertemplate=string, name=string2, line=dict(color="purple"),
+    )  
+    fig.add_trace(trace7) 
+    fig.add_trace(trace8) 
+ 
+    
+    fig.layout.xaxis["title"] = "Standard Deviation"
+    fig.layout.yaxis["title"] = "Expected Return"
+    fig.update_xaxes(range=[0, 1.25 * df["stdev"].max()])
+    fig.update_yaxes(range=[0, 1.25 * df["mean"].max()])
+    fig.update_yaxes(tickformat=".0%")
+    fig.update_xaxes(tickformat=".0%")
+    fig.update_layout(legend=dict(yanchor="top", y =0.99, xanchor="left", x=0.74))
+    # fig.show()
+
+
+    #2nd plot of risky asset share as function of risk aversion:
+    ravers = np.arange(0.2,20,0.1)
+    cd = np.empty(shape=(len(ravers),5,1),dtype=float)
+    wgts = [opt_utility(mns, cov, Shorts, rs, rb, A) for A in ravers]
+    df = pd.DataFrame(wgts, columns=['u','wgt_risky','wgt_rf','wgt_lowrisk','wgt_highrisk'])
+    if (rb != rs):
+        custdat = np.empty(shape=(df.shape[0],3,1), dtype=float)
+        custdat[:,0] = np.array(100*df.wgt_rf).reshape(-1,1)
+        custdat[:,1] = np.array(100*df.wgt_lowrisk).reshape(-1,1)
+        custdat[:,2] = np.array(100*df.wgt_highrisk).reshape(-1,1)
+        string = 'risk-free: %{customdata[0]:.0f}%<br>'
+        string+= 'efficient low-risk: %{customdata[1]:.0f}%<br>'
+        string+= 'efficient high-risk: %{customdata[2]:.0f}%<br>'
+        string+= '<extra></extra>'
+        trace1 = go.Scatter(x=ravers,y=df['wgt_risky'],mode='lines',customdata=custdat,hovertemplate=string, line=dict(color="orange"))
+        fig = go.Figure()
+        fig.add_trace(trace1)
+    else:
+        custdat = np.empty(shape=(df.shape[0],2,1), dtype=float)
+        custdat[:,0] = np.array(100*df.wgt_rf).reshape(-1,1)
+        custdat[:,1] = np.array(100*df.wgt_lowrisk).reshape(-1,1)
+        string = 'risk-free: %{customdata[0]:.0f}%<br>'
+        string+= 'tangency: %{customdata[1]:.0f}%<br>'
+        string+= '<extra></extra>'
+        trace1 = go.Scatter(x=ravers,y=df['wgt_risky'],mode='lines',customdata=custdat,hovertemplate=string, line=dict(color="orange"))
+        fig = go.Figure()
+        fig.add_trace(trace1)       
+    fig.layout.xaxis["title"] = "Risk Aversion"
+    fig.layout.yaxis["title"] = "Weight in Risky Assets"
+    fig.update_yaxes(tickformat=".1%")
+    fig.update_xaxes(tickformat=".2")
+    fig.update_layout(legend=dict(yanchor="top", y =0.99, xanchor="left", x=0.74))
+    fig.show()
+
+
+figtbl(mn_stock,mn_bond,sd_stock,sd_bond,corr,rs,extra,raver1, raver2, "Stock","Bond")
+```
+
+
+## Alternatives to mean-variance preferences
+
+Alternatively, some investors have a either a target expected return or target standard deviation. \
+If we have a target expected return, solve for $w_{\text{risky}}$:
+$$ E[r_p] = w_{\text{risky}} \cdot E[r_{\text{risky}}] + (1-w_{\text{risky}}) \cdot r_f $$
+
+If we have a target standard deviation, solve for $w_{\text{risky}}$:
+$$ \text{sd}[r_p] = w_{\text{risky}} \cdot \text{sd}[r_{\text{risky}}] $$
+
+# For next time: Practical Issues in Portfolio Optimization
+
+<br><br><br><br>
+
+![](RiceLogo.png){fig-align="center"}

@@ -1,0 +1,293 @@
+---
+title: 'Portfolio Returns'
+author: "<br>Kevin Crotty<br>BUSI 448: Investments"
+format: 
+    revealjs:
+        incremental: true
+        logo: RiceLogo.png
+        footer: "BUSI 448"
+        self-contained: true
+        code-fold: true
+        theme: [default, custom.scss]
+        show-slide-number: print
+        menu: 
+            width: wide
+            numbers: true        
+execute:
+    echo: true
+    freeze: auto
+jupyter: python3
+---
+
+## Where are we?
+**Last time**:
+
+::: {.nonincremental}
+- Calculating returns
+- Fetching data
+- Summarizing returns
+:::
+
+. . . 
+
+**Today**:
+
+::: {.nonincremental}
+- Returns of portfolios
+- Portfolio expected return
+- Portfolio standard deviation
+:::
+
+
+# Returns of Portfolios
+
+## Portfolios
+
+- Portfolio are combinations of underlying assets \
+
+- Given return properties of the underlying assets, what are the return properties of their combination? \
+
+## Expected Return of Portfolio of $N$ Assets 
+
+$$ E[r_p] = \sum_{i=1}^{N} w_i E[r_i] $$
+
+- $w_i$ is the portfolio weight of asset $i$ \
+- $E[r_i]$ is the expected return of asset $i$ \
+- The portfolio is fully invested: $\sum_i w_i = 1$ \
+- Notation: $E(r_p)=\mu_i$
+
+## Variance of Portfolio of $N$ Assets 
+
+$$ \text{var}[r_p] = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j \text{cov}[r_i,r_j] $$
+
+- $w_i$ is the portfolio weight of asset $i$ \
+- $\text{cov}[r_i,r_j]$ is the covariance between assets $i$ and $j$ \
+- Recall that $\text{cov}[r_i,r_j]=\text{var}[r_i]$ and $\text{sd}[r_i]=\sqrt{\text{var}[r_i]}$ \
+- Notation: $\text{var}[r_p]=\sigma^2_p$; $\text{cov}[r_i,r_j]=\sigma_{i,j}$; $\text{sd}[r_p]=\sigma_p$
+
+## Variance of Portfolio of $N$ Assets: A Matrix View
+
+$$ \text{var}[r_p] = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j \text{cov}[r_i,r_j] $$
+
+<table border="1">
+  <!-- Row 1 -->
+  <tr> 
+    <td style="text-align:center; background-color:gray">$w_1 w_1 \text{cov}[r_1,r_1]$</td>
+    <td style="text-align:center">$w_1 w_2 \text{cov}[r_1,r_2]$</td>
+    <td style="text-align:center">$w_1 w_3 \text{cov}[r_1,r_3]$</td>
+  </tr>
+  <!-- Row 2 -->
+  <tr>
+    <td style="text-align:center">$w_2 w_1 \text{cov}[r_2,r_1]$</td>
+    <td style="text-align:center; background-color:gray">$w_2 w_2 \text{cov}[r_2,r_2]$</td>
+    <td style="text-align:center">$w_2 w_3 \text{cov}[r_2,r_3]$</td>
+  </tr>
+  <!-- Row 3 -->
+  <tr>
+    <td style="text-align:center">$w_3 w_1 \text{cov}[r_3,r_1]$</td>
+    <td style="text-align:center">$w_3 w_2 \text{cov}[r_3,r_2]$</td>
+    <td style="text-align:center; background-color:gray">$w_3 w_3 \text{cov}[r_3,r_3]$</td>
+  </tr>
+</table>
+
+## Variance of Portfolio of $N$ Assets: A Matrix View
+
+$$ \text{var}[r_p] = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j \text{cov}[r_i,r_j] $$
+
+<table border="1">
+  <!-- Row 1 -->
+  <tr> 
+    <td style="text-align:center; background-color:gray">$w_1^2 \text{var}[r_1]$</td>
+    <td style="text-align:center">$w_1 w_2 \text{cov}[r_1,r_2]$</td>
+    <td style="text-align:center">$w_1 w_3 \text{cov}[r_1,r_3]$</td>
+  </tr>
+  <!-- Row 2 -->
+  <tr>
+    <td style="text-align:center">$w_2 w_1 \text{cov}[r_2,r_1]$</td>
+    <td style="text-align:center; background-color:gray">$w_2^2 \text{var}[r_2]$</td>
+    <td style="text-align:center">$w_2 w_3 \text{cov}[r_2,r_3]$</td>
+  </tr>
+  <!-- Row 3 -->
+  <tr>
+    <td style="text-align:center">$w_3 w_1 \text{cov}[r_3,r_1]$</td>
+    <td style="text-align:center">$w_3 w_2 \text{cov}[r_3,r_2]$</td>
+    <td style="text-align:center; background-color:gray">$w_3^2 \text{var}[r_3]$</td>
+  </tr>
+</table>
+
+## Variance of Portfolio of $N$ Assets: A Matrix View
+
+$$ \text{var}[r_p] = \sum_{i=1}^{N} w_i^2 \text{var}[r_i]+ 2 \sum_{j>i} w_i w_j \text{cov}[r_i,r_j] $$
+
+<table border="1">
+  <!-- Row 1 -->
+  <tr> 
+    <td style="text-align:center; background-color:gray">$w_1^2 \text{var}[r_1]$</td>
+    <td style="text-align:center; background-color:lightblue">$w_1 w_2 \text{cov}[r_1,r_2]$</td>
+    <td style="text-align:center; background-color:lightcoral">$w_1 w_3 \text{cov}[r_1,r_3]$</td>
+  </tr>
+  <!-- Row 2 -->
+  <tr>
+    <td style="text-align:center; background-color:lightblue">$w_2 w_1 \text{cov}[r_2,r_1]$</td>
+    <td style="text-align:center; background-color:gray">$w_2^2 \text{var}[r_2]$</td>
+    <td style="text-align:center; background-color:#d9f2d9">$w_2 w_3 \text{cov}[r_2,r_3]$</td>
+  </tr>
+  <!-- Row 3 -->
+  <tr>
+    <td style="text-align:center; background-color:lightcoral">$w_3 w_1 \text{cov}[r_3,r_1]$</td>
+    <td style="text-align:center; background-color:#d9f2d9">$w_3 w_2 \text{cov}[r_3,r_2]$</td>
+    <td style="text-align:center; background-color:gray">$w_3^2 \text{var}[r_3]$</td>
+  </tr>
+</table>
+
+## Example: Equal-weighted portfolio of two assets
+
+- Expected Return 
+
+. . .
+
+\begin{align}
+    E[r_p] =& w_1 E[r_1] + w_2 E[r_2] \\
+           =& 0.5 E[r_1] + 0.5 E[r_2] \\
+\end{align}
+
+
+- Portfolio Variance
+
+. . . 
+
+\begin{align}
+    \text{var}[r_p] =& w_1^2 \text{var}[r_1]+ w_2^2 \text{var}[r_2]+ 2 w_1 w_2 \text{cov}[r_1,r_2] \\ 
+                    =& 0.5^2 \text{var}[r_1]+ 0.5^2 \text{var}[r_2]+ 2\cdot 0.5\cdot 0.5 \text{cov}_{12} \\
+                    =& 0.25 \text{var}[r_1]+ 0.25 \text{var}[r_2]+  0.5 \text{cov}[r_1,r_2] \\
+\end{align}
+
+. . . 
+
+- [BBCX: general weights and correlations](http://bbcx-investments.com/portfolios/two-assets)
+<!-- ## {background-iframe="http://bbcx-investments.com/portfolios/two-assets" background-interactive="True"} -->
+
+
+## Variance of Portfolio of $N$ Assets: Matrices {.smaller}
+
+$$ \text{var}[r_p] = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j \text{cov}[r_i,r_j] = w'Vw $$
+
+- Portfolio weights vector $$w'=[w_1\, w_2\,...\,w_N]$$
+
+- Covariance matrix of returns:
+\begin{equation*}
+    V = 
+    \begin{bmatrix}
+        \text{var}[r_1]     & \text{cov}[r_1,r_2] & \dots  & \text{cov}[r_1,r_N] \\
+        \text{cov}[r_2,r_1] & \text{var}[r_2]     & \dots  & \text{cov}[r_2,r_N] \\
+        \vdots              & \vdots              & \ddots &  \vdots \\
+        \text{cov}[r_N,r_1] & \text{cov}[r_N,r_2] & \dots  & \text{var}[r_N] \\
+    \end{bmatrix}
+\end{equation*}
+
+## Covariance and Correlation
+
+- Covariance: absolute degree of co-movement between two assets 
+- Correlation: relative degree of co-movement between two assets
+
+. . .
+
+$$ \text{corr}[r_i,r_j] = \rho_{ij} = \frac{\text{cov}[r_i,r_j]}{\text{sd}[r_i]\cdot\text{sd}[r_j]} $$
+
+- What are the possible values for $\rho$?
+
+
+# Portfolio Statistics in Python
+
+## Portfolio expected return in Python
+``` p
+import numpy as np
+
+# Expected returns
+mns = np.array([0.10, 0.05, 0.07])
+
+# Portfolio weights
+wgts = np.array([0.25, 0.5, 0.25])
+
+#Portfolio expected return
+port_expret = wgts @ mns
+```
+
+
+## Portfolio variance: matrix approach {.smaller}
+Given a covariance matrix $V$:
+\begin{equation*}
+    V = 
+    \begin{bmatrix}
+        \text{var}[r_1]     & \text{cov}[r_1,r_2] & \dots  & \text{cov}[r_1,r_N] \\
+        \text{cov}[r_2,r_1] & \text{var}[r_2]     & \dots  & \text{cov}[r_2,r_N] \\
+        \vdots              & \vdots              & \ddots &  \vdots \\
+        \text{cov}[r_N,r_1] & \text{cov}[r_N,r_2] & \dots  & \text{var}[r_N] \\
+    \end{bmatrix}
+\end{equation*}
+and a vector of portfolio weights 
+$$w'=[w_1\, w_2\,...\,w_N]\,,$$
+
+The portfolio variance is the matrix product:
+$$ \text{var}[r_p] = w'Vw \,.$$ 
+
+
+## Portfolio variance in Python: Inputs
+
+``` p
+import numpy as np
+
+##### Inputs
+# Standard deviations
+sds = np.array([0.20, 0.12, 0.15])
+
+# Correlations
+corr12 = 0.3
+corr13 = 0.3
+corr23 = 0.3
+
+# Portfolio weights
+wgts = np.array([0.25, 0.5, 0.25])
+```
+
+## Covariance matrix: method 1
+``` p
+##### Method 1 to calculate covariance matrix
+# Covariances
+cov12 = corr12 * sds[0] * sds[1]
+cov13 = corr13 * sds[0] * sds[2]
+cov23 = corr23 * sds[1] * sds[2]
+# Covariance matrix
+cov = np.array([[sds[0]**2,  cov12,     cov13], \
+                [cov12,      sds[1]**2, cov23], \
+                [cov13,      cov23,     sds[2]**2]])
+```
+
+## Covariance matrix: method 2
+``` p
+##### Method 2 to calculate covariance matrix
+# Correlation matrix
+C  = np.identity(3)
+C[0, 1] = C[1, 0] = corr12
+C[0, 2] = C[2, 0] = corr13
+C[1, 2] = C[2, 1] = corr23
+# Covariance matrix
+cov = np.diag(sds) @ C @ np.diag(sds)
+```
+
+## Portfolio risk in Python
+``` p
+##### Portfolio risk measures
+# Portfolio variance
+port_var = wgts @ cov @ wgts
+
+# Portfolio standard deviation
+port_sd  = np.sqrt(port_var)
+```
+
+
+# For next time: Equity Markets
+
+<br><br><br><br>
+
+![](RiceLogo.png){fig-align="center"}

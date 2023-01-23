@@ -34,7 +34,6 @@ jupyter: python3
 
 ::: {.nonincremental}
 - Saving for retirement
-- Real and nominal cash flows and rates
 :::
 
 # Saving for retirement
@@ -114,63 +113,8 @@ A useful function: `npf.pmt`
 
 
 
-# Saving for retirement with inflation
-## Saving for retirement with inflation
-- Now assume we consume a constant **real** amount in retirement
-  - our standard of living will be unchanged each year
-- Can finance with constant nominal or real saving
-- Assume a nominal rate of 5% and inflation of 2% each year
 
-. . .
-
-**Q1: How much do we need to save each year if saving a constant real amount?**
-
-. . . 
-
-**Q2: How much do we need to save each year if saving a constant nominal amount?**
-
-
-## Real and Nominal Cash Flows
-
-What is the relationship between real and nominal cash flows at a point in time $t$?
-
-. . . 
-
-$$ \text{Nominal CF}_t = \text{Real CF}_t \cdot (1+\text{inflation})^t. $$
-
-. . .
-
-What does the above look like?
-
-## Real and Nominal Discount Rates
-
-What is the relationship between real and nominal rates?
-
-. . .
-
-$$ 1+ \text{nominal rate} = (1+\text{real rate})(1+\text{inflation}).$$
-
-- Nominal cash flows are discounted/compounded using nominal rates.
-- Real cash flows are discounted/compounded using real rates.
-
-
-# Uncertain returns
-
-## Simulating random returns
-
-We can easily simulate random returns in Python
-
-``` {.python}
-from scipy.stats import norm
-norm.rvs(loc=0.03, scale=0.1, size=50)
-```
-
-- What does the distribution of ending balances look like if we save $32,000 for 30 years (in real terms) and withdraw $100,000 for 20 years? (both in real terms)
-  - Assume real returns are normally distributed with mean of 3% and standard deviation of 10%.
-- How often do we run out of money?!?
-
-
-# For next time: Returns, returns, and more returns...
+# For next time: Real and nominal cash flows, and uncertainty
 
 <br><br><br><br>
 

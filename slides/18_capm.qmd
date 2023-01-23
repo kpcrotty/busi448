@@ -1,0 +1,267 @@
+---
+title: 'CAPM'
+author: "<br>Kevin Crotty<br>BUSI 448: Investments"
+format: 
+    revealjs:
+        incremental: true
+        logo: RiceLogo.png
+        footer: "BUSI 448"
+        self-contained: true
+        code-fold: true
+        theme: [default, custom.scss]
+        show-slide-number: print
+        menu: 
+            width: wide
+            numbers: true             
+execute:
+    echo: true
+    freeze: auto
+jupyter: python3
+---
+
+
+## Where are we?
+**Last time**:
+
+::: {.nonincremental}
+- Market Model Regressions
+- Alphas and Betas
+- Estimating Covariance Matrix
+:::
+
+. . . 
+
+**Today**:
+
+::: {.nonincremental}
+- CAPM and the Market Model Regression
+- CAPM: Theory
+- CAPM: Practice
+:::
+
+# CAPM and the Market Model Regression
+## What is the CAPM?
+
+- The Capital Asset Pricing Model (CAPM) is a theory from the 1960s.  Its discoverer won the Nobel prize in economics.
+- The intuition is:
+  - Market risk is the biggest risk that a diversified investor faces.
+  - The risk of each asset should be measured in terms of how much it contributes to market risk.
+  - The risk premium of each asset should depend (linearly) on this measure of risk.
+
+##  Capital Asset Pricing Model
+
+$$E[r_i - r_f] = \beta_i \cdot E[r_m-r_f]$$
+
+- $E[r_m-r_f]$ is the market risk premium
+- $\beta_i = \frac{\text{cov}(r_i, r_m)}{\text{var}(r_m)}$
+
+. . .
+
+Empirically, we estimate a **market model regression**:
+
+$$ r_{i,t} - r_{f,t} = \alpha_i + \beta_i (r_{m,t} - r_{f,t}) + \varepsilon_{i,t} $$
+
+- What differs between the top and bottom equations?
+
+
+
+
+# Theory: CAPM 
+## CAPM Assumptions
+
+- Investors have **identical** beliefs about the **same universe** of asset returns
+- Investors have **mean-variance** preferences
+- **Single period** investment horizon
+- **Frictionless** borrowing and lending
+  - borrowing rate = savings rate
+- **Frictionless** trading
+  - no transactions costs & no taxation & shorting allowed
+- **Perfect competition**: investors are price-takers
+
+## Equilibrium
+
+- All investors view the market portfolio as the tangency portfolio.
+- The capital allocation line with respect to the market portfolio is called the **capital market line**
+- Investors save or borrow at the risk-free rate to locate on the CML according to their risk aversion.
+- Prices will adjust so that the marginal benefit of an asset (its risk premium) is proportional to its marginal contribution to the risk of the *market portfolio*.
+
+## Deriving the CAPM (1/3) {.smaller}
+
+Recall that the tangency portfolio in a frictionless setting satisfies:
+
+\begin{align*}
+    \sum_{i=1}^N \text{cov}[r_1,r_i] w_i &= \delta (E[r_1] - r_f) \\
+    \sum_{i=1}^N \text{cov}[r_2,r_i] w_i &= \delta (E[r_2] - r_f) \\
+    & \vdots \\
+    \sum_{i=1}^N \text{cov}[r_N,r_i] w_i &= \delta (E[r_N] - r_f) 
+\end{align*}
+where $\delta$ is a constant (it is a Lagrange multiplier from the optimization problem)
+
+::: {.nonincremental}
+- The LHS terms are the contributions of each asset to overall portfolio risk.  
+- The RHS terms are proportional to each asset's risk premium.
+:::
+
+## Deriving the CAPM (2/3)  {.smaller}
+
+- Previously: we solved the system for weights
+- CAPM: solve for expected returns using market weights
+
+. . .
+
+For asset $j$:
+$$ \sum_{i=1}^N \text{cov}[r_j,r_i] w_i = \delta (E[r_j] - r_f) $$
+
+. . . 
+
+Rearrange and use the fact that $r_m = \sum_i w_i r_i$ to get:
+$$ E[r_j - r_f] = \delta^{-1} \text{cov}[r_j,r_m] $$
+
+## Deriving the CAPM (3/3) {.smaller}
+
+Using the definition of beta:
+
+$$ E[r_j - r_f] = \delta^{-1} \beta_j \text{var}[r_m]\,. $$
+
+. . . 
+
+Now aggregate this at market weights:
+
+$$ \sum_j w_j \cdot E[r_j - r_f] = \delta^{-1}\text{var}[r_m] \sum_j w_j \cdot \beta_j $$
+
+. . . 
+
+This implies $\delta = \text{var}[r_m] / E[r_m - r_f]$, so we arrive at the CAPM formula:
+
+$$ E[r_j - r_f] = \beta_j E[r_m - r_f] . $$
+
+
+## Intuition of the equilibium {.smaller}
+
+- The marginal benefit of an asset (its risk premium) is proportional to its marginal contribution to the risk of the *market portfolio*
+- The marginal contribution to risk is measured by beta.
+
+. . . 
+
+What if this weren't the case?
+
+- If an asset's reward to risk contribution ratio is higher than ratios for other assets, what would you do?
+  - Hold the asset at a greater weight, reducing weights in others.
+  - But purchasing would push price up and return down until all investments had the same reward-to-risk-contribution ratio.
+
+
+
+# Practice: CAPM 
+## CAPM and Corporate Finance
+
+- The CAPM is widely used to estimate expected returns to compute discount factors for corporate investment projects.
+  - The return shareholders expect is $r_f + \beta_i \cdot E[r_m-r_f]$.
+  - This is the required return on equity capital for corporate projects.
+  - aka cost of equity capital
+
+## CAPM and Investments
+  
+- The CAPM is somewhat less useful in an investments context.
+  - What are the inputs for $r_f$ and $E[r_m-r_f]$?
+  - Estimating inputs can be too noisy
+  - Doesn't describe the cross-section of equity returns well
+
+
+
+## Estimating the market risk premium
+
+- Empirically, this is challenging.
+
+- An additional complication: the MRP is likely time-varying.
+
+## Historical average market risk premium
+
+- One option is to use the **realized** average: $$\frac{1}{T}\sum_t (r_{m,t}-r_{f,t})$$ as an estimate of the **expected** market risk premium
+- Sample means are noisy estimates of population means
+  - Need a large $T$ sample
+  - Precision of estimate doesn't improve with sampling data more frequently.
+
+
+## Precision of historical average
+- Standard error = SD/$\sqrt{T}$
+  - Annual SD of market return of 20%:
+
+. . .
+
+| Years of Data                         | Standard Error of Estimates                 |
+|:-------------------------------------:|:-------------------------------------------:|
+| 5                                     | 8.94%                                       |
+| 10                                    | 6.32%                                       |
+| 25                                    | 4.00%                                       |
+| 50                                    | 2.83%                                       |
+| 100                                   | 2.00%                                       | 
+
+
+## {background-iframe="http://bbcx-investments.com/capm/mrp_estimation" background-interactive="True"}
+
+<!-- ## Simulation of estimating betas -->
+
+<!-- SIMULATION WITH 10 ASSETS WITH RETURNS GENERATED UNDER  -->
+
+## Security market line
+
+The **security market line** is the visual representation of the CAPM and the cross-section of expected returns
+
+``` {python}
+#| echo: false
+import numpy as np
+import pandas as pd
+from pandas_datareader import DataReader as pdr
+import plotly.graph_objects as go
+import statsmodels.api as sm
+from scipy.stats import norm
+betas = norm.rvs(loc=1, scale=0.5, size=10,random_state=10)
+mrp = 0.05
+rf  = 0.02
+expret = rf + betas*mrp
+
+# Plot SML with no alpha
+trace  = go.Scatter(x=betas, y=expret, mode="markers", name='Assets', marker=dict(size=10),)
+minval = 0.0
+maxval = 2.0
+trace_sml = go.Scatter(x= np.linspace(minval,maxval,100), y = rf+mrp*np.linspace(minval,maxval,100), mode='lines',name='SML',
+    hovertemplate="SML<br>y-intercept: risk-free rate<br>slope: market risk premium<extra></extra>")
+
+fig = go.Figure()
+fig.add_trace(trace)
+fig.add_trace(trace_sml)
+fig.update_xaxes(title='Beta',tickformat=".2f", range=[minval,maxval])
+fig.update_yaxes(title='Expected Return',tickformat=".1%", range=[0, 0.2])
+fig.update_layout(title='Security Market Line (no alpha)')
+fig.update_layout(legend=dict(yanchor="top", y =0.99, xanchor="left", x=0.01))
+fig.show()
+
+```
+
+
+## The CAPM and cross-sectional data 
+
+- The CAPM doesn't fit realized returns in the cross-section of stocks very well.
+
+- Theoretically, the slope of the SML should be: 
+  - $E[r_m-r_f]$
+- Empirically, the slope is much flatter than the realized market risk premium.  
+
+
+
+## Industry returns example
+
+- A simple example is industry returns. 
+- Average returns are mostly unrelated to betas.
+
+## {background-iframe="https://bbcx-investments.com/capm/sml-industries" background-interactive="True"}
+
+## In-class notebook version
+
+Let's look at what this webpage is doing.
+
+# For next time: Anomalies and the Cross-Section of Returns
+
+<br><br><br><br>
+
+![](RiceLogo.png){fig-align="center"}
