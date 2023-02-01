@@ -151,7 +151,7 @@ $$ x_B = \frac{115}{100} = 1.15$$
 
 What did we do above?
 
-- We solved a system of equations to create a portfolio of bonds that each mature at different period in order to replicate the cash flows of our 'target' bond.
+- We solved a system of equations to create a portfolio of bonds that each mature at different periods in order to replicate the cash flows of our 'target' bond.
 - Can we form replicating portfolios using coupon bonds as well?
 
 . . . 
@@ -198,10 +198,10 @@ $$
 
 $$
 \begin{matrix}
-x_A \cdot 100 &+&  x_B \cdot 0   &+&  x_C \cdot 12.5 &+&  x_D \cdot 28.75 &=& 0 \\
-x_A \cdot 0   &+&  x_B \cdot 100 &+&  x_C \cdot 12.5 &+&  x_D \cdot 28.75 &=& 100 \\
-x_A \cdot 0   &+&  x_B \cdot 0   &+&  x_C \cdot 12.5 &+&  x_D \cdot 28.75 &=& 0 \\
-x_A \cdot 0   &+&  x_B \cdot 0   &+&  x_C \cdot 1012.5 &+&  x_D \cdot 1028.75 &=& 1100 \\
+x_A \cdot 100 &+&  x_B \cdot 0   &+&  x_C \cdot 12.5   &+&  x_D \cdot 28.75 &=& 0 \\
+x_A \cdot 0   &+&  x_B \cdot 100 &+&  x_C \cdot 12.5   &+&  x_D \cdot 28.75 &=& 100 \\
+x_A \cdot 0   &+&  x_B \cdot 0   &+&  x_C \cdot 1012.5 &+&  x_D \cdot 28.75 &=& 0 \\
+x_A \cdot 0   &+&  x_B \cdot 0   &+&  x_C \cdot 0      &+&  x_D \cdot 1028.75 &=& 1100 \\
 \end{matrix}
 $$
 
