@@ -1,0 +1,61 @@
+---
+title: "Offers with Asymmetric Information"
+format: 
+    html:
+        self-contained: true  
+---
+
+#### Base Case
+
+Suppose a buyer is bidding on an asset of unknown value $V$.  The buyer knows that $V$ falls between 0 and 1 (in particular, it is uniformly distributed between 0 and 1).  The seller of the object does know the value of $V$.  How much should the buyer bid on the asset?
+
+Let's first think about how the seller will behave as a function of the buyer's bid amount $b$.  The seller doesn't want to lose money, so she'll only complete the trade if $b \ge V$.  This means the buyer faces the following problem:
+
+$$ \underset{b\in{[0,1]}}{\text{max}}  E \big[(V-b) \mathbf{1}[b \ge V]\big] \,.$$
+
+$\mathbf{1}[b \ge V]$ is an indicator function that equals one when the bid is at least as bid as the realized value $V$ and is zero otherwise.
+
+We can calculate the expected value in the problem above.
+\begin{align*}
+E \big[(V-b) \mathbf{1}[b \ge V]\big] =& \int_0^1 (V-b) \mathbf{1}[b \ge V] dV \\
+=& \int_0^b (V-b) dV \\
+=& \frac{V^2}{2} - bV \Big|_{V=0}^{V=b} \\
+=& \frac{-b^2}{2}\\
+\end{align*}
+
+The bid that maximizes this expected value is 0!  With asymmetric information here, the buyer should bid nothing to avoid being adversely selected by the superior information of the seller.
+
+#### Case with Known Liquidity Shock for Seller
+
+Now let's assume the buyer knows that the seller has a liquidity need to sell the asset. In particular, the seller will accept any offer greater than half of the asset's actual value $V$.  How much should the buyer bid on the asset in this case?
+
+The buyer now solves:
+$$ \underset{b\in{[0,1]}}{\text{max}}  E \big[(V-b) \mathbf{1}[b \ge 0.5 V]\big] \,.$$
+
+The expected value in this problem is:
+\begin{align*}
+E \big[(V-b) \mathbf{1}[b \ge 0.5 V]\big] =& \int_0^{\text{min}(2b,1)} (V-b) dV \\
+=& \frac{V^2}{2} - bV \Big|_{V=0}^{V=\text{min}(2b,1)} \\
+=& \mathbf{1}[b \le 0.5] \left( \frac{4b^2}{2} - 2b^2 \right) + \mathbf{1}[b > 0.5] \left( \frac{1}{2} - b \right)  \\
+=& \mathbf{1}[b \le 0.5] \cdot 0 + \mathbf{1}[b > 0.5] \left( \frac{1}{2} - b \right) \,.
+\end{align*}
+
+Thus, an optimal bid is any bid between 0 and 0.5.  In expectation, the bidder will lose money anytime they bid over 0.5, but their expected value is zero for any bid between 0 and 0.5.
+
+
+#### Case with Uncertain Liquidity Shock for Seller
+
+Now suppose that the buyer does not know for sure that the seller has a liquidity need.  In particular, the buyer only knows that there is a 50% chance that the seller has a liquidity need.  What is the optimal bid in this circumstance?
+
+The buyer now solves:
+$$ \underset{b\in{[0,1]}}{\text{max}} \frac{1}{2} E \big[(V-b) \mathbf{1}[b \ge V]\big] + \frac{1}{2} E \big[(V-b) \mathbf{1}[b \ge 0.5 V]\big] \,.$$
+
+For bids below 0.5, the expected value is
+$$ \frac{1}{2} \cdot \frac{-b^2}{2} + \frac{1}{2} \cdot 0 \,,$$
+which is negative for all nonzero bids.
+
+For bids greater than or equal 0.5, the expected value is 
+$$ \frac{1}{2} \cdot \frac{-b^2}{2} + \frac{1}{2} \cdot \left(\frac{1}{2} - b\right)\,, $$
+which is negative for all bids greater than or equal to 0.5.
+
+Therefore, the optimal bid is again 0, and there is no trade.
