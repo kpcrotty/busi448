@@ -13,7 +13,7 @@ Let's first think about how the seller will behave as a function of the buyer's 
 
 $$ \underset{b\in{[0,1]}}{\text{max}}  E \big[(V-b) \mathbf{1}[b \ge V]\big] \,.$$
 
-$\mathbf{1}[b \ge V]$ is an indicator function that equals one when the bid is at least as bid as the realized value $V$ and is zero otherwise.
+$\mathbf{1}[b \ge V]$ is an indicator function that equals one when the bid is at least as big as the realized value $V$ and is zero otherwise.
 
 We can calculate the expected value in the problem above.
 \begin{align*}

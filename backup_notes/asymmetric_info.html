@@ -2465,7 +2465,7 @@ vertical-align: -.125em;
 <p>Suppose a buyer is bidding on an asset of unknown value <span class="math inline">\(V\)</span>. The buyer knows that <span class="math inline">\(V\)</span> falls between 0 and 1 (in particular, it is uniformly distributed between 0 and 1). The seller of the object does know the value of <span class="math inline">\(V\)</span>. How much should the buyer bid on the asset?</p>
 <p>Let’s first think about how the seller will behave as a function of the buyer’s bid amount <span class="math inline">\(b\)</span>. The seller doesn’t want to lose money, so she’ll only complete the trade if <span class="math inline">\(b \ge V\)</span>. This means the buyer faces the following problem:</p>
 <p><span class="math display">\[ \underset{b\in{[0,1]}}{\text{max}}  E \big[(V-b) \mathbf{1}[b \ge V]\big] \,.\]</span></p>
-<p><span class="math inline">\(\mathbf{1}[b \ge V]\)</span> is an indicator function that equals one when the bid is at least as bid as the realized value <span class="math inline">\(V\)</span> and is zero otherwise.</p>
+<p><span class="math inline">\(\mathbf{1}[b \ge V]\)</span> is an indicator function that equals one when the bid is at least as big as the realized value <span class="math inline">\(V\)</span> and is zero otherwise.</p>
 <p>We can calculate the expected value in the problem above. <span class="math display">\[\begin{align*}
 E \big[(V-b) \mathbf{1}[b \ge V]\big] =&amp; \int_0^1 (V-b) \mathbf{1}[b \ge V] dV \\
 =&amp; \int_0^b (V-b) dV \\
