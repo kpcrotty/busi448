@@ -92,7 +92,7 @@ Suppose the stocks go up 10% and you're charged 2% interest on the loan (rolled 
 Let $w = \frac{\text{Debt}}{\text{Initial Equity}}$.
 
 Levered portfolio return is:
-$$ w \cdot r_{\text{borrow}} + (1 + w) \cdot r_{\text{stock}} $$
+$$ -w \cdot r_{\text{borrow}} + (1 + w) \cdot r_{\text{stock}} $$
 
 . . .
 
