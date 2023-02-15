@@ -1392,7 +1392,7 @@ display: none;
 </tbody>
 </table>
 <p>For maintenance margin of 30%, a margin call occurs if stock return is greater than:</p>
-<p><span class="math display">\[ \frac{9,000}{6,000(1+0.25)} - 1 = 15.4\%\]</span></p>
+<p><span class="math display">\[ \frac{9,000}{6,000(1+0.3)} - 1 = 15.4\%\]</span></p>
 </section>
 <section id="relative-performance" class="slide level2">
 <h2>Relative performance</h2>
@@ -1499,14 +1499,6 @@ display: none;
 <li class="fragment">Reg T is for initial margin. Maintenance margin is up to your broker.</li>
 <li class="fragment">This is a 150/50 portfolio (150% long and 50% short).</li>
 </ul>
-</section>
-<section id="dividends-and-interest" class="slide level2">
-<h2>Dividends and interest</h2>
-<ul>
-<li class="fragment">You have to pay the lender dividends paid by the stock.</li>
-<li class="fragment">Cash proceeds from a short sale are held as collateral.</li>
-<li class="fragment">How much interest you get on the cash collateral depends on your broker. Shop around.</li>
-</ul>
 </section></section>
 <section>
 <section id="equity-lending" class="title-slide slide level1 center">
@@ -1547,6 +1539,14 @@ display: none;
 </ul></li>
 <li class="fragment">In the event of recall, the short-seller must either cover their short position or locate a new security loan.</li>
 </ul>
+</section>
+<section id="dividends-and-interest" class="slide level2">
+<h2>Dividends and interest</h2>
+<ul>
+<li class="fragment">You have to pay the lender dividends paid by the stock.</li>
+<li class="fragment">As discussed above, cash proceeds from a short sale are held as collateral.</li>
+<li class="fragment">How much interest you get on the cash collateral depends on your broker. Shop around.</li>
+</ul>
 </section></section>
 <section>
 <section id="information" class="title-slide slide level1 center">
@@ -1560,8 +1560,8 @@ display: none;
 <li class="fragment"><p>This suggests shorts, on average, are informed traders.</p></li>
 </ul>
 </section>
-<section id="short-interest" class="slide level2">
-<h2>Short interest</h2>
+<section id="quantifying-short-selling-activity" class="slide level2">
+<h2>Quantifying short-selling activity</h2>
 <ul>
 <li class="fragment"><strong>Short interest</strong>: number of shares held short at a point in time</li>
 <li class="fragment"><strong>Relative short interest</strong>: <span class="math display">\[\text{RSI} = \frac{\text{short interest}}{\text{shares outstanding}}\]</span></li>
@@ -1600,7 +1600,7 @@ display: none;
 <li class="fragment">Palm (maker of Palm Pilots) was owned by 3Com (network systems &amp; services)</li>
 <li class="fragment">March 2, 2000: 3Com sells 5% of its stake in Palm to the general public in an IPO for Palm (an equity carve-out)</li>
 <li class="fragment">3Com announces it will spin off its remaining shares of Palm to 3Com shareholders before the end of the year</li>
-<li class="fragment">3Com shareholders would receive 1.5 shares of Palm for each share of Palm they own.</li>
+<li class="fragment">3Com shareholders would receive 1.5 shares of Palm for each share of 3Com they own.</li>
 </ul>
 </section>
 <section id="palm-3com-carve-out" class="slide level2">
@@ -1621,14 +1621,14 @@ display: none;
 <ul>
 <li class="fragment">The day before the Palm IPO, 3Com closes at $104.13 per share.</li>
 <li class="fragment">On the first day of trading, Palm closes at $95.06/share.</li>
-<li class="fragment">If Palm is at $95, then 3Com should be at least
+<li class="fragment">If Palm is at $95.06, then 3Com should be at least
 <ul>
-<li class="fragment">1.5 <span class="math inline">\(\cdot\)</span> 95 = $142.50</li>
+<li class="fragment">1.5 <span class="math inline">\(\cdot\)</span> 95.06 = $142.59</li>
 </ul></li>
 <li class="fragment">Instead, the price of 3Com dropped to $81.81 (?!?)
 <ul>
 <li class="fragment">What is the implied value of 3Com’s non-Palm assets and businesses (so-called <strong>stub value</strong>)?</li>
-<li class="fragment"><strong>-$63/share</strong></li>
+<li class="fragment"><strong>-$61/share</strong></li>
 </ul></li>
 </ul>
 </section>
@@ -1686,7 +1686,7 @@ display: none;
 <h2>Limits to arbitrage</h2>
 <ul>
 <li class="fragment">Even with this fairly clean example, there was risk here.</li>
-<li class="fragment">It was challening and costly to borrow shares to short.</li>
+<li class="fragment">It was challenging and costly to borrow shares to short.</li>
 <li class="fragment">The shorted shares could have been recalled.</li>
 <li class="fragment">Prices could have moved against convergence, requiring additional capital</li>
 <li class="fragment">IRS may not approve transaction</li>
@@ -1715,7 +1715,7 @@ display: none;
 <li class="fragment">or prices may fall <em>coincident</em> with short selling</li>
 <li class="fragment">correlation <span class="math inline">\(\neq\)</span> causation!</li>
 </ul></li>
-<li class="fragment">Short sellers due seem to be informed, on average.</li>
+<li class="fragment">Short sellers do seem to be informed, on average.</li>
 <li class="fragment">Because short-selling is perceived to have detrimental effects on market quality, it is a frequent subject of regulation.</li>
 </ul>
 <!-- ## Specific regulations -->
@@ -1724,8 +1724,8 @@ display: none;
 <h2>Prohibiting short-sales</h2>
 <ul>
 <li class="fragment">Some jurisdictions simply do not allow short-selling for all or some securities</li>
-<li class="fragment">Hong Kong requires security be above market cap and volume thresholds</li>
 <li class="fragment">US banned short-sales in 2008 for financial stocks</li>
+<li class="fragment">Hong Kong requires security be above market cap and volume thresholds</li>
 </ul>
 </section>
 <section id="restricting-short-sales" class="slide level2">

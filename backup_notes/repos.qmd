@@ -1,0 +1,12 @@
+---
+title: "Repo"
+format: 
+    html:
+        self-contained: true  
+---
+
+It is helpful to think of repurchase agreements as collateralized borrowing.  The cash borrower is borrowing cash and putting up a bond as collateral for the cash loan.  
+
+The credit risk on the cash borrower’s side is that the cash borrower will default on the cash loan.  Using the bond as collateral protects the cash lender as long as the market value of the bond is high enough to offset any default by the cash borrower.  If the bond’s market value falls, then the cash lender is worried that the loan is not sufficiently collateralized.  To mitigate this concern, the cash borrower sends additional collateral or cash to the cash lender (i.e., the loan is marked-to-market).
+
+On the other hand, if the market value increases, we can think of the cash loan as being overcollateralized, and the cash lender can send collateral or cash to the cash borrower to get the collateralization back in line with its initial level.  There is an added wrinkle and interpretation of credit risk with respect to the cash lender.  Some cash lenders are participating in the repo market in order to short sell the borrowed security.  If they have shorted the security and its market value increases, there is a risk that the cash lender will not be able to cover their short position (i.e., buy back the bond in the market in order to return it to the cash borrower).  Marking-to-market for increases in collateral values in the repo market mitigates this risk.

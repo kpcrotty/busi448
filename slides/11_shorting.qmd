@@ -154,7 +154,7 @@ Initial balance sheet
 
 For maintenance margin of 30%, a margin call occurs if stock return is greater than:
 
-$$ \frac{9,000}{6,000(1+0.25)} - 1 = 15.4\%$$
+$$ \frac{9,000}{6,000(1+0.3)} - 1 = 15.4\%$$
 
 
 ## Relative performance
@@ -224,11 +224,7 @@ The return is 20% (12,000/10,000).
 - Reg T is for initial margin. Maintenance margin is up to your broker.
 - This is a 150/50 portfolio (150% long and 50% short).
 
-## Dividends and interest
 
-- You have to pay the lender dividends paid by the stock.
-- Cash proceeds from a short sale are held as collateral.
-- How much interest you get on the cash collateral depends on your broker.  Shop around.
 
 
 
@@ -262,7 +258,11 @@ Two ways to view the transaction
   - for instance, require physical stock certificate to receive dividends
 - In the event of recall, the short-seller must either cover their short position or locate a new security loan.
 
+## Dividends and interest
 
+- You have to pay the lender dividends paid by the stock.
+- As discussed above, cash proceeds from a short sale are held as collateral.
+- How much interest you get on the cash collateral depends on your broker.  Shop around.
 
 
 
@@ -276,7 +276,7 @@ Two ways to view the transaction
 
 - This suggests shorts, on average, are informed traders.
 
-## Short interest
+## Quantifying short-selling activity
 
 - **Short interest**: number of shares held short at a point in time
 - **Relative short interest**: $$\text{RSI} = \frac{\text{short interest}}{\text{shares outstanding}}$$
@@ -304,7 +304,7 @@ Two ways to view the transaction
 - Palm (maker of Palm Pilots) was owned by 3Com (network systems & services)
 - March 2, 2000: 3Com sells 5% of its stake in Palm to the general public in an IPO for Palm (an equity carve-out)
 - 3Com announces it will spin off its remaining shares of Palm to 3Com shareholders before the end of the year
-- 3Com shareholders would receive 1.5 shares of Palm for each share of Palm they own.
+- 3Com shareholders would receive 1.5 shares of Palm for each share of 3Com they own.
 
 ## Palm-3Com Carve-out
 
@@ -321,12 +321,12 @@ The carve-out creates two ways to buy Palm stock:
 
 - The day before the Palm IPO, 3Com closes at $104.13 per share. 
 - On the first day of trading, Palm closes at $95.06/share.
-- If Palm is at $95, then 3Com should be at least
-  - 1.5 $\cdot$ 95 = $142.50
+- If Palm is at $95.06, then 3Com should be at least
+  - 1.5 $\cdot$ 95.06 = $142.59
 
 - Instead, the price of 3Com dropped to $81.81 (?!?)
   - What is the implied value of 3Com's non-Palm assets and businesses (so-called **stub value**)?
-  - **-$63/share**
+  - **-$61/share**
 
 ## Arbitrage trade
 
@@ -369,7 +369,7 @@ This mispricing persisted for more than SIX WEEKS.
 ## Limits to arbitrage
 
 - Even with this fairly clean example, there was risk here.
-- It was challening and costly to borrow shares to short.
+- It was challenging and costly to borrow shares to short.
 - The shorted shares could have been recalled.
 - Prices could have moved against convergence, requiring additional capital
 - IRS may not approve transaction
@@ -388,7 +388,7 @@ This mispricing persisted for more than SIX WEEKS.
   - Prices may fall *because* of short selling
   - or prices may fall *coincident* with short selling
   - correlation $\neq$ causation!
-- Short sellers due seem to be informed, on average.
+- Short sellers do seem to be informed, on average.
 - Because short-selling is perceived to have detrimental effects on market quality, it is a frequent subject of regulation.
 
 <!-- ## Specific regulations -->
@@ -396,8 +396,9 @@ This mispricing persisted for more than SIX WEEKS.
 ## Prohibiting short-sales
 
 - Some jurisdictions simply do not allow short-selling for all or some securities
-- Hong Kong requires security be above market cap and volume thresholds
 - US banned short-sales in 2008 for financial stocks
+- Hong Kong requires security be above market cap and volume thresholds
+
 
 ## Restricting short-sales
 
