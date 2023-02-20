@@ -7,11 +7,11 @@ format:
         logo: RiceLogo.png
         footer: "BUSI 448"
         self-contained: true
-        code-fold: true
+        code-fold: false
         theme: [default, custom.scss]
         show-slide-number: print
 execute:
-    echo: true
+    echo: false
     freeze: auto
 jupyter: python3
 ---
@@ -35,6 +35,22 @@ jupyter: python3
 - Efficient combinations of risky assets
 :::
 
+## Portfolios: combinations of underlying assets
+
+Given return properties of underlying assets, what are the return properties of their combination? 
+
+... and what's the optimal way to combine the assets?
+
+![](../images/portfolios1.png)
+
+
+## Portfolios: combinations of underlying assets
+
+Given return properties of underlying assets, what are the return properties of their combination? 
+
+... and what's the optimal way to combine the assets?
+
+![](../images/portfolios2.png)
 
 # Diversification
 ## What is diversification?
@@ -45,27 +61,26 @@ jupyter: python3
 
 - By combining assets together, we may be able to build a portfolio that has less risk than even the least risky asset we use as a building block! 
 
-
-## Portfolios of Two Risky Assets 
-
-Let's consider combining a stock market fund and a bond fund.
-
-The return of a two-asset portfolio is the weighted sum of the returns of the underlying assets:
-$$ r_p = w  r_{\text{US}} + (1-w) r_{\text{intl}} \,, $$ 
-where $w$ is the portfolio weight in the stock fund.  
-
-The expected return of the portfolio is:
-$$ E[r_p] =  w  r_{\text{US}} + (1-w) r_{\text{intl}} \,, $$ 
+- violation of the ``no free lunch'' principle
 
 
-## Portfolio Risk (Two Risky Assets) {.smaller}
+## Portfolios of Two Risky Assets {.smaller}
 
-$$ \text{var}[r_p] = E\big[(r_p-E[r_p])^2\big].$$ 
-We can write the portfolio variance in terms of the individual asset variances and their covariance:
-$$ w^2 \text{var}[r_{\text{US}}] + (1-w)^2 \text{var}[r_{\text{intl}}] + 2 w (1-w) \text{cov}[r_{\text{US}},r_{\text{intl}}] $$
+- Let's consider combining a domestic equity fund and a developed markets international equity fund.
 
-Alternatively, we can express the last term using correlation:
-$$ w^2 \text{var}[r_{\text{US}}] + (1-w)^2 \text{var}[r_{\text{intl}}] + 2 w (1-w) \rho \cdot \text{sd}[r_{\text{US}}]\text{sd}[r_{\text{intl}}]$$
+- The return of a two-asset portfolio is the weighted sum of the returns of the underlying assets:$$ r_p = w  r_{\text{US}} + (1-w) r_{\text{intl}} \,, $$ 
+where $w$ is the portfolio weight in the domestic fund.  
+
+- The expected return of the portfolio is:$$ E[r_p] =  w  E[r_{\text{US}}] + (1-w) E[r_{\text{intl}}] \,. $$ 
+
+
+## Portfolio risk (Two risky assets) {.smaller}
+
+- We will use either the portfolio variance or standard deviation as a measure of the portfolio's risk.
+
+- We can write the portfolio variance in terms of the individual asset variances and their covariance:$$ w^2 \text{var}[r_{\text{US}}] + (1-w)^2 \text{var}[r_{\text{intl}}] + 2 w (1-w) \text{cov}[r_{\text{US}},r_{\text{intl}}] $$
+
+- Alternatively, we can express the last term using correlation $\rho$: $$ w^2 \text{var}[r_{\text{US}}] + (1-w)^2 \text{var}[r_{\text{intl}}] + 2 w (1-w) \rho \cdot \text{sd}[r_{\text{US}}]\text{sd}[r_{\text{intl}}]$$
 
 ## Diversification in action
 ```{python}
@@ -158,11 +173,13 @@ figtbl(mn1,mn2,sd1,sd2,corr12,"US Equity", "Developed Intl")
 ```
 
 
-## Effects of Correlation
+## Correlation and diversification
 
 Lower correlation between assets results in greater potential diversification benefits.
 
-## {background-iframe="http://bbcx-investments.com/portfolios/two-assets" background-interactive="True"}
+[BBCX website example](http://bbcx-investments.com/portfolios/two-assets)
+
+<!-- ## {background-iframe="http://bbcx-investments.com/portfolios/two-assets" background-interactive="True"} -->
 
 
 
@@ -170,12 +187,12 @@ Lower correlation between assets results in greater potential diversification be
 
 
 
-## Adding another Risky Asset {.smaller}
+## Adding another risky asset {.smaller}
 
 Let's also consider investing in an emerging market fund.
 
 **Expected return**:
-$$ E[r_p] = \sum_{i=1}^{N} w_i E[r_i]\,,$$ 
+$$ E[r_p] = w_{\text{US}}  E[r_{\text{US}}] + w_{\text{intl}} E[r_{\text{intl}}]  + w_{\text{emerg}}  E[r_{\text{emerg}}] \,,$$ 
 where $w_i$ is the portfolio weight in asset $i$.
 
 . . . 
@@ -183,31 +200,16 @@ where $w_i$ is the portfolio weight in asset $i$.
 **Portfolio variance**:
 $$
 \begin{align*}
-   \text{var}[r_p] =&w_1^2 \text{var}[r_1] + w_2^2 \text{var}[r_2] + w_3^2 \text{var}[r_3] \\
-   &+ 2 w_1 w_2  \text{cov}[r_1, r_2] \\
-   &+ 2 w_1 w_3  \text{cov}[r_1, r_3] \\
-   &+ 2 w_2 w_3  \text{cov}[r_2, r_3] \\
+   \text{var}[r_p] =&w_{\text{US}}^2 \text{var}[r_{\text{US}}] + w_{\text{intl}}^2 \text{var}[r_{\text{intl}}] + w_{\text{emerg}}^2 \text{var}[r_{\text{emerg}}] \\
+   &+ 2 w_{\text{US}} w_{\text{intl}}  \text{cov}[r_{\text{US}}, r_{\text{intl}}] \\
+   &+ 2 w_{\text{US}} w_{\text{emerg}}  \text{cov}[r_{\text{US}}, r_{\text{emerg}}] \\
+   &+ 2 w_{\text{intl}} w_{\text{emerg}}  \text{cov}[r_{\text{intl}}, r_{\text{emerg}}] \\
 \end{align*} 
 $$
 
-## Portfolio expected return in Python
-``` p
-import numpy as np
-
-# Expected returns
-mns = np.array([0.10, 0.05, 0.07])
-
-# Portfolio weights
-wgts = np.array([0.25, 0.5, 0.25])
-
-#Portfolio expected return
-port_expret = wgts @ mns
-```
 
 
-
-
-## Three Asset Portfolios {.smaller}
+## Possible three asset portfolios {.smaller}
 ```{python}
 import pandas as pd
 import numpy as np
@@ -384,7 +386,12 @@ def figtbl(mn1, mn2, mn3, sd1, sd2, sd3, c12, c13, c23, asset1_name, asset2_name
 figtbl(mn1, mn2, mn3, sd1, sd2, sd3, corr12, corr13, corr23, "US Equity", "Developed Intl", "Emerging Mkt")
 ```
 
-## {background-iframe="http://bbcx-investments.com/portfolios/three-assets" background-interactive="True"}
+
+## Correlation and diversification: 3 risky assets
+[BBCX website](http://bbcx-investments.com/portfolios/three-assets)
+
+<!-- ## {background-iframe="http://bbcx-investments.com/portfolios/three-assets" background-interactive="True"} -->
+
 
 
 # Portfolios with Many Assets
@@ -418,60 +425,6 @@ $$w'=[w_1\, w_2\,...\,w_N]\,,$$
 
 The portfolio variance is the matrix product:
 $$ \text{var}[r_p] = w'Vw \,.$$ 
-
-
-## Portfolio variance in Python: Inputs
-
-``` p
-import numpy as np
-
-##### Inputs
-# Standard deviations
-sds = np.array([0.20, 0.12, 0.15])
-
-# Correlations
-corr12 = 0.3
-corr13 = 0.3
-corr23 = 0.3
-
-# Portfolio weights
-wgts = np.array([0.25, 0.5, 0.25])
-```
-
-## Covariance matrix: method 1
-``` p
-##### Method 1 to calculate covariance matrix
-# Covariances
-cov12 = corr12 * sds[0] * sds[1]
-cov13 = corr13 * sds[0] * sds[2]
-cov23 = corr23 * sds[1] * sds[2]
-# Covariance matrix
-cov = np.array([[sds[0]**2,  cov12,     cov13], \
-                [cov12,      sds[1]**2, cov23], \
-                [cov13,      cov23,     sds[2]**2]])
-```
-
-## Covariance matrix: method 2
-``` p
-##### Method 2 to calculate covariance matrix
-# Correlation matrix
-C  = np.identity(3)
-C[0, 1] = C[1, 0] = corr12
-C[0, 2] = C[2, 0] = corr13
-C[1, 2] = C[2, 1] = corr23
-# Covariance matrix
-cov = np.diag(sds) @ C @ np.diag(sds)
-```
-
-## Portfolio risk in Python
-``` p
-##### Portfolio risk measures
-# Portfolio variance
-port_var = wgts @ cov @ wgts
-
-# Portfolio standard deviation
-port_sd  = np.sqrt(port_var)
-```
 
 
 
@@ -552,21 +505,21 @@ How many variance terms?
 $$N=5$$
 :::
  
-::: {.fragment fragment-index=0} 
+::: {.fragment fragment-index=2} 
 How many covariance terms?
 :::
 
-::: {.fragment fragment-index=2} 
+::: {.fragment fragment-index=3} 
 $$N^2-N = 25-5=20 $$ 
 ::: 
 
 
 ## Why does covariance dominate with large $N$?  {.smaller}
 
--Consider an $N$-asset, equal-weighted portfolio $(w=1/N$) \
--Assume all assets have the same variance $(\sigma^2_{\text{all}})$ \
--Assume all pairs of assets have the same covariance $(\overline{\text{cov}})$ \
--What is the variance of the portfolio?
+- Consider an $N$-asset, equal-weighted portfolio $(w=1/N$) \
+- Assume all assets have the same variance $(\sigma^2_{\text{all}})$ \
+- Assume all pairs of assets have the same covariance $(\overline{\text{cov}})$ \
+- What is the variance of the portfolio?
 
 . . .
 
@@ -582,34 +535,36 @@ What happens to this as N gets large?
 $$ \text{var}(r_p) \underset{N\rightarrow \infty}{\longrightarrow} 0\cdot\sigma^2_{\text{all}}+(1-0)\overline{\text{cov}}=\overline{\text{cov}} $$
 
 
-## Diversification curves
+## Diversification curves {.smaller}
+
+![](../images/diversification.png)
 
 - Diversification eliminates some, but not all, of the risk of individual assets. 
 
 - In large portfolios, $\text{var}[r_i]$'s effectively diversified away, but not $\text{cov}[r_i,r_j]$'s. 
 
-- Diversifiable, non-systematic, idiosyncratic risk vs. non-diversifiable, systematic, market risk
+- [BBCX website](http://bbcx-investments.com/portfolios/diversification)
 
-## {background-iframe="http://bbcx-investments.com/portfolios/diversification" background-interactive="True"}
+<!-- ## {background-iframe="http://bbcx-investments.com/portfolios/diversification" background-interactive="True"} -->
 
-# Short-selling
-## Short-Sales {.smaller}
+# Short-selling and the opportunity set
+## Short-Sales 
 
 What is the meaning of a negative portfolio weight?
 
 - Negative portfolio weights correspond to short positions in a portfolio. 
-
+<!-- 
 - Short sellers: sell high, then buy low.
 
 - Short-selling involves borrowing a security from another owner and selling it.  
 
 - The short-seller then has a liability to return the security to the security lender (liability=market value).
 
-- Short-sellers hope to purchase the security later for a lower price.  
+- Short-sellers hope to purchase the security later for a lower price.   -->
 
-- Many practical issues we will ignore today (restrictions on using sales proceeds, fee paid to borrow asset, etc.)
+- For our discussion of portfolio optimization, we will ignore many practical issues (restrictions on using sales proceeds, fee paid to borrow asset, etc.)
 
-## Short-Sales {.smaller}
+## Allowing short sales {.smaller}
 
 ```{python}
 import numpy as np
@@ -714,7 +669,7 @@ subject to constraints: $E[r_p]=\mu_{\text{target}}$ and $\sum_i w_i=1$
 
 The function `cvxopt.solvers.qp` solves problems of the general form:
 \begin{align}
-    \underset{w}{\text{min  }}& \frac{1}{2} w' Q w + p'x \\
+    \underset{w}{\text{min  }}& \frac{1}{2} w' Q w + p'w \\
      \text{subject to  } & Gw \le h \\
                         & Aw = b \\
 \end{align}
@@ -722,29 +677,27 @@ The function `cvxopt.solvers.qp` solves problems of the general form:
 ## Finding a Frontier Portfolio: Parameters
 ``` p
 ##### Inputs
-# Risk-free rate
-r = 0.02
 # Expected returns
-mns = np.array([0.06, 0.065, 0.08])
+MNS = np.array([0.06, 0.065, 0.08])
+
 # Standard deviations
-sds = np.array([0.15, 0.165, 0.21])
+SDS = np.array([0.15, 0.165, 0.21])
+
 # Correlations
-corr12 = 0.75
-corr13 = 0.75
-corr23 = 0.75
-# Covariance matrix
 C  = np.identity(3)
-C[0, 1] = C[1, 0] = corr12
-C[0, 2] = C[2, 0] = corr13
-C[1, 2] = C[2, 1] = corr23
-cov = np.diag(sds) @ C @ np.diag(sds)
+C[0, 1] = C[1, 0] = 0.75
+C[0, 2] = C[2, 0] = 0.75
+C[1, 2] = C[2, 1] = 0.75
+
+# Covariance matrix
+COV = np.diag(SDS) @ C @ np.diag(SDS)
+
+# Target expected return
+TARGET_EXP_RET = 0.07
 ```
 
 ## Finding a Frontier Portfolio: Optimization
-``` p
-import numpy as np
-from cvxopt import matrix
-from cvxopt.solvers import qp as Solver, options as SolverOptions
+``` {.python code-line-numbers="|3-4|5-7|8-10|11"}
 def frontier(means, cov, target):
     n = len(means)
     Q = matrix(cov, tc="d")
@@ -758,13 +711,12 @@ def frontier(means, cov, target):
     sol = Solver(Q, p, G, h, A, b)
     wgts = np.array(sol["x"]).flatten() if sol["status"] == "optimal" else np.array(n * [np.nan])
     return wgts
-wgts_frontier = [frontier(mns, cov, m) for m in np.linspace(mns.min(), mns.max(),5)]
 ```
 
 # GMV
 ## The Global Minimum Variance Problem {.smaller}
 ::: {.nonincremental}
-- The GMV portfolio is the risky portfolio with the smallest variance. \
+- The GMV portfolio is the portfolio of risky assets with the smallest variance. \
 - It is a set of portfolio weights that minimizes the portfolio variance.
 :::
 
@@ -773,26 +725,23 @@ $$ \underset{w_1,w_2,\dots,w_N}{\text{min}} \text{var}[r_{p}] $$
 subject to constraints: $\sum_i w_i=1$
 
 ## GMV in Python
-``` p
-import numpy as np
-from cvxopt import matrix
-from cvxopt.solvers import qp as Solver, options as SolverOptions
-
-n = len(mns)
-Q = matrix(cov, tc="d")
-p = matrix(np.zeros(n), (n, 1), tc="d")
-# Constraint: short-sales allowed
-G = matrix(np.zeros((n,n)), tc="d")
-h = matrix(np.zeros(n), (n, 1), tc="d")
-# Constraint: fully-invested portfolio
-A = matrix(np.ones(n), (1, n), tc="d")
-b = matrix([1], (1, 1), tc="d")
-sol = Solver(Q, p, G, h, A, b)
-wgts_gmv = np.array(sol["x"]).flatten() if sol["status"] == "optimal" else np.array(n * [np.nan])
+```  {.python code-line-numbers="|8-10"}
+def gmv(means, cov):
+    n = len(means)
+    Q = matrix(cov, tc="d")
+    p = matrix(np.zeros(n), (n, 1), tc="d")
+    # Constraint: short-sales allowed
+    G = matrix(np.zeros((n,n)), tc="d")
+    h = matrix(np.zeros(n), (n, 1), tc="d")
+    # Constraint: fully-invested portfolio
+    A = matrix(np.ones(n), (1, n), tc="d")
+    b = matrix([1], (1, 1), tc="d")
+    sol = Solver(Q, p, G, h, A, b)
+    wgts = np.array(sol["x"]).flatten() if sol["status"] == "optimal" else np.array(n * [np.nan])
+    return wgts
 ```
 
-
-## {background-iframe="http://bbcx-investments.com/portfolios/frontier" background-interactive="True"}
+<!-- ## {background-iframe="http://bbcx-investments.com/portfolios/frontier" background-interactive="True"} -->
 
 
 # For next time: Theory of Optimal Portfolios
