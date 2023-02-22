@@ -11,7 +11,7 @@ format:
         theme: [default, custom.scss]
         show-slide-number: print
 execute:
-    echo: true
+    echo: false
     freeze: auto
 jupyter: python3
 ---
@@ -161,8 +161,8 @@ from scipy.stats import norm
 import plotly.express as px
 def random_returns(mn1, sd1, mn2, sd2, T):
     # Generate data
-    rv1   = norm(loc=mn1, scale=sd1).rvs(T)
-    rv2   = norm(loc=mn2, scale=sd2).rvs(T)
+    rv1 = norm.rvs(loc=mn1, scale = sd1, size=T)  
+    rv2 = norm.rvs(loc=mn2, scale = sd2, size=T)  
     time  = np.arange(T)
     df = pd.DataFrame(data={'time': time, 'ret1': rv1, 'ret2': rv2})
 
@@ -221,7 +221,7 @@ What is true of $\text{var}[r_f]$ and $\text{cov}[r_{\text{risky}},r_f]$?
 
 . . . 
 
-$$ \text{sd}[r_p] = w \cdot \text{sd}[r_{\text{risky}}] $$
+$$ \text{sd}[r_p] = |w| \cdot \text{sd}[r_{\text{risky}}] $$
 
 ## Capital Allocation Line {.smaller}
 We can solve for $w$ and substitute into the expected return def'n to obtain:
@@ -585,7 +585,7 @@ figtbl(mn_stock,mn_bond,sd_stock,sd_bond,corr,rs,extra,"Stock","Bond")
 ```
 
 
-## {background-iframe="http://bbcx-investments.com/portfolios/sharpe" background-interactive="True"}
+<!-- ## {background-iframe="http://bbcx-investments.com/portfolios/sharpe" background-interactive="True"} -->
 
 
 ## The Tangency Portfolio Problem
@@ -600,15 +600,13 @@ subject to constraints: $\sum_i w_i=1$
 
 ## The Tangency Portfolio Problem in Python
 
-``` p
-import numpy as np
+``` {.python code-line-numbers="|1,17|3-6|7-8|9-12|13-14|15-17"}
 from scipy.optimize import minimize
-
-n = len(mns)
+n = len(MNS)
 def f(w):
-    mn = w @ mns
-    sd = np.sqrt(w @ cov @ w)
-    return -(mn - r) / sd
+    mn = w @ MNS
+    sd = np.sqrt(w @ COV @ w)
+    return -(mn - RF) / sd
 # Initial guess (equal-weighted)
 w0 = (1/n)*np.ones(n)
 # Constraint: fully-invested portfolio
@@ -618,7 +616,8 @@ cons = [{"type": "eq", "fun": lambda x: A @ x - b}]
 # No short-sale constraint
 bnds = [(None, None) for i in range(n)] 
 # Optimization
-wgts_tangency = minimize(f, w0, bounds=bnds, constraints=cons).x
+TOL = 10**(-10)
+wgts = minimize(f, w0, bounds=bnds, constraints=cons, options={'ftol':TOL}).x
 ```
 
 ## The Tangency Portfolio Problem {.smaller}
@@ -639,7 +638,7 @@ where $\delta$ is a constant (it is a Lagrange multiplier from the optimization 
 - **The ratio of an asset's excess return to its contribution to overall portfolio risk is the same across all assets for the optimal combination of risky assets!**
 <!-- ::: -->
 
-## The Tangency Portfolio Problem in Python
+## Theoretical tangency (no shorting restrictions)
 
 ``` p
 import numpy as np
@@ -649,9 +648,9 @@ w = np.linalg.solve(cov, means - r)
 wgts_tangency = w / np.sum(w)
 ```
 
-## {background-iframe="http://bbcx-investments.com/portfolios/tangency" background-interactive="True"}
+<!-- {background-iframe="http://bbcx-investments.com/portfolios/tangency" background-interactive="True"} -->
 
-## {background-iframe="http://bbcx-investments.com/portfolios/optimal-N" background-interactive="True"}
+<!-- ## {background-iframe="http://bbcx-investments.com/portfolios/optimal-N" background-interactive="True"} -->
 
 # Preferences
 ## Preferences and the Capital Allocation Line
@@ -1479,6 +1478,18 @@ $$ E[r_p] = w_{\text{risky}} \cdot E[r_{\text{risky}}] + (1-w_{\text{risky}}) \c
 
 If we have a target standard deviation, solve for $w_{\text{risky}}$:
 $$ \text{sd}[r_p] = w_{\text{risky}} \cdot \text{sd}[r_{\text{risky}}] $$
+
+
+## BBCX website resources
+
+[Manual search for optimal Sharpe ratio](https://bbcx-investments.com/portfolios/sharpe)
+
+[3-asset tangency](https://bbcx-investments.com/portfolios/tangency)
+
+[3-asset capital allocation](https://bbcx-investments.com/portfolios/optimal)
+
+[N-asset portfolios](https://bbcx-investments.com/portfolios/optimal-N)
+
 
 # For next time: Practical Issues in Portfolio Optimization
 
