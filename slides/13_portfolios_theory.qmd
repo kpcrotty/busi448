@@ -765,7 +765,7 @@ fig.show()
 
 A mean-variance investor chooses $w$ to solve:
 $$ \underset{w}\max E[r_p] - 0.5\cdot A \cdot \text{var}[r_p]\,. $$  
-with $r_p = w r_{\text{risky}} + (1-w) r_{\text{risky} r_f}$.
+with $r_p = w r_{\text{risky}} + (1-w) r_f$.
 
 The optimal allocation to the risky portfolio is:
 $$ w^* = \frac{E[r_{\text{risky}}-r_f]}{A \cdot \text{var}_{\text{risky}}}\,.$$ 

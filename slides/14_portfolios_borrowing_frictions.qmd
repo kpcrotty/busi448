@@ -1,5 +1,5 @@
 ---
-title: 'Optimal Portfolios: Practice'
+title: 'Optimal Portfolios: Borrowing Frictions'
 author: "<br>Kevin Crotty<br>BUSI 448: Investments"
 format: 
     revealjs:
@@ -11,7 +11,7 @@ format:
         theme: [default, custom.scss]
         show-slide-number: print
 execute:
-    echo: true
+    echo: false
     freeze: auto
 jupyter: python3
 ---
@@ -139,7 +139,7 @@ class portfolio:
 
 ::: {.nonincremental}
 - Borrowing frictions
-- Short-sales constraints
+<!-- - Short-sales constraints -->
 :::
 
 # Borrowing frictions
@@ -543,22 +543,28 @@ figtbl(mn_stock,mn_bond,sd_stock,sd_bond,corr,rs,extra,"Stock","Bond")
 
 - Where do investors with different risk aversions choose to invest when faced with this investment opportunity set?  
 
-- The answer depends on the investor's risk aversion and the Sharpe ratios of the efficient low risk and high mean portfolios. 
+- The answer depends on the investor's risk aversion and the reward-risk ratios of the efficient low risk and high mean portfolios. 
 
 ## Capital allocation with leverage frictions
 
-**High risk aversion investors** invest in efficient low risk portfolio and save:
+**High risk aversion investors** invest in the efficient low risk portfolio and save:
 $$ w^*_{\text{low}} = \frac{E[r_{\text{low}}-r_f^{\text{saving}}]}{A \cdot \text{var}_{\text{low}}}.$$
 
 . . .
 
-**Low risk aversion investors** invest in efficient high mean portfolio and borrow:
+**Low risk aversion investors** invest in the efficient high mean portfolio and borrow:
 $$ w^*_{\text{high}} = \frac{E[r_{\text{high}}-r_f^{\text{borrow}}]}{A \cdot \text{var}_{\text{high}}}.$$
 
-. . . 
+
+## Capital allocation with leverage frictions
 
 **Intermediate risk aversion investors** invest in risky assets only.
 
+- Can express as a two-asset portfolio of the efficient low and high risk portfolios.
+
+- The optimal weight $a^*$ in the low-risk portfolio is: $$ a^* = \frac{E[r_{\text{low}} - r_{\text{high}}] - A (\text{cov}[r_{\text{low}}, r_{\text{high}}]-\text{var}[r_{\text{high}}])}{A (\text{var}[r_{\text{low}}]+\text{var}[r_{\text{high}}]-2\text{cov}[r_{\text{low}}, r_{\text{high}}])}\,,$$
+
+- Note: $\text{cov}[r_{\text{low}}, r_{\text{high}}] = w_{\text{low}}' V w_{\text{high}}$, where $w_{\text{low}}$ and $w_{\text{high}}$ are the weights in the underlying risky assets for the efficient low-risk and high-mean portfolios, respectively.
 
 ## Capital allocation with leverage frictions
 ```{python}
@@ -1259,288 +1265,75 @@ def figtbl(mn1, mn2, sd1, sd2, c, rs, extra, raver1, raver2, asset1_name, asset2
 figtbl(mn_stock,mn_bond,sd_stock,sd_bond,corr,rs,extra,raver1, raver2, "Stock","Bond")
 ```
 
+## Capital allocation: two solution methods
 
-## {background-iframe="http://bbcx-investments.com/portfolios/optimal-two-rates" background-interactive="True"}
+- Method #1: Find risk aversion thresholds that represent low- and high-risk portfolios
+- Method #2: Directly maximize mean-variance utility using all assets, including risk-free savings and borrowings
 
+## Method #1: Risk aversion thresholds
 
+We can find the risk aversion thresholds for savings and borrowing by setting risky asset allocation $w^* \le 1$ (savings) or $w^* \ge 1$ (borrowing) in the capital allocation expressions and solving for risk aversion.
 
+- **Upper risk aversion threshold**: some savings if $$A \ge \frac{E[r_{\text{low}}-r_f]}{\text{var}(r_{\text{low}})}.$$
 
+- **Lower risk aversion threshold**: some borrowing if $$A \le \frac{E[r_{\text{high}}-r_f]}{\text{var}(r_{\text{high}})}.$$
 
+## Method #2: Direct optimization of utility {.smaller}
 
+The optimal portfolio for investor with risk aversion $A$ solves:
+$$ \underset{w_{\text{saving}},w_{\text{borrow}},w_1,w_2,\dots,w_N}{\text{max}} E[r_p] - 0.5 \cdot A \cdot \text{var}[r_p] $$ 
+subject to the constraints $$w_{\text{saving}} + w_{\text{borrow}} + \sum_i w_i=1,$$ $$w_{\text{saving}} \ge 0,$$ $$w_{\text{borrow}} \le 0.$$ 
 
+- We need to augment the expected return vector and covariance matrix with elements for the savings and borrowing assets.
 
+## Mapping to `cvxopt.solvers.qp` {.smaller}
+Recall the `cvxopt.solvers.qp` function's general form:
+\begin{align*}
+    \underset{w}{\text{min  }}& \frac{1}{2} w' Q w + p'w \\
+     \text{subject to  } & Gw \le h \\
+                        & Aw = b \\
+\end{align*}
 
+- $0.5w'Qw$ captures $0.5 \cdot A \cdot \text{var}[r_p]$
+- $p'w$ captures $-E[r_p]$
+- $Gw \le h$ captures only positive saving and negative borrowing
+- $Aw=b$ is the fully invested constraint
 
-
-
-
-
-
-# Short-selling constraints
-## Short-selling constraints
-
-::: {.nonincremental}
-- Negative investment weights involve short-selling.  
-
-- Each position's weight is:
-$$ w_i = \frac{\text{Value of Position}}{\text{Total Portfolio Value}} $$
-
-- Some investors cannot or choose not to short sell.
-:::
-
-## Short-selling and the frontier
-
-``` {python}
-import numpy as np
-import plotly.graph_objects as go
-
-#Based on French return series
-# Asset 1: US Equity
-# Asset 2: Developed International
-# Asset 1: Emerging Market
-mn1= 6
-mn2= 6.5
-mn3= 8
-sd1= 15
-sd2= 16.5 
-sd3= 21
-corr12 = 75 
-corr13 = 75 
-corr23 = 75 
-
-def is_pos_def(x):
-    if np.all(np.linalg.eigvals(x) > 0):
-        return 'True'
-    else:
-        return 'False'
-    
-def figtbl(mn1, mn2, mn3, sd1, sd2, sd3, c12, c13, c23, asset_names):
-    mns = np.array((mn1, mn2, mn3)) / 100
-    sds = np.array((sd1, sd2, sd3)) / 100
-    corr = np.identity(3)
-    corr[0,1] = corr[1,0] = c12 / 100
-    corr[0,2] = corr[2,0] = c13 / 100
-    corr[1,2] = corr[2,1] = c23 / 100
-    cov = np.diag(sds) @ corr @ np.diag(sds)
-    N = 3
-
-    def custom(string, ports):
-        cd = np.empty(shape=(len(ports), N, 1), dtype=float)
-        for i in range(N):
-            cd[:, i] = np.array([w[i] for w in ports]).reshape(-1, 1)
-        string += "<br>"
-        for i in range(N):
-            string += asset_names[i]
-            string += ": %{customdata["
-            string += str(i)
-            string += "]:.1%}<br>"
-        string += "<extra></extra>"
-        return string, cd
-
-
-    # No short-sales
-    P = portfolio(mns, cov, False)
-
-    mingrid = np.min(mns)
-    maxgrid = np.max(mns)
-    mnsFrontier = np.linspace(mingrid, maxgrid, 50)
-    portsFrontier = [P.frontier(m) for m in mnsFrontier]
-    sdsFrontier = [np.sqrt(w @ cov @ w) for w in portsFrontier]
-
-    # string, cd = custom('frontier', portsFrontier)
-    string, cd = custom('frontier w/o short sales', portsFrontier)
-    trace1 = go.Scatter(
-        x=sdsFrontier,
-        y=mnsFrontier,
-        mode="lines",
-        customdata=cd,
-        hovertemplate=string,
-        line=dict(color="green"),
-        name="3-Fund Frontier w/o short sales"
-    )
-
-    gmv = P.GMV
-
-    string = "GMV portfolio w/o short sales <br>"
-    for i in range(N):
-        string += asset_names[i]+": " + f'{gmv[i]:.1%}' + "<br>"
-    string += "<extra></extra>"        
-    trace1a = go.Scatter(
-        x=[np.sqrt(gmv @ cov @ gmv)],
-        y=[gmv @ mns],
-        mode="markers",
-        # customdata=cd,
-        hovertemplate=string,        
-        marker=dict(size=15, color="green"),
-        name="GMV Portfolio w/o Short Sales"
-    )
-
-
-
-    # Allowing short-selling
-    P = portfolio(mns, cov, True)
-
-    mingrid = 0.9*np.min(mns)
-    maxgrid = 1.025*np.max(mns)
-    mnsFrontier = np.linspace(mingrid, maxgrid, 50)
-    portsFrontier = [P.frontier(m) for m in mnsFrontier]
-    sdsFrontier = [np.sqrt(w @ cov @ w) for w in portsFrontier]
-
-    string, cd = custom('frontier with short sales', portsFrontier)
-    trace2 = go.Scatter(
-        x=sdsFrontier,
-        y=mnsFrontier,
-        mode="lines",
-        customdata=cd,
-        hovertemplate=string,
-        line=dict(color="blue"),
-        name="3-Fund Frontier with short sales"
-    )
-
-    gmv = P.GMV
-
-    string = "GMV portfolio with short sales <br>"
-    for i in range(N):
-        string += asset_names[i]+": " + f'{gmv[i]:.1%}' + "<br>"
-    string += "<extra></extra>"
-    trace2a = go.Scatter(
-        x=[np.sqrt(gmv @ cov @ gmv)],
-        y = [gmv @ mns],
-        mode = "markers",
-        hovertemplate = string,
-        marker = dict(size=15, color="blue"),
-        name="GMV Portfolio with Short Sales"
-    )
-
-    trace3 = go.Scatter(
-        x=sds,
-        y=mns,
-        # text=[1, 2, 3],
-        # hovertemplate="Asset %{text}<extra></extra>",
-        text=asset_names,
-        hovertemplate="%{text}<extra></extra>",
-        mode="markers",
-        marker=dict(size=15, color="red"),
-        name="Underlying Assets"
-    )
-
-    fig = go.Figure()
-    
-    for trace in (trace1, trace1a, trace2, trace2a, trace3):
-        fig.add_trace(trace)
-    #trace1=frontier w/o short sales
-    #trace1a=GMV portfolio w/o short sales
-    #trace2=frontier with short sales
-    #trace2a=GMV portfolio with short sales
-    #trace3=Assets
-        
-        
-    fig.layout.xaxis["title"] = "Standard Deviation"
-    fig.layout.yaxis["title"] = "Expected Return"
-    # fig.update_xaxes(range=[0, 1.25 * np.max(sds)])
-    # fig.update_yaxes(range=[0, 1.25 * np.max(mns)])
-    fig.update_yaxes(tickformat=".1%")
-    fig.update_xaxes(tickformat=".1%")
-    fig.update_layout(legend=dict(yanchor="top", y =0.99, xanchor="left", x=0.01))
-    fig.show()
-    # return largefig(fig), is_pos_def(cov)
-figtbl(mn1, mn2, mn3, sd1, sd2, sd3, corr12, corr13, corr23, ["US Equity", "Developed Intl", "Emerging Mkt"])
-```
-
-
-## {background-iframe="http://bbcx-investments.com/portfolios/short-sales-constraints" background-interactive="True"}
-
-
-## Inputs
-``` p
-import numpy as np
-from cvxopt import matrix
-from cvxopt.solvers import qp as Solver, options as SolverOptions
-from scipy.optimize import minimize
-
-# Risk-free rate
-r = 0.02
-# Expected returns
-mns = np.array([0.06, 0.065, 0.08])
-# Standard deviations
-sds = np.array([0.15, 0.165, 0.21])
-# Correlations
-corr12 = 0.75
-corr13 = 0.75
-corr23 = 0.75
-# Covariance matrix
-C  = np.identity(3)
-C[0, 1] = C[1, 0] = corr12
-C[0, 2] = C[2, 0] = corr13
-C[1, 2] = C[2, 1] = corr23
-cov = np.diag(sds) @ C @ np.diag(sds)
-```
-
-## Short-sales constraints: GMV
-``` p
-##### GMV problem with short-sale constraints
-n = len(mns)
-Q = matrix(cov, tc="d")
-p = matrix(np.zeros(n), (n, 1), tc="d")
-# Constraint: short-sales not allowed
-G = matrix(-np.identity(n), tc="d")
-h = matrix(np.zeros(n), (n, 1), tc="d")
-# Constraint: fully-invested portfolio
-A = matrix(np.ones(n), (1, n), tc="d")
-b = matrix([1], (1, 1), tc="d")
-sol = Solver(Q, p, G, h, A, b)
-wgts_gmv = np.array(sol["x"]).flatten() if sol["status"] == "optimal" else np.array(n * [np.nan])
-```
-
-
-
-## Short-sales constraints: Efficient Frontier
-
-``` p
-##### Frontier problem with short-sale constraints
-def frontier(means, cov, target):
-    n = len(means)
-    Q = matrix(cov, tc="d")
-    p = matrix(np.zeros(n), (n, 1), tc="d")
-    # Constraint: short-sales not allowed
-    G = matrix(-np.identity(n), tc="d")
-    h = matrix(np.zeros(n), (n, 1), tc="d")
-    # Fully-invested constraint
-    A = matrix(np.vstack((np.ones(n), means)), (2, n), tc="d")
-    b = matrix([1, target], (2, 1), tc="d")
+## Python implementation
+``` {.python code-line-numbers="|3-5|6-7|8-13|14-16"}
+def opt_allocation2(means, cov, rf_save, rf_borrow, risk_aversion):
+    n=len(means)
+    Q = np.zeros((n + 2, n + 2))
+    Q[2:, 2:] = risk_aversion * cov
+    Q = matrix(Q, tc="d")
+    p = np.array([-rf_save, -rf_borrow] + list(-means))
+    p = matrix(p, (n + 2, 1), tc="d")
+    # Constraint: saving weight positive, borrowing weight negative
+    G = np.zeros((2, n + 2))
+    G[0, 0] = -1
+    G[1, 1] = 1
+    G = matrix(G, (2, n+2), tc="d")
+    h = matrix([0, 0], (2, 1), tc="d")
+    # Constraint: fully-invested portfolio
+    A = matrix(np.ones(n+2), (1, n+2), tc="d")
+    b = matrix([1], (1, 1), tc="d")
     sol = Solver(Q, p, G, h, A, b)
-    wgts = np.array(sol["x"]).flatten() if sol["status"] == "optimal" else np.array(n * [np.nan])
-    return wgts
-wgts_frontier = [frontier(mns, cov, m) for m in np.linspace(mns.min(), mns.max(),5)]
+    if sol["status"] == "optimal":
+        wgts_optimal = np.array(sol["x"]).flatten()
+    else:
+        wgts_optimal = None
+    return wgts_optimal
 ```
 
-## Short-sales constraints: Tangency Portfolio
+## BBCX website resources
 
-``` p
-##### Tangency Portfolio
-n = len(mns)
-def f(w):
-    mn = w @ mns
-    sd = np.sqrt(w @ cov @ w)
-    return -(mn - r) / sd
-# Initial guess (equal-weighted)
-w0 = (1/n)*np.ones(n)
-# Constraint: fully-invested portfolio
-A = np.ones(n)
-b = 1
-cons = [{"type": "eq", "fun": lambda x: A @ x - b}]
-# Short-sale constraint
-bnds = [(0, None) for i in range(n)] 
-# Optimization
-wgts_tangency = minimize(f, w0, bounds=bnds, constraints=cons).x
-```
+[Optimal allocation with different rates](https://bbcx-investments.com/portfolios/optimal-two-rates)
+<!-- ## {background-iframe="http://bbcx-investments.com/portfolios/optimal-two-rates" background-interactive="True"} -->
 
 
-## Industry portfolios and short-sales constraints
 
-Let's look at a notebook that implements portfolio optimization on industry portfolios with and without short-sales constraints.
 
-# For next time: Rebalancing
+# For next time: Short-sale constraints
 
 <br><br><br><br>
 
