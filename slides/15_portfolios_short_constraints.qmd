@@ -1,5 +1,5 @@
 ---
-title: 'Optimal Portfolios: Borrowing Frictions'
+title: 'Optimal Portfolios: Short-Selling Constraints'
 author: "<br>Kevin Crotty<br>BUSI 448: Investments"
 format: 
     revealjs:
@@ -147,7 +147,7 @@ class portfolio:
 - Negative investment weights involve short-selling.  
 
 - Each position's weight is:
-$$ w_i = \frac{\text{Value of Position}}{\text{Total Portfolio Value}} $$
+$$ w_i = \frac{\text{Value of Position}}{\text{Invested Capital}} $$
 
 - Some investors cannot or choose not to short sell.
 :::
@@ -313,53 +313,9 @@ figtbl(mn1, mn2, mn3, sd1, sd2, sd3, corr12, corr13, corr23, ["US Equity", "Deve
 
 
 
-
-## Inputs
-``` p
-import numpy as np
-from cvxopt import matrix
-from cvxopt.solvers import qp as Solver, options as SolverOptions
-from scipy.optimize import minimize
-
-# Risk-free rate
-r = 0.02
-# Expected returns
-mns = np.array([0.06, 0.065, 0.08])
-# Standard deviations
-sds = np.array([0.15, 0.165, 0.21])
-# Correlations
-corr12 = 0.75
-corr13 = 0.75
-corr23 = 0.75
-# Covariance matrix
-C  = np.identity(3)
-C[0, 1] = C[1, 0] = corr12
-C[0, 2] = C[2, 0] = corr13
-C[1, 2] = C[2, 1] = corr23
-cov = np.diag(sds) @ C @ np.diag(sds)
-```
-
-## Short-sales constraints: GMV
-``` p
-##### GMV problem with short-sale constraints
-n = len(mns)
-Q = matrix(cov, tc="d")
-p = matrix(np.zeros(n), (n, 1), tc="d")
-# Constraint: short-sales not allowed
-G = matrix(-np.identity(n), tc="d")
-h = matrix(np.zeros(n), (n, 1), tc="d")
-# Constraint: fully-invested portfolio
-A = matrix(np.ones(n), (1, n), tc="d")
-b = matrix([1], (1, 1), tc="d")
-sol = Solver(Q, p, G, h, A, b)
-wgts_gmv = np.array(sol["x"]).flatten() if sol["status"] == "optimal" else np.array(n * [np.nan])
-```
-
-
-
 ## Short-sales constraints: Efficient Frontier
 
-``` p
+``` {.python code-line-numbers="|6-8"}
 ##### Frontier problem with short-sale constraints
 def frontier(means, cov, target):
     n = len(means)
@@ -377,9 +333,27 @@ def frontier(means, cov, target):
 wgts_frontier = [frontier(mns, cov, m) for m in np.linspace(mns.min(), mns.max(),5)]
 ```
 
+
+## Short-sales constraints: GMV
+``` {.python code-line-numbers="|5-7"}
+##### GMV problem with short-sale constraints
+n = len(mns)
+Q = matrix(cov, tc="d")
+p = matrix(np.zeros(n), (n, 1), tc="d")
+# Constraint: short-sales not allowed
+G = matrix(-np.identity(n), tc="d")
+h = matrix(np.zeros(n), (n, 1), tc="d")
+# Constraint: fully-invested portfolio
+A = matrix(np.ones(n), (1, n), tc="d")
+b = matrix([1], (1, 1), tc="d")
+sol = Solver(Q, p, G, h, A, b)
+wgts_gmv = np.array(sol["x"]).flatten() if sol["status"] == "optimal" else np.array(n * [np.nan])
+```
+
+
 ## Short-sales constraints: Tangency Portfolio
 
-``` p
+``` {.python code-line-numbers="|13-14"}
 ##### Tangency Portfolio
 n = len(mns)
 def f(w):
@@ -401,14 +375,19 @@ wgts_tangency = minimize(f, w0, bounds=bnds, constraints=cons).x
 
 ## BBCX website resources
 
-[Optimal allocation with different rates](http://bbcx-investments.com/portfolios/short-sales-constraints)
+[Investment opportunity set with short-sale constraints](https://bbcx-investments.com/portfolios/short-sales-constraints)
 <!-- ## {background-iframe="http://bbcx-investments.com/portfolios/short-sales-constraints" background-interactive="True"} -->
 
 
 
-## Industry portfolios and short-sales constraints
+## Industry portfolios and position constraints
+::: {.nonincremental}
+Let's look at a notebook that constructs frontiers using industry portfolios 
 
-Let's look at a notebook that implements portfolio optimization on industry portfolios with and without short-sales constraints.
+- allowing short selling
+- with short-sales constraints
+- with short-sales constraints and maximum position sizes
+:::
 
 # For next time: Rebalancing
 
