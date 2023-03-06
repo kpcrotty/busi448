@@ -131,7 +131,6 @@ class portfolio:
 **Last time**:
 
 ::: {.nonincremental}
-- Borrowing frictions
 - Short-sales constraints
 :::
 
@@ -140,12 +139,69 @@ class portfolio:
 **Today**:
 
 ::: {.nonincremental}
-- Midterm discussion
+- Simulation
 - Investing over multiple periods
 - Rebalancing
 :::
 
-# Midterm comments
+# Simulation
+
+## General steps
+
+1. Identify one or more random inputs
+2. Set up a function that generates a random draw of the inputs and does some calculations to produce output(s).
+3. Run the function in step 2 many times to collect the simulated distribution of the output(s).
+4. Summarize the output distribution in some way (average value, percentiles, etc.)
+
+## Simulating a single return series
+
+``` {.python code-line-numbers="|1,5-6|2-4"}
+from scipy.stats import norm
+N_SIMS=1000
+sims = pd.DataFrame(dtype=float,columns=['avg_ret'],index=np.arange(N_SIMS))
+for s in sims.index:
+    rets = norm.rvs(loc=MN, scale=SD, size=T)
+    sims.loc[s] = np.mean(rets)
+```
+
+## Using a function for a single realization
+
+``` {.python code-line-numbers="|1-4|6-9"}
+# Function to run a single realization
+def sim_calc(mean, sd, n_time):
+    rets = norm.rvs(loc=mean, scale = sd, size=n_time)
+    return np.mean(rets)  
+
+# Collect N_SIMS runs of the simulation function
+sims = pd.DataFrame(dtype=float,columns=['avg_ret'],index=np.arange(N_SIMS))
+for s in sims.index:
+    sims.loc[s] = sim_calc(MN,SD,T)
+```
+
+## Simulating multiple return series
+
+``` {.python code-line-numbers="|1-9|11-15"}
+# Simulate a single realization and do calculation(s)
+def sim_calc(means, cov, n_time):
+    n = len(means)
+    rets = pd.DataFrame(data=mvn.rvs(MNS, COV, size=T), 
+            columns=['ret' + str(i+1) for i in np.arange(n)])
+    x = rets.corr()
+    corr12 = x.loc['ret1', 'ret2']
+    corr13 = x.loc['ret1', 'ret3']
+    return corr12, corr13
+
+# Collect N_SIMS runs of the simulation function
+sims = pd.DataFrame(dtype=float,columns=['corr12', 'corr13'],
+        index=np.arange(N_SIMS))
+for s in sims.index:
+    sims.loc[s,['corr12','corr13']] = sim_calc(MNS,COV,T)    
+```
+
+## 
+
+Let's look at a notebook that simulates some of our input statistics for portfolio optimization.
+
 
 # Rebalancing
 ## 60-40 Stock-Bond Portfolio
@@ -413,7 +469,7 @@ figtbl(mn_stock,mn_bond,sd_stock,sd_bond,corr,rs,extra,"Stock","Bond")
 
 - Weights become: 61.4% and 38.6%
 
-- $$ w_{i,t+1} = w_{i,t}\frac{1+r_{i,t}}{1+r_{p,t}} $$ where $r_{p,t}=\sum_{j=1}^N w_{j,t} r_{j,t}$ is the time $t$ realized portfolio return for an $N$ asset portfolio
+- The new weight for asset $i$ is:$$ w_{i,t+1} = w_{i,t}\frac{1+r_{i,t}}{1+r_{p,t}} $$ where $r_{p,t}=\sum_{j=1}^N w_{j,t} r_{j,t}$ is the time $t$ realized portfolio return for an $N$ asset portfolio
 
 
 ## Five years of possible returns
@@ -941,14 +997,14 @@ If expected returns are mean-reverting, then it is also advantageous to rebalanc
 
 - Selling winners may result in capital gains taxes
 
-- Potential benefit of improved portfolio allocation vs. potential tax exposure of selling overweighted assets.
+- One must weigh the potential benefit of improved portfolio allocation vs. the potential tax exposure of selling overweighted assets
 
 
 ## Practical Issues: Transactions Costs
 
 - Similarly, trading may result in fixed or variable transactions costs 
 
-- Potential benefit of improved portfolio allocation vs. expected costs of the rebalancing transactions 
+- One must weight the potential benefit of improved portfolio allocation vs. the expected costs of the rebalancing transactions 
 
 
 # For next time: Input Sensitivity
