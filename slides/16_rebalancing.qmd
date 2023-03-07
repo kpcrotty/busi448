@@ -184,7 +184,7 @@ for s in sims.index:
 # Simulate a single realization and do calculation(s)
 def sim_calc(means, cov, n_time):
     n = len(means)
-    rets = pd.DataFrame(data=mvn.rvs(MNS, COV, size=T), 
+    rets = pd.DataFrame(data=mvn.rvs(means, cov, size=T), 
             columns=['ret' + str(i+1) for i in np.arange(n)])
     x = rets.corr()
     corr12 = x.loc['ret1', 'ret2']
