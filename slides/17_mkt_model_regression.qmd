@@ -33,7 +33,8 @@ jupyter: python3
 ::: {.nonincremental}
 - Market Model Regressions
 - Alphas and Betas
-- Estimating Covariance Matrix
+- Estimating the Covariance Matrix
+- Estimation Error
 
 :::
 
@@ -44,7 +45,7 @@ jupyter: python3
 $$ r_{i,t} - r_{f,t} = \alpha_i + \beta_i (r_{b,t} - r_{f,t}) + \varepsilon_{i,t} $$
 
 - Regress stock excess returns on benchmark excess returns
-- $\beta_i = \frac{\text{cov}(r_i, r_b)}{\text{var}(r_b)}$
+- $\beta_i = \frac{\text{cov}(r_i-r_f, r_b-r_f)}{\text{var}(r_b-r_f)}$
 - Most common benchmark is a market return
   - CRSP value-weighted market, S&P 500
   - I'll refer to this as the **market model**
@@ -58,9 +59,9 @@ $$ r_{i,t} - r_{f,t} = \alpha_i + \beta_i (r_{m,t} - r_{f,t}) + \varepsilon_{i,t
 
 . . .
 
-Let's look at an example.
+[Visualization](https://learn-investments.org/capm/alphas-betas)
 
-## {background-iframe="https://bbcx-investments.com/capm/alphas-betas" background-interactive="True"}
+<!-- ## {background-iframe="https://learn-investments.org/capm/alphas-betas" background-interactive="True"} -->
 
 ## Meaning of $\beta$
 
@@ -92,7 +93,11 @@ if I were holding the market, could I have improved mean-variance efficiency by 
 :::
 ::::
 
-## {background-iframe="http://bbcx-investments.com/capm/alphas-mve" background-interactive="True"}
+. . . 
+
+[Visualization](https://learn-investments.org/capm/alphas-mve)
+
+<!-- ## {background-iframe="https://learn-investments.org/capm/alphas-mve" background-interactive="True"} -->
 
 ## A warning
 
@@ -145,16 +150,16 @@ $$ \frac{N^2-N}{2} $$
 
 - A great deal of estimation risk with 5,000 parameters to estimate!
 
-
+<!-- 
 ## Market Model
 
 
-$$ r_{i,t} - r_{f,t} = \alpha_i + \beta_i (r_{m,t} - r_{f,t}) + \varepsilon_{i,t} $$
+$$ r_{i,t} - r_{f,t} = \alpha_i + \beta_i (r_{m,t} - r_{f,t}) + \varepsilon_{i,t} $$ -->
 
 
 ## Market Model-Implied Covariances
 
-What is the covariance of two assets $i$ and $j$, $\text{cov}(r_i,r_j)$?
+Under the market model, what is the covariance of two assets $i$ and $j$, $\text{cov}(r_i,r_j)$?
 
 . . . 
 
@@ -174,29 +179,36 @@ For variance terms, we definitely should not ignore the residual variance:
 
 $$ \text{var}(r_i) = \beta_i^2 \text{var}(r_m) + \text{var}(\varepsilon_i) $$
 
+. . . 
+
+Alternatively, we can just estimate the stock-specific variance directly.
+
 ## Reduced parameter dimensionality
 
-- $N$ betas
-- $N$ residual variances
+- Pairwise $\rho$: $\frac{N^2-N}{2}$ correlations, $N$ variances
+- Market Model: $N$ betas, $N$ variances, $1$ mkt variance
 
 . . .
 
 
 | N(Assets)              | Pairwise $\rho$ N(Parameters)               | Market Model N(Parameters)                  |
 |:----------------------:|:-------------------------------------------:|:-------------------------------------------:|
-| 5                      | 15                                          | 10                                          |
-| 10                     | 55                                          | 20                                          |
-| 25                     | 325                                         | 50                                          |
-| 50                     | 1,275                                       | 100                                         |
-| 100                    | 5,050                                       | 200                                         | 
-
-
-
-# Persistence of $\alpha$ and $\beta$
+| 5                      | 15                                          | 11                                          |
+| 10                     | 55                                          | 21                                          |
+| 50                     | 1,275                                       | 101                                         |
+| 100                    | 5,050                                       | 201                                         | 
 
 ## Industry Portfolios
 
-Let's take a look at alphas and betas for some industry portfolios
+- **Notebook #1**: Estimate betas for industry portfolios and calculate market model-implied covariance matrix
+- **Notebook #2**: Backtest performance of using the market model-implied covariance matrix for industry portfolios
+
+
+# Persistence of $\beta$ (and $\alpha$)
+
+## Estimation error
+
+- Alpha and beta are estimates, so will be subject to the usual concerns about estimation error.
 
 ## Shrinking betas
 
@@ -208,6 +220,10 @@ Let's take a look at alphas and betas for some industry portfolios
 $$ \beta_{\text{adjusted}} = 0.67 \cdot \beta_{\text{adjusted}} + 0.33 \cdot 1 $$
 
 - Many fancier alternatives exist.
+
+##
+
+Let's return to notebook #1 and consider how well shrinking betas performs for our industry portfolios.
 
 # For next time: "Capital Asset Pricing Model"
 

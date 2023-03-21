@@ -1202,7 +1202,8 @@ display: none;
 <ul>
 <li>Market Model Regressions</li>
 <li>Alphas and Betas</li>
-<li>Estimating Covariance Matrix</li>
+<li>Estimating the Covariance Matrix</li>
+<li>Estimation Error</li>
 </ul>
 </div>
 </div>
@@ -1217,7 +1218,7 @@ display: none;
 <p><span class="math display">\[ r_{i,t} - r_{f,t} = \alpha_i + \beta_i (r_{b,t} - r_{f,t}) + \varepsilon_{i,t} \]</span></p>
 <ul>
 <li class="fragment">Regress stock excess returns on benchmark excess returns</li>
-<li class="fragment"><span class="math inline">\(\beta_i = \frac{\text{cov}(r_i, r_b)}{\text{var}(r_b)}\)</span></li>
+<li class="fragment"><span class="math inline">\(\beta_i = \frac{\text{cov}(r_i-r_f, r_b-r_f)}{\text{var}(r_b-r_f)}\)</span></li>
 <li class="fragment">Most common benchmark is a market return
 <ul>
 <li class="fragment">CRSP value-weighted market, S&amp;P 500</li>
@@ -1234,11 +1235,9 @@ display: none;
 <li class="fragment">Meaning of <span class="math inline">\(\varepsilon\)</span>?</li>
 </ul>
 <div class="fragment">
-<p>Let’s look at an example.</p>
+<p><a href="https://learn-investments.org/capm/alphas-betas">Visualization</a></p>
+<!-- ## {background-iframe="https://learn-investments.org/capm/alphas-betas" background-interactive="True"} -->
 </div>
-</section>
-<section id="section" class="slide level2" data-background-iframe="https://bbcx-investments.com/capm/alphas-betas" data-background-interactive="True">
-<h2></h2>
 </section>
 <section id="meaning-of-beta" class="slide level2">
 <h2>Meaning of <span class="math inline">\(\beta\)</span></h2>
@@ -1269,9 +1268,10 @@ display: none;
 </div>
 </div>
 </div>
-</section>
-<section id="section-1" class="slide level2" data-background-iframe="http://bbcx-investments.com/capm/alphas-mve" data-background-interactive="True">
-<h2></h2>
+<div class="fragment">
+<p><a href="https://learn-investments.org/capm/alphas-mve">Visualization</a></p>
+<!-- ## {background-iframe="https://learn-investments.org/capm/alphas-mve" background-interactive="True"} -->
+</div>
 </section>
 <section id="a-warning" class="slide level2">
 <h2>A warning</h2>
@@ -1348,14 +1348,17 @@ display: none;
 <ul>
 <li class="fragment">A great deal of estimation risk with 5,000 parameters to estimate!</li>
 </ul>
-</section>
-<section id="market-model" class="slide level2">
-<h2>Market Model</h2>
-<p><span class="math display">\[ r_{i,t} - r_{f,t} = \alpha_i + \beta_i (r_{m,t} - r_{f,t}) + \varepsilon_{i,t} \]</span></p>
+<!-- 
+## Market Model
+
+
+
+
+$$ r_{i,t} - r_{f,t} = \alpha_i + \beta_i (r_{m,t} - r_{f,t}) + \varepsilon_{i,t} $$ -->
 </section>
 <section id="market-model-implied-covariances" class="slide level2">
 <h2>Market Model-Implied Covariances</h2>
-<p>What is the covariance of two assets <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>, <span class="math inline">\(\text{cov}(r_i,r_j)\)</span>?</p>
+<p>Under the market model, what is the covariance of two assets <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>, <span class="math inline">\(\text{cov}(r_i,r_j)\)</span>?</p>
 <div class="fragment">
 <p><span class="math display">\[\text{cov}(\alpha_i + \beta_i (r_{m} - r_{f}) + \varepsilon_{i},  \alpha_j + \beta_j (r_{m} - r_{f}) + \varepsilon_{j})\]</span></p>
 <ul>
@@ -1371,12 +1374,15 @@ display: none;
 <h2>Market Model-Implied Variances</h2>
 <p>For variance terms, we definitely should not ignore the residual variance:</p>
 <p><span class="math display">\[ \text{var}(r_i) = \beta_i^2 \text{var}(r_m) + \text{var}(\varepsilon_i) \]</span></p>
+<div class="fragment">
+<p>Alternatively, we can just estimate the stock-specific variance directly.</p>
+</div>
 </section>
 <section id="reduced-parameter-dimensionality" class="slide level2">
 <h2>Reduced parameter dimensionality</h2>
 <ul>
-<li class="fragment"><span class="math inline">\(N\)</span> betas</li>
-<li class="fragment"><span class="math inline">\(N\)</span> residual variances</li>
+<li class="fragment">Pairwise <span class="math inline">\(\rho\)</span>: <span class="math inline">\(\frac{N^2-N}{2}\)</span> correlations, <span class="math inline">\(N\)</span> variances</li>
+<li class="fragment">Market Model: <span class="math inline">\(N\)</span> betas, <span class="math inline">\(N\)</span> variances, <span class="math inline">\(1\)</span> mkt variance</li>
 </ul>
 <div class="fragment">
 <table>
@@ -1396,40 +1402,44 @@ display: none;
 <tr class="odd">
 <td style="text-align: center;">5</td>
 <td style="text-align: center;">15</td>
-<td style="text-align: center;">10</td>
+<td style="text-align: center;">11</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">10</td>
 <td style="text-align: center;">55</td>
-<td style="text-align: center;">20</td>
+<td style="text-align: center;">21</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">25</td>
-<td style="text-align: center;">325</td>
-<td style="text-align: center;">50</td>
-</tr>
-<tr class="even">
 <td style="text-align: center;">50</td>
 <td style="text-align: center;">1,275</td>
-<td style="text-align: center;">100</td>
+<td style="text-align: center;">101</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">100</td>
 <td style="text-align: center;">5,050</td>
-<td style="text-align: center;">200</td>
+<td style="text-align: center;">201</td>
 </tr>
 </tbody>
 </table>
 </div>
-</section></section>
-<section>
-<section id="persistence-of-alpha-and-beta" class="title-slide slide level1 center">
-<h1>Persistence of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span></h1>
-
 </section>
 <section id="industry-portfolios" class="slide level2">
 <h2>Industry Portfolios</h2>
-<p>Let’s take a look at alphas and betas for some industry portfolios</p>
+<ul>
+<li class="fragment"><strong>Notebook #1</strong>: Estimate betas for industry portfolios and calculate market model-implied covariance matrix</li>
+<li class="fragment"><strong>Notebook #2</strong>: Backtest performance of using the market model-implied covariance matrix for industry portfolios</li>
+</ul>
+</section></section>
+<section>
+<section id="persistence-of-beta-and-alpha" class="title-slide slide level1 center">
+<h1>Persistence of <span class="math inline">\(\beta\)</span> (and <span class="math inline">\(\alpha\)</span>)</h1>
+
+</section>
+<section id="estimation-error" class="slide level2">
+<h2>Estimation error</h2>
+<ul>
+<li class="fragment">Alpha and beta are estimates, so will be subject to the usual concerns about estimation error.</li>
+</ul>
 </section>
 <section id="shrinking-betas" class="slide level2">
 <h2>Shrinking betas</h2>
@@ -1443,6 +1453,10 @@ display: none;
 <li class="fragment">Many fancier alternatives exist.</li>
 </ul>
 </div>
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
+<p>Let’s return to notebook #1 and consider how well shrinking betas performs for our industry portfolios.</p>
 </section></section>
 <section id="for-next-time-capital-asset-pricing-model" class="title-slide slide level1 center">
 <h1>For next time: “Capital Asset Pricing Model”</h1>
