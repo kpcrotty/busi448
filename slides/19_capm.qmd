@@ -72,6 +72,9 @@ $$ r_{i,t} - r_{f,t} = \alpha_i + \beta_i (r_{m,t} - r_{f,t}) + \varepsilon_{i,t
 - Investors have **identical** beliefs about the **same universe** of asset returns
 - Investors have **mean-variance** preferences
 - **Single period** investment horizon
+
+## CAPM Assumptions
+
 - **Frictionless** borrowing and lending
   - borrowing rate = savings rate
 - **Frictionless** trading
@@ -159,6 +162,10 @@ What if this weren't the case?
   - This is the required return on equity capital for corporate projects.
   - aka cost of equity capital
 
+. . . 
+
+[Website](https://learn-investments.org/capm/costequity)
+
 ## CAPM and Investments
   
 - The CAPM is somewhat less useful in an investments context.
@@ -182,7 +189,7 @@ What if this weren't the case?
   - Precision of estimate doesn't improve with sampling data more frequently.
 
 
-## Precision of historical average
+## Precision of historical average 
 - Standard error = SD/$\sqrt{T}$
   - Annual SD of market return of 20%:
 
@@ -196,8 +203,11 @@ What if this weren't the case?
 | 50                                    | 2.83%                                       |
 | 100                                   | 2.00%                                       | 
 
+. . . 
 
-## {background-iframe="http://bbcx-investments.com/capm/mrp_estimation" background-interactive="True"}
+[Visualization](https://learn-investments.org/capm/mrp_estimation)
+
+<!-- ## {background-iframe="http://bbcx-investments.com/capm/mrp_estimation" background-interactive="True"} -->
 
 <!-- ## Simulation of estimating betas -->
 
@@ -254,13 +264,17 @@ fig.show()
 - A simple example is industry returns. 
 - Average returns are mostly unrelated to betas.
 
-## {background-iframe="https://bbcx-investments.com/capm/sml-industries" background-interactive="True"}
+. . . 
+
+[Website example](https://learn-investments.org/capm/sml-industries)
+
+<!-- ## {background-iframe="https://bbcx-investments.com/capm/sml-industries" background-interactive="True"} -->
 
 ## In-class notebook version
 
 Let's look at what this webpage is doing.
 
-# For next time: Anomalies and the Cross-Section of Returns
+# For next time: Predictability in the Cross-Section of Returns
 
 <br><br><br><br>
 
