@@ -85,22 +85,28 @@ jupyter: python3
 - Idiosyncratic volatility (Ang, Hodrick, Xing, Zhang 2006)
   - High `idiovol` $\rightarrow$ low $r_{t+1}$
 
-## {background-iframe="http://bbcx-investments.com/factor-investing/quintiles" background-interactive="True"}
+## Visualizing anomalies
 
-## {background-iframe="http://bbcx-investments.com/factor-investing/ghz-sorts" background-interactive="True"}
+[One-way sorts](https://learn-investments.org/factor-investing/quintiles)
+
+[Two-way sorts](https://learn-investments.org/factor-investing/two-way-sorts)
+
+<!-- ## {background-iframe="http://bbcx-investments.com/factor-investing/quintiles" background-interactive="True"}
+
+## {background-iframe="http://bbcx-investments.com/factor-investing/ghz-sorts" background-interactive="True"} -->
 
 ## Sorting in python
 
 ``` {.python}
 # Sorting function
-def cut(x):
+def cut_quintiles(x):
     try:
-        out = pd.qcut(x, 5, labels=labels)
+        out = pd.qcut(x, 5, labels=["Lo 20", "Qnt 2", "Qnt 3", "Qnt 4", "Hi 20"])
     except:
         out = pd.Series(np.nan, index=x.index)
     return out
-char = 'beta'
-df["quintile"] = df.groupby("date")[char].apply(cut)
+CHAR = 'beta'
+df["quintile"] = df.groupby("date")[CHAR].apply(cut_quintiles)    
 ```
 
 
@@ -126,12 +132,21 @@ For each time period, run a cross-sectional regression:$$ r_{i,t} = a_t + b_t \c
 
 - This produces a time-series of coefficients $b_t$.  If the characteristic is associated with higher returns, the time-series average of $\hat{b}_t$ should be different from zero!
 
+## Multivariate Fama-MacBeth
+
+- We can also characterize returns as a linear function of multiple characteristics:
+
+. . .
+
+For each time period, run a cross-sectional regression:$$ r_{i,t} = a_t + b_{1,t} \cdot \text{X1}_{i,t-1} + b_{2,t} \cdot \text{X2}_{i,t-1}+ e_{i,t} $$
+
 
 ## Regressions or sorts?
 
 - Regression restricts the relation between returns and the characteristic to be linear
 - Sorting allows for a nonlinear relation across stocks
   - It is more flexible, but it is reassuring if the relation is monotonically increasing or decreasing.
+- Recent literature has applied various machine learning techniques to better characterize the cross-section of expected returns.
 
 
 ## Persistence of anomalies
