@@ -1,5 +1,5 @@
 ---
-title: 'Modern Asset Pricing Models'
+title: 'Multifactor Models'
 author: "<br>Kevin Crotty<br>BUSI 448: Investments"
 format: 
     revealjs:
@@ -127,7 +127,7 @@ $$ SMB_t = \alpha_{\text{SMB}} + \beta_{\text{SMB}} (R_{m,t} - R_{f,t}) + \varep
 
 $$ HML_t = \alpha_{\text{HML}} + \beta_{\text{HML}} (R_{m,t} - R_{f,t}) + \varepsilon_{i,t} $$
 
-- Let's look at today's notebook.
+- Let's look at today's first notebook.
 - Recall: non-zero alphas mean that the market portfolio is not mean-variance efficient
   - Investing in a portfolio of the market and a positive alpha portfolio leads to a higher Sharpe ratio.
 
@@ -267,10 +267,11 @@ $$ CMA_t = \alpha_{\text{CMA}} + \beta_{\text{CMA}} (R_{m,t} - R_{f,t}) + \varep
 # Expected return estimates
 ## Factor models and E[r] estimates
 
-- For a given stock, we need two ingredients to construct an expected return estimate.
+- For a given stock, we need three ingredients to construct an expected return estimate.
 
 1. Factor loadings ($\beta_i, s_i, h_i, r_i, c_i$)
 2. Factor risk premia ($\lambda_{\text{mkt}}$, $\lambda_{\text{smb}}$, $\lambda_{\text{hml}}$, $\lambda_{\text{rmw}}$, $\lambda_{\text{cma}}$)
+3. The risk-free rate
 
 - We have previously discussed the market risk premium.
 - Now we want to estimate the other risk premiums
@@ -282,16 +283,12 @@ Using the estimated factor loadings and estimates of the factor risk permia, the
 
 $$ E[R_i] = R_f + \hat{\beta}_i \hat{\lambda}_{\text{mkt}} + \hat{s}_i \hat{\lambda}_{\text{smb}} + \hat{h}_i \hat{\lambda}_{\text{hml}} + \hat{r}_i \hat{\lambda}_{\text{rmw}} + \hat{c}_i  \hat{\lambda}_{\text{cma}}$$
 
-- Let's look at an example.
-
-## {background-iframe="http://bbcx-investments.com/factor-investing/ff-costequity" background-interactive="True"}
-
-
-
+- Let's look at an example on the [website](https://learn-investments.org/factor-investing/ff-costequity)
+- A notebook implementing this approach is on the [binder site](https://mybinder.org/v2/gh/kpcrotty/busi448_binder/HEAD)
 
 # Characteristic regressions
 
-## Fama-MacBeth Cross-sectional approach
+## Fama-MacBeth cross-sectional approach
 
 - We could also simply use the cross-sectional relationship between realized returns and lagged characteristics to characterize expected returns.
 - We will use $N$ characteristics guided by the empirical record so far
@@ -301,7 +298,7 @@ $$ E[R_i] = R_f + \hat{\beta}_i \hat{\lambda}_{\text{mkt}} + \hat{s}_i \hat{\lam
 
 1. Run cross-sectional regressions for 120 months of returns $$ R_{it}-R_{ft} = a_t + \sum_{j=1}^N b_{j,t}\cdot \text{characteristic}_{it-1} + e_{it}$$
 2. Take average of each characteristic's time-series of $b_{jt}$s $$\overline{b}_{j}= \frac{1}{120} \sum_{t=1}^{120} b_{j,t}$$
-3. Expected return estimate $\tau$ is: $$E[R_{i\tau}] = R_{f\tau} +  \sum_{j=1}^N \overline{b}_{j} \cdot \text{characteristic}_{i\tau-1} $$
+3. Expected return estimate $\tau$ is: $$E[R_{i\tau}] = R_{f\tau} +  \overline{a} + \sum_{j=1}^N \overline{b}_{j} \cdot \text{characteristic}_{i\tau-1} $$
 
 - Let's look at how to implement this
 
