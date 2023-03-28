@@ -294,7 +294,7 @@ $$ E[R_i] = R_f + \hat{\beta}_i \hat{\lambda}_{\text{mkt}} + \hat{s}_i \hat{\lam
 - We will use $N$ characteristics guided by the empirical record so far
 
 
-# The procedure {.smaller}
+## The procedure {.smaller}
 
 1. Run cross-sectional regressions for 120 months of returns $$ R_{it}-R_{ft} = a_t + \sum_{j=1}^N b_{j,t}\cdot \text{characteristic}_{it-1} + e_{it}$$
 2. Take average of each characteristic's time-series of $b_{jt}$s $$\overline{b}_{j}= \frac{1}{120} \sum_{t=1}^{120} b_{j,t}$$
