@@ -14,7 +14,7 @@ format:
             width: wide
             numbers: true             
 execute:
-    echo: true
+    echo: false
     freeze: auto
 jupyter: python3
 ---
@@ -35,7 +35,7 @@ jupyter: python3
 - Duration
 :::
 
-## Fixed Income Risks
+## Fixed Income Topics
 
 - Interest rate risk
   - Duration  
@@ -59,13 +59,22 @@ $$ P = \frac{C}{(1+y/m)}+\frac{C}{(1+y/m)^2}+...+\frac{C+FACE}{(1+y/m)^T}$$
 where $C$ is the coupon payment of the bond.
 
 
+
+# Interest Rate Risk
+
 ## Duration defined {.smaller}
 
 $$ P = \frac{C}{(1+DR)} + \frac{C}{(1+DR)^2}+ \frac{C}{(1+DR)^3}+ ... + \frac{C+FACE}{(1+DR)^T} $$
 
+. . .
+
 We can rewrite this as:
 $$ P = PV(CF_{t_1}) + PV(CF_{t_2})+ PV(CF_{t_3})+ ... + PV(CF_{t_T}) $$
-where $t_1$ is the time of the first cash-flow in years.  Now divide both sides by $P$:
+where $t_1$ is the time of the first cash-flow in years.  
+
+. . .
+
+Now divide both sides by $P$:
 
 $$ 1 = \frac{PV(CF_{t_1})}{P} + \frac{PV(CF_{t_2})}{P}+ \frac{PV(CF_{t_3})}{P}+ ... + \frac{PV(CF_{t_T})}{P} $$
 
@@ -74,7 +83,7 @@ $$ 1 = \frac{PV(CF_{t_1})}{P} + \frac{PV(CF_{t_2})}{P}+ \frac{PV(CF_{t_3})}{P}+ 
 Each term on the RHS is a weight!
 
 
-# Interest Rate Risk
+
 
 ## Duration defined {.smaller}
 
@@ -130,8 +139,34 @@ fig.show()
 
 ## What happens to duration as:
 
-- Maturity increases
-- Coupon rate increases
+- Maturity increases?
+- Coupon rate increases?
+
+
+
+
+
+
+
+
+## Duration is related to interest rate risk! {.smaller}
+
+For a change in yield $y$ of $\Delta y$, the percent change in price is:
+$$\frac{\Delta P}{P} \approx - \left[ \frac{\text{duration}}{1+DR} \right] \cdot \Delta y.$$
+
+The term in brackets is **modified duration**.
+
+. . . 
+
+Alternatively, we can work in prices rather than returns:
+
+$$ P_{\text{new}} \approx P_0 - P_0 \cdot \left[ \frac{\text{duration}}{1+DR} \right] \cdot \Delta y $$
+
+
+. . . 
+
+Let's go to today's notebook and calculate duration
+
 
 
 ## Duration and the bond pricing function
@@ -162,8 +197,8 @@ CR  = 0.05          # annual coupon rate
 YTM = 0.10          # annual yield to maturity
 NOP = 1             # payments per year
 PRINCIPAL = 100     # face value of the bond
-TTM  = 40
-DELTA_YIELDS    = np.arange(-0.02,0.025,0.005)
+TTM  = 80
+DELTA_YIELDS    = np.arange(-0.05,0.055,0.005)
 column_index = ['act_price','approx_price']
 df = pd.DataFrame(dtype=float,columns=column_index,index=DELTA_YIELDS)
 df.index.name='delta_ytm'
@@ -190,21 +225,6 @@ fig.update_layout(legend=dict(yanchor="top", y =0.99, xanchor="left", x=0.6))
 fig.show()
 
 ```
-
-
-## Duration is related to interest rate risk!
-
-For a change in yield $y$ of $\Delta y$, the percent change in price is:
-$$\frac{\Delta P}{P} \approx - \left[ \frac{\text{duration}}{1+DR} \right] \cdot \Delta y.$$
-
-The term in brackets is **modified duration**.
-
-. . . 
-
-Alternatively, we can work in prices rather than returns:
-
-$$ P_{\text{new}} \approx P_0 - P_0 \cdot \left[ \frac{\text{duration}}{1+DR} \right] \cdot \Delta y $$
-
 
 ## How good is this approximation?
 Consider two bonds with

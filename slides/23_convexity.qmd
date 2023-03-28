@@ -14,7 +14,7 @@ format:
             width: wide
             numbers: true             
 execute:
-    echo: true
+    echo: false
     freeze: auto
 jupyter: python3
 ---
@@ -74,8 +74,8 @@ CR  = 0.05          # annual coupon rate
 YTM = 0.10          # annual yield to maturity
 NOP = 1             # payments per year
 PRINCIPAL = 100     # face value of the bond
-TTM  = 40
-DELTA_YIELDS    = np.arange(-0.02,0.025,0.005)
+TTM  = 80
+DELTA_YIELDS    = np.arange(-0.05,0.055,0.005)
 column_index = ['act_price','approx_price']
 df = pd.DataFrame(dtype=float,columns=column_index,index=DELTA_YIELDS)
 df.index.name='delta_ytm'
@@ -106,7 +106,7 @@ fig.show()
   - Where and why is it a bad approximation?
 
 
-## Moving beyond the linear approximation
+## Moving beyond the linear approximation {.smaller}
 
 - Can we improve on the relationship?
   - Hint: think back to your math classes
@@ -122,7 +122,7 @@ $$ \frac{\Delta P}{P(y)} \approx \frac{1}{P}\cdot\frac{dP}{dy} \cdot \Delta y + 
 
 
 
-## Convexity  
+## Convexity   {.smaller}
 
 - **Convexity** captures curvature of the pricing function
   - second derivative of price w.r.t. yield, scaled by price.
@@ -145,7 +145,7 @@ The second-order return approximation is:
 
 $$ \frac{\Delta P}{P(y)} \approx -\text{mduration} \cdot \Delta y + 0.5\cdot\text{convexity}\cdot (\Delta y)^2.$$
 
-- Let's take a look at how this approximation performs.
+- Let's take a look at today's notebook to see how this approximation performs.
 
 
 ## Desirability of convexity
