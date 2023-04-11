@@ -1,0 +1,180 @@
+---
+title: 'Asset Management and Performance Evaluation'
+author: "<br>Kevin Crotty<br>BUSI 448: Investments"
+format: 
+    revealjs:
+        incremental: true
+        logo: RiceLogo.png
+        footer: "BUSI 448"
+        self-contained: true
+        code-fold: true
+        theme: [default, custom.scss]
+        show-slide-number: print
+        menu: 
+            width: wide
+            numbers: true             
+execute:
+    echo: false
+    freeze: auto
+jupyter: python3
+---
+
+# Economics of Asset Management
+
+## Efficient Markets Theory
+
+**Market efficiency**: Prices reflect all available information.  
+
+. . .
+
+The "forms" of efficiency differ only in their definition of "all":
+
+- **Weak**: Prices reflect all historical trade data (past prices, trends, volumes, moving averages)
+- **Semi-strong**: Prices reflect all publicly available information (SEC filings, news reports, etc.)
+- **Strong**: Prices reflect all relevant information (public and private).
+
+## Grossman-Stiglitz Paradox
+
+- Suppose all information is already reflected in prices
+- If the cost of gathering information is large relative to the benefits that can be derived from trading on that information, investors will have no incentive to perform the necessary analysis.
+- If all information is reflected in prices, then there is nothing to be gained from stock analysis.
+- If no one has incentive to gather/analyze information, no one will be able to trade on said information.
+- If no one can trade on the information, then how does the information get incorporated in the price?  
+
+## Implications for market efficiency
+
+The same intuition, in principle, applies to semi-strong form and weak-form efficiency:
+
+- If there is nothing to be gained from fundamental analysis, no one will do it.
+- If there is nothing to be gained from technical analysis, no one will do it.
+
+. . .
+
+What are the implications for market efficiency?
+
+
+## Equilibrium for Asset Management
+
+Consider a world where
+
+1. investors try to invest with skilled managers
+2. managers face decreasing returns to scale.
+
+- Where will investors move their money?
+- What should happen to the performance (*in returns*) of skilled managers over time?
+- What will happen to underperforming funds?
+
+
+
+# Alphas
+
+## How should we evaluate managers?
+
+- One way: $$ \text{Abnormal Return} = r_{\text{portfolio}} - r_{\text{benchmark}}$$
+
+- How should we choose the benchmark?
+
+## Recall the Market Model Regression
+
+$$ r_{\text{portfolio},t} - r_{f,t} = \alpha_p + \beta_p (r_{m,t} - r_{f,t}) + \varepsilon_{p,t} $$
+
+## Alpha is a benchmark-adjusted average return! {.smaller}
+
+$$ \alpha_p = \frac{1}{T} \sum_{t=1}^T [r_{\text{portfolio}} - r_{f,t} - \hat{\beta}_p \cdot (r_{m,t} - r_{f,t})] $$
+
+where the benchmark return is:
+
+$$ r_{\text{benchmark},t} = r_{f,t} + \hat{\beta}_p \cdot (r_{m,t} - r_{f,t}) $$
+
+
+## Factor-model alphas {.smaller}
+
+The alpha from the Fama-French-Carhart model $$ r_{p,t} - r_{f,t} = \alpha_p + \beta_p (r_{m,t} - r_{f,t}) + s_p SMB_t + h_p HML_t + m_p WML_t+ \varepsilon_{p,t} $$ is also an average benchmark-adjusted return.  
+
+. . . 
+
+The benchmark return is:
+$$ r_{f,t} + \hat{\beta}_p \cdot (r_{m,t} - r_{f,t}) + \hat{s}_p SMB_t + \hat{h}_p HML_t + \hat{m}_p WML_t. $$ 
+
+. . . 
+
+The benchmark-adjusted (active) return each period is:
+$$ \alpha_p + \varepsilon_{p,t}.$$
+
+
+## Today's first notebook
+
+- We will estimate alphas for a large sample of actively managed mutual funds.
+
+- What do you think the distribution of alphas will look like?
+  - *Draw a histogram with the outcome variable being $\alpha$*
+
+- Can we predict funds leaving the sample?
+
+- How important is survivorship bias?
+
+## Today's second notebook
+
+- Let's assess the performance of a set of momentum ETFs.
+
+
+# Attribution Analysis
+
+## Understanding performance
+
+- It is often useful to explain the source of a fund's performance.  Such analysis is called **attribution analysis**
+
+- We will consider attribution analysis based on the Fama-French-Carhart model.
+
+## FFC return components
+
+We can write a portfolio's return each period as the sum of:
+
+1. Active return: $\hspace{4.2em}\hat{\alpha}_p + \varepsilon_{p,t}$
+2. Market benchmark: $\hspace{0.5em}r_{f,t} + \hat{\beta}_p \cdot (r_{m,t} - r_{f,t})$
+3. Size exposure:    $\hspace{4.0em}\hat{s}_p  \cdot SMB_t$
+4. Value/growth exposure: $\hspace{0.5em}\hat{h}_p  \cdot HML_t$
+5. Momentum exposure: $\hspace{1.0em}\hat{m}_p  \cdot WML_t$
+
+
+## Today's third notebook
+
+Let's run an attribution analysis for a fund by plotting the cumulative returns of each component over time.
+
+
+# Market Timing
+
+## Asset management skill
+
+How can asset managers earn their fees?
+
+- They may be good at picking stocks that will perform well in the future
+- They may be good at timing the overall market.
+
+## Testing for Market Timing Ability
+
+If we plot fund excess returns versus market excess returns, what should the shape of scatter plot look like for a successful market timer?
+
+## Henriksson-Merton Model {.smaller}
+
+Consider the following model:
+$$ r_{p,t} - r_{f,t} = \alpha_p + b_p (r_{m,t} - r_{f,t}) + c_p (r_{m,t} - r_{f,t})^+ + \varepsilon_{p,t} $$
+
+where $(r_{m,t} - r_{f,t})^+$ equals the market excess return if it is positive, and zero otherwise.
+
+. . .
+
+What should be true of $c_p$ for successful market timers?
+
+## Today's fourth notebook
+
+- Let's look at some examples of good and bad market timing. 
+
+- How does market-timing impact market-model alphas?
+
+
+# For next time: Taxes
+
+<br><br><br><br>
+
+![](RiceLogo.png){fig-align="center"}
