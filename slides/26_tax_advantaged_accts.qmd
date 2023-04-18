@@ -1,5 +1,5 @@
 ---
-title: 'Tax-advantaged Accounts'
+title: 'Taxes'
 author: "<br>Kevin Crotty<br>BUSI 448: Investments"
 format: 
     revealjs:
@@ -23,8 +23,10 @@ jupyter: python3
 **Last time**:
 
 ::: {.nonincremental}
-- Credit risk
-- Credit ratings
+- Economics of asset mgt
+- Alphas
+- Attribution Analysis
+- Market Timing
 :::
 
 . . . 
@@ -32,10 +34,77 @@ jupyter: python3
 **Today**:
 
 ::: {.nonincremental}
-- Tax-advantaged accounts
+- Tax-advantaged Accounts
+- Tax-advantaged Securities
 :::
 
-# Types of Tax Advantages
+
+# Taxation Primer
+
+## Tax Brackets
+
+**Progressive taxation**: income is taxed at higher rates as more is earned
+
+- The first dollar earned is taxed less than the last dollar earned.
+
+- **Marginal** tax rate refers to the tax rate owed on next dollar you earn.
+
+## Tax Brackets
+
+![](../images/taxbracket_2022.png)
+
+## Deductions shield income from taxation
+
+- Some retirement savings are tax-deductible
+
+- Standard deductions vs. itemized deductions
+  - Single filer: $12,950
+  - Married filing jointly: $25,900
+
+- Itemized deductions
+  - Mortgage interest
+  - State and local taxes (SALT)
+  - Charitable contributions
+
+## General schedule
+
+Gross Income
+
+-Tax-Deductible Savings Contributions
+
+[-Other Deductible Items]{.underline}
+
+=Adjusted Gross Income (AGI)
+
+[-Standard or Itemized Deduction]{.underline}
+
+=Taxable Income
+
+- Tax is calculated based on taxable income and filing status
+
+## Example 
+
+- Consider a single investor earning $65,000 per year.  
+- Assume they take the standard deduction of $12,590.
+- Under the 2022 tax rates & brackets, what is the investor's tax bill if they do not have any other deductions?
+- What is the investor's tax bill if they have contributed $6,000 to a traditional IRA?
+
+## Taxes and investments
+
+- Investments are made in the hopes of generating income or price appreciation.  
+- The source of the return can impact the taxes owed.
+- Interest income is taxed at ordinary income rates.
+- Capital gains are taxed at different capital gains rates.
+  - Is holding period short- or long-term?
+  - Limits on deductibility of capital losses
+  - Gain is calculated relative to your **cost basis**
+
+## 2022 LT capital gains rates
+
+![](../images/capgains_rates_2022.png)
+
+
+# Tax-advantaged Accounts
 
 <!-- The following is partially based off of Scholes, Wolfson, Erickson, Maydew, and Shevlin's Taxes and Business Strategy text.   -->
 
@@ -72,7 +141,7 @@ $$FV_1 = \Pi_{t=1}^T \left(1+r_t(1-\tau_{oi,t})\right) \,. $$
 
 - Non-deductible IRA
 - Contributions are in after-tax dollars
-- Taxation on gains is deferred until withdrawal at which time they are taxed as ordinary income
+- Taxation on gains is deferred until withdrawal at which time they are taxed as *ordinary income*
 
 . . . 
 
@@ -84,49 +153,118 @@ $$
 
 ## Tax treatment #3
 
+- Non-dividend stock
+- Investment made with after-tax dollars
+- Taxation on gains is deferred until sale at which time they are taxed as *capital gains*
+
+. . . 
+
+$$ \begin{align*}
+FV_3 =& \Pi_{t=1}^T (1+r_t) - \tau_{cg,T} \left[\Pi_{t=1}^T (1+r_t) - 1\right] \\
+=& (1-\tau_{cg,T})\Pi_{t=1}^T (1+r_t) + \tau_{cg,T}  
+\end{align*}
+$$
+
+
+## Tax treatment #4
+
 - Roth IRA or a 529 college savings plan
 - Contributions are made using after-tax dollars and earnings are tax-exempt
 
 . . . 
 
-A dollar of after-tax investment turns into $$FV_3 = \Pi_{t=1}^T \left(1+r_t\right) \,. $$
+A dollar of after-tax investment turns into $$FV_4 = \Pi_{t=1}^T \left(1+r_t\right) \,. $$
 
 
-## Tax treatment #4
+## Tax treatment #5
 
 - Traditional IRA or 401(k)/403(b) retirement plan. 
 - Contributions are made using pre-tax dollars (that is, contributions are tax deductible)
 - Earnings are tax-deferred $\rightarrow$ withdrawals taxed at ordinary income rates
   - withdrawals of both initial investment and gains
 
-## Tax treatment #4 (cont'd)
+## Tax treatment #5 (cont'd)
 - Because the contribution is tax deductible, you save $\tau_{oi,0}$ of taxes that would have otherwise been paid.
 - The after-tax cost upon contribution is thus $1-\tau_{oi,0}.$
 - The investment account grows to a time $T$ value of $\Pi_{t=1}^T \left(1+r_t\right)$ which is all taxed at withdrawal generating an after-tax time $T$ value of $(1-\tau_{oi,T})\Pi_{t=1}^T \left(1+r_t\right)$.  
-- After-tax return (after-tax FV/after-tax contribution): $$FV_4 = \frac{(1-\tau_{oi,T})\Pi_{t=1}^T \left(1+r_t\right)}{1-\tau_{oi,0}}$$
+
+## Tax treatment #5 (cont'd)
+
+After-tax return (after-tax FV/after-tax contribution): $$FV_5 = \frac{(1-\tau_{oi,T})\Pi_{t=1}^T \left(1+r_t\right)}{1-\tau_{oi,0}}$$
 
 ## Traditional vs. Roth IRAs
 
-**If $\tau_{oi,0}=\tau_{oi}$, traditional and Roth IRAs are equivalent on an after-tax basis.**
+**If $\tau_{oi,0}=\tau_{oi,T}$, traditional and Roth IRAs are equivalent on an after-tax basis.**
 
 - Roth IRAs are preferred if an investor's tax rate is expected to be higher at withdrawal.
   - Better to pay taxes at low rate today
-- Traditional IRAs are preferred if an investors tax rate is expected to be lower at withdrawl.
+- Traditional IRAs are preferred if an investor's tax rate is expected to be lower at withdrawl.
   - Better to shield taxes at high rate today
 
 
-# Asset Location 
+## Asset location vs. asset allocation
 
-## Asset Location
+**Asset allocation**: the choice of how much of each asset to hold
 
-**Asset location** refers to the choice of where to locate different asset classes if different tax-advantaged accounts are available.
+**Asset location**: the choice of where to locate different asset classes if different tax-advantaged accounts are available.
 
 - This is a challenging problem!
+- Investors with different expected tax rates may come to different allocation and location decisions.
+
+- Rule of thumb: Hold more heavily taxed assets (corporate and Treasury bonds) in tax-deferred accounts and lightly-taxed assets (stocks) in taxable accounts
 
 
-## TBD...
+# Tax-advantaged Securities
 
-# For next time: Tax-advantaged Assets
+## Mortgages
+
+- For households, mortgage interest is tax-deductible, up to some limits.
+  - Deduction reduces taxable income
+  - Tax savings is: $$\tau_{\text{marginal}} \cdot \text{Deductible Mortgage Interest}$$
+
+## 2022 tax year
+- Mortgage interest expense on principal up to $750,000 is tax deductible.
+- Taxpayer must itemize deductions rather than take the standard deduction
+  - Single filer: $12,950
+  - Married filing jointly: $25,900
+
+## Example
+
+- The annual interest expense for a $500,000 mortgage with a 5% interest rate is $24,832.47 in the first year.
+- For an investor with a 24% marginal tax rate and a $12,950 standard deduction, what is the incremental value of itemizing deductions?
+
+## Municipal Bonds
+
+- Municipal bonds: issued by states and municipalities
+- In an investor's home state, muni coupons and original issue discount (OID) are exempt from state income tax
+  - US treasury bonds are also exempt from state and local taxes
+- Some munis qualify as exempt from federal income tax
+- Munis are tax-exempt only at issuance
+
+## Muni yields
+
+- Munis are primarily held by individuals (in the issuing state)
+- These investors accept a lower yield than they would for a comparable taxable bond.
+
+# Other tax topics
+
+## ETFs versus mutual funds
+
+- ETFs are generally more tax-efficient than mutual funds.
+- Flows in and out of mutual funds may generate sales of underlying assets in the mutual fund.
+  - Resulting capital gains are passed on to the fund investor
+- ETF investors thus are able to substantially defer capital gains taxation
+
+## Roth IRAs and skewed returns
+
+- Withdrawals from Roth IRAs do not incur any tax.
+- This tax treatment can be extraordinarily valuable for highly skewed assets.
+- A famous example is Peter Thiel (PayPal founder and venture capitalist)
+- Thiel's Roth IRA is over $5 billion!
+- Congress will likely cap the maximum balance that will be tax-free
+- Paying attention to taxes pays...sometimes big!
+
+# For next time: Review
 
 <br><br><br><br>
 

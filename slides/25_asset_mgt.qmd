@@ -19,6 +19,26 @@ execute:
 jupyter: python3
 ---
 
+
+## Where are we?
+**Last time**:
+
+::: {.nonincremental}
+- Credit risk
+- Credit ratings
+:::
+
+. . . 
+
+**Today**:
+
+::: {.nonincremental}
+- Economics of asset mgt
+- Alphas
+- Attribution Analysis
+- Market Timing
+:::
+
 # Economics of Asset Management
 
 ## Efficient Markets Theory
