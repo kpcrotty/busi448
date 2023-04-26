@@ -1,5 +1,5 @@
 ---
-title: 'Asset Managers'
+title: 'Review'
 author: "<br>Kevin Crotty<br>BUSI 448: Investments"
 format: 
     revealjs:
@@ -18,5 +18,246 @@ execute:
     freeze: auto
 jupyter: python3
 ---
+
+## Exam Information
+
+- Thursday, April 27th from 7-10 pm
+- McNair 214
+- Open notes and book
+- You may use:
+  - the canvas site and notes
+  - the binder sites
+  - Jupyter notebook with Python
+  - Excel
+  - the interactive website
+
+## What to expect
+
+- The exam will be administered through Canvas, like the midterm and problem sets
+- Questions will be a mix of true/false, multiple choice, numerical and short answer
+- Please study beforehand!
+  - Looking up and learning concepts in real-time is not a recipe for success.
+
+
+# Shameless Plug
+
+## Data-Driven Investments Lab Course
+
+- Quantitative portfolio management lab course
+- Currently offered to MBAs and Master's of Data Science students
+- Develop, backtest, and implement equity trading strategies
+- Will be offered in spring semester
+- Research-based approach to portfolio management
+
+# Some Review
+
+## This course as a portfolio
+
+1. Introductory Material (19%)
+2. Financial Markets (23%)
+3. Optimal Portfolios (23%)
+4. Equity Topics (15%)
+5. Fixed Income Topics (12%)
+6. Performance Evaluation (4%)
+7. Taxes (4%)
+
+# Introductory Material (19%)
+
+## Savings problems
+
+- Annuity calculations
+- Basic bond prices
+- Saving for retirement
+- Real and nominal cash flows and rates
+
+## Returns
+
+- How to calculate 
+- Compounding returns
+- Arithmetic vs. geometric averages
+- Dispersion: variance and standard deviation
+- Comovement: covariance and correlation
+- Calculating portfolio return characteristics
+  - Expected returns; variance; SD
+
+# Financial Markets (23%)
+
+## Equity Market
+
+- Over long horizons, average returns in the US stock market have exceeded those of bonds.
+- Stock returns are risky; that is, volatile.
+- Stock return distributions are fat-tailed and negatively skewed.
+- Past aggregate returns do **not** predict future aggregate returns.
+- Volatility is time-varying and persistent.
+
+## Treasury Markets
+
+- Term structure of interest rates
+- Spot rates
+  - zero-coupon bonds
+  - bootstrapping from coupon bonds
+
+## Arbitrage
+
+- Free risk-free return
+- Bootstrapping spot rates based on **no-arbitrage** pricing
+- Law of One Price says that price of bond = price of replicating portfolios
+  - If not, there exists an arbitrage
+
+
+## Markets and Trading
+
+- Adverse selection: taking advantage of information asymmetry
+- Winner's Curse: you might regret winning an auction!
+- Bid-ask spreads in limit order books are partially due to adverse selection concerns
+
+## Leverage and Margin
+
+- **Leverage** is investing with borrowed money
+  - amplifies good and bad returns
+- **Margin**: borrowing money from your broker to buy assets
+- Brokers and regulators require initial and maintenance margins to protect against default risk
+- Price movements against your position may generate margin calls.
+
+## Short-selling and Limits to Arbitrage
+
+- Borrow the asset, sell it **short**, then buy back later
+- Margin accounts on short positions require extra collateral to protect against price increases (liability increases)
+- In practice, arbitrage trades are limited by frictions like equity borrowing fees and margin requirements.
+- Prices might move the wrong way before they correct!
+
+
+
+# Optimal Portfolios (23%)
+
+## Diversification
+
+- **Diversification**: portfolios of assets may reduce overall risk 
+- **Efficient Frontier**: the set of portfolios that minimize portfolio risk for a given target expected return
+- **Global Minimum Variance**: portfolio of risky assets with the smallest variance
+
+## Theory
+
+- Capital allocation with a risk-free asset
+- **Tangency portfolio**: portfolio of risky assets with the highest Sharpe ratio
+- **Capital Allocation Line**: set of portfolios combining risk-free asset and tangency portfolio
+- Location on CAL depends on investor's **risk aversion**
+
+## Borrowing Frictions
+
+- Borrowing rates usually exceed savings rates
+- For a single risky asset, this leads to a kinked CAL
+- Efficient frontier consists of
+  - a CAL consisting of saving and maximum Sharpe ratio portfolio w.r.t savings rate
+  - a portion of the all-risky-asset frontier
+  - a CAL consisting of borrowing and maximum Sharpe ratio portfolio w.r.t borrowing rate
+
+## Shorting Constraints
+
+- Some investors may not be able to short assets
+- This reduces the investment opportunity set
+- Recall how to implement efficient and tangency portfolios with position limits
+
+## Rebalancing
+
+- Assuming our inputs stay constant over time, price movements will cause portfolios to drift from optimal weights over time.
+- Rebalancing portfolios back to optimal weights improves expected performance.
+
+## Input Sensitivity
+
+- Mean-variance optimization is sensitive to inputs
+- Position limits can mitigate error-maximization problem
+- In practice, some try to estimate a subset of the inputs
+  - GMV (assume equal means)
+  - Risky parity (assume equal means and zero corr)
+  - Equal-weighted (equal means & SDs; zero corr)
+
+
+
+# Equity Topics (15%)
+
+## Market Model
+
+- $\beta$ measures sensitivity to market returns
+- $\alpha$ measures historical average abnormal return 
+- $\beta$'s can be used in estimating the covariance matrix with fewer parameters
+
+## CAPM
+
+- Widely used model for expected equity returns
+- Requires 3 inputs
+  - Risk-free rate
+  - Beta
+  - Market risk premium
+- Performs poorly in explaining differences in stock return empirically
+  - Security market line is too flat
+
+## Cross-sectional Predictability
+
+- Sorting stocks on characteristics has been more successful in explaining cross-sectional differences in returns than beta
+  - Market cap, book-to-market, momentum, liquidity, idiosyncratic volatility
+- Cross-sectional regressions of returns on lagged characteristics are another method of explaining returns
+
+
+## Multifactor Models
+
+- Beyond the market excess return as a factor
+- Size: Small Minus Big
+- Value: High B/M Minus Low
+- Momentum: Winners Minus Losers
+- Op. profitability: Robust Minus Weak
+- Investment: Conservative Minus Aggressive
+
+
+
+# Fixed Income Topics (12%)
+
+## Duration
+
+- **Duration** is a weighted average time to maturity
+- Duration allows us to quickly compare interest rate risk for bonds with different coupons, maturity, yields, etc.
+- Duration is also the horizon at which reinvestment risk and interest risk cancel out
+
+## Convexity
+
+- **Convexity** measures the curvature of the pricing function
+- Duration + Convexity allow for better approximation of pricing function
+- Investors like positive convexity (standard coupon bond)
+- Issues prefer negative convexity (callable bonds / MBS)
+
+## Credit Risk
+
+- **Credit risk**: risk issuer will not pay promised CFs
+- Credit ratings are a standard way to measure
+- Yields higher for lower rated debt
+- Yield $\neq$ expected return!
+
+# Performance Evaluation (4%)
+
+## Evaluating Asset Managers
+
+- $\alpha$'s from a factor model are average benchmark-adjusted average returns
+- **Atrribution analysis**: performance can be decomposed into the benchmark component(s) (factor loadings times factor realizations) and the active component.
+
+
+
+# Taxes (4%)
+
+## Tax-efficient Investing
+
+- Calculating Taxes
+- Effects of deductibility of tax-advantaged savings
+  - Traditional IRA/401(k)
+- Effects of deferral of taxation
+  - Non-dividend stock; non-deductible IRA
+
+
+# Thanks and Good Luck!
+
+<br><br><br><br>
+
+![](RiceLogo.png){fig-align="center"}
+
+
 
 
