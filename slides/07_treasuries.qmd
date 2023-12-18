@@ -130,7 +130,7 @@ fig.update_xaxes(title='Maturity', tickformat=".0f")
 fig.show()
 ```
 
-- [BBCX yield curves](http://bbcx-investments.com/fixed-income/termstructure)
+- [dashboard: yield curves](https://learn-investments.rice-business.org/fixed-income/termstructure)
 
 <!-- ## {background-iframe="http://bbcx-investments.com/fixed-income/termstructure" background-interactive="True"} -->
 
@@ -198,7 +198,7 @@ fig.show()
 
 ## Stocks, bonds, and gold returns
 
-- [BBCX stocks/bonds/gold](http://bbcx-investments.com/risk/sbb)
+- [dashboard: stocks/bonds/gold](https://learn-investments.rice-business.org/risk/sbb)
 <!-- ## {background-iframe="http://bbcx-investments.com/risk/sbb" background-interactive="True"} -->
 
 

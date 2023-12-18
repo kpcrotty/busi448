@@ -177,7 +177,7 @@ figtbl(mn1,mn2,sd1,sd2,corr12,"US Equity", "Developed Intl")
 
 Lower correlation between assets results in greater potential diversification benefits.
 
-[BBCX website example](http://bbcx-investments.com/portfolios/two-assets)
+[dashboard example](https://learn-investments.rice-business.org/portfolios/two-assets)
 
 <!-- ## {background-iframe="http://bbcx-investments.com/portfolios/two-assets" background-interactive="True"} -->
 
@@ -388,7 +388,7 @@ figtbl(mn1, mn2, mn3, sd1, sd2, sd3, corr12, corr13, corr23, "US Equity", "Devel
 
 
 ## Correlation and diversification: 3 risky assets
-[BBCX website](http://bbcx-investments.com/portfolios/three-assets)
+[dashboard](https://learn-investments.rice-business.org/portfolios/three-assets)
 
 <!-- ## {background-iframe="http://bbcx-investments.com/portfolios/three-assets" background-interactive="True"} -->
 
@@ -543,7 +543,7 @@ $$ \text{var}(r_p) \underset{N\rightarrow \infty}{\longrightarrow} 0\cdot\sigma^
 
 - In large portfolios, $\text{var}[r_i]$'s effectively diversified away, but not $\text{cov}[r_i,r_j]$'s. 
 
-- [BBCX website](http://bbcx-investments.com/portfolios/diversification)
+- [dashboard](https://learn-investments.rice-business.org/portfolios/diversification)
 
 <!-- ## {background-iframe="http://bbcx-investments.com/portfolios/diversification" background-interactive="True"} -->
 

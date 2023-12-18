@@ -87,9 +87,9 @@ jupyter: python3
 
 ## Visualizing anomalies
 
-[One-way sorts](https://learn-investments.org/factor-investing/quintiles)
+[One-way sorts](https://learn-investments.rice-business.org/factor-investing/quintiles)
 
-[Two-way sorts](https://learn-investments.org/factor-investing/two-way-sorts)
+[Two-way sorts](https://learn-investments.rice-business.org/factor-investing/two-way-sorts)
 
 <!-- ## {background-iframe="http://bbcx-investments.com/factor-investing/quintiles" background-interactive="True"}
 

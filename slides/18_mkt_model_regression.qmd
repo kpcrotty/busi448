@@ -59,7 +59,7 @@ $$ r_{i,t} - r_{f,t} = \alpha_i + \beta_i (r_{m,t} - r_{f,t}) + \varepsilon_{i,t
 
 . . .
 
-[Visualization](https://learn-investments.org/capm/alphas-betas)
+[Visualization](https://learn-investments.rice-business.org/capm/alphas-betas)
 
 <!-- ## {background-iframe="https://learn-investments.org/capm/alphas-betas" background-interactive="True"} -->
 
@@ -95,7 +95,7 @@ if I were holding the market, could I have improved mean-variance efficiency by 
 
 . . . 
 
-[Visualization](https://learn-investments.org/capm/alphas-mve)
+[Visualization](https://learn-investments.rice-business.org/capm/alphas-mve)
 
 <!-- ## {background-iframe="https://learn-investments.org/capm/alphas-mve" background-interactive="True"} -->
 

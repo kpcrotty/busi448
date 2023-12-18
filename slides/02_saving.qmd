@@ -93,7 +93,7 @@ fig.show()
 - Write out series of cash flows and compound
 - Use `npf.fv` function 
   - `npf.fv(rate, n_periods, -pmt, -pv)`
-- Let's try both in today's [notebook](https://mybinder.org/v2/gh/kpcrotty/busi448_binder/HEAD)
+- Let's try both in today's [notebook](https://colab.research.google.com/github/kpcrotty/busi448/blob/main/class_notebooks/02_saving.ipynb)
 
 
 ## The savings/retirement problem

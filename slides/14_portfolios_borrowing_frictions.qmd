@@ -1325,9 +1325,9 @@ def opt_allocation2(means, cov, rf_save, rf_borrow, risk_aversion):
     return wgts_optimal
 ```
 
-## BBCX website resources
+## Learn Investments Dashboard resources
 
-[Optimal allocation with different rates](https://bbcx-investments.com/portfolios/optimal-two-rates)
+[Optimal allocation with different rates](https://learn-investments.rice-business.org/portfolios/optimal-two-rates)
 <!-- ## {background-iframe="http://bbcx-investments.com/portfolios/optimal-two-rates" background-interactive="True"} -->
 
 

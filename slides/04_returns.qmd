@@ -81,8 +81,8 @@ $$ R_t = \frac{P_t + AI_t + C_t - (P_{t-1}+AI_{t-1})}{P_{t-1}+AI_{t-1}} $$
 
 - Prices quoted as **clean prices**, which exclude accrued interest.
 - Trades between coupon payments transact at **dirty price**
-  - dirty price = clean price plus accrued interest [(BBCX)](http://bbcx-investments.com/fixed-income/clean-dirty)
-  - [sample price paths](http://bbcx-investments.com/fixed-income/clean-dirty-paths)
+  - dirty price = clean price plus accrued interest [(dashboard)](https://learn-investments.rice-business.org/fixed-income/clean-dirty)
+  - [sample price paths](https://learn-investments.rice-business.org/fixed-income/clean-dirty-paths)
 
 <!-- ## {background-iframe="http://bbcx-investments.com/fixed-income/clean-dirty" background-interactive="True"} -->
 

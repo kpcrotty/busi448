@@ -164,7 +164,7 @@ $$ \text{var}[r_p] = \sum_{i=1}^{N} w_i^2 \text{var}[r_i]+ 2 \sum_{j>i} w_i w_j 
 
 . . . 
 
-- [BBCX: general weights and correlations](http://bbcx-investments.com/portfolios/two-assets)
+- [dashboard: general weights and correlations](https://learn-investments.rice-business.org/portfolios/two-assets)
 <!-- ## {background-iframe="http://bbcx-investments.com/portfolios/two-assets" background-interactive="True"} -->
 
 

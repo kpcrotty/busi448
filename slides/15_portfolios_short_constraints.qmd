@@ -373,9 +373,9 @@ wgts_tangency = minimize(f, w0, bounds=bnds, constraints=cons).x
 ```
 
 
-## BBCX website resources
+## Learn Investments Dashboard resources
 
-[Investment opportunity set with short-sale constraints](https://bbcx-investments.com/portfolios/short-sales-constraints)
+[Investment opportunity set with short-sale constraints](https://learn-investments.rice-business.org/portfolios/optimal-two-rates/portfolios/short-sales-constraints)
 <!-- ## {background-iframe="http://bbcx-investments.com/portfolios/short-sales-constraints" background-interactive="True"} -->
 
 

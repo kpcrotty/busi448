@@ -164,7 +164,7 @@ What if this weren't the case?
 
 . . . 
 
-[Website](https://learn-investments.org/capm/costequity)
+[Website](https://learn-investments.rice-business.org/capm/costequity)
 
 ## CAPM and Investments
   
@@ -205,7 +205,7 @@ What if this weren't the case?
 
 . . . 
 
-[Visualization](https://learn-investments.org/capm/mrp_estimation)
+[Visualization](https://learn-investments.rice-business.org/capm/mrp_estimation)
 
 <!-- ## {background-iframe="http://bbcx-investments.com/capm/mrp_estimation" background-interactive="True"} -->
 
@@ -266,7 +266,7 @@ fig.show()
 
 . . . 
 
-[Website example](https://learn-investments.org/capm/sml-industries)
+[Website example](https://learn-investments.rice-business.org/capm/sml-industries)
 
 <!-- ## {background-iframe="https://bbcx-investments.com/capm/sml-industries" background-interactive="True"} -->
 

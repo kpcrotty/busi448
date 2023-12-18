@@ -283,8 +283,8 @@ Using the estimated factor loadings and estimates of the factor risk permia, the
 
 $$ E[R_i] = R_f + \hat{\beta}_i \hat{\lambda}_{\text{mkt}} + \hat{s}_i \hat{\lambda}_{\text{smb}} + \hat{h}_i \hat{\lambda}_{\text{hml}} + \hat{r}_i \hat{\lambda}_{\text{rmw}} + \hat{c}_i  \hat{\lambda}_{\text{cma}}$$
 
-- Let's look at an example on the [website](https://learn-investments.org/factor-investing/ff-costequity)
-- A notebook implementing this approach is on the [binder site](https://mybinder.org/v2/gh/kpcrotty/busi448_binder/HEAD)
+- Let's look at an example on the [dashboard](https://learn-investments.rice-business.org/factor-investing/ff-costequity)
+- A notebook implementing this approach is on [Colab](https://colab.research.google.com/github/kpcrotty/busi448/blob/main/class_notebooks/21b_factor_models_and_exprets.ipynb)
 
 # Characteristic regressions
 

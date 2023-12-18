@@ -1480,15 +1480,15 @@ If we have a target standard deviation, solve for $w_{\text{risky}}$:
 $$ \text{sd}[r_p] = w_{\text{risky}} \cdot \text{sd}[r_{\text{risky}}] $$
 
 
-## BBCX website resources
+## Learn Investments Dashboard resources
 
-[Manual search for optimal Sharpe ratio](https://bbcx-investments.com/portfolios/sharpe)
+[Manual search for optimal Sharpe ratio](https://learn-investments.rice-business.org/portfolios/sharpe)
 
-[3-asset tangency](https://bbcx-investments.com/portfolios/tangency)
+[3-asset tangency](https://learn-investments.rice-business.org/portfolios/tangency)
 
-[3-asset capital allocation](https://bbcx-investments.com/portfolios/optimal)
+[3-asset capital allocation](https://learn-investments.rice-business.org/portfolios/optimal)
 
-[N-asset portfolios](https://bbcx-investments.com/portfolios/optimal-N)
+[N-asset portfolios](https://learn-investments.rice-business.org/portfolios/optimal-N)
 
 
 # For next time: Practical Issues in Portfolio Optimization

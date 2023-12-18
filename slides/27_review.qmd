@@ -21,15 +21,14 @@ jupyter: python3
 
 ## Exam Information
 
-- Thursday, April 27th from 7-10 pm
-- McNair 214
 - Open notes and book
 - You may use:
   - the canvas site and notes
-  - the binder sites
+  - Google Colab
+  - the binder site
   - Jupyter notebook with Python
   - Excel
-  - the interactive website
+  - the Learn Investments website
 
 ## What to expect
 
@@ -44,7 +43,7 @@ jupyter: python3
 ## Data-Driven Investments Lab Course
 
 - Quantitative portfolio management lab course
-- Currently offered to MBAs and Master's of Data Science students
+- Jointly offered to MBAs and Master's of Data Science students
 - Develop, backtest, and implement equity trading strategies
 - Will be offered in spring semester
 - Research-based approach to portfolio management
