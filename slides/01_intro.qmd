@@ -95,8 +95,8 @@ fig.show()
 ```
 
 
-## BBCX website
-Some of the course will use the [BBCX investments library](http://bbcx-investments.com).
+## Learn Investments website
+Some of the course will use the [Rice Business Learn Investments Dashboard](https://learn-investments.rice-business.org).
 
 . . . 
 
@@ -106,13 +106,12 @@ The pages demonstrate many concepts we will cover.
 - Should be used to help understand concepts and develop intuition.
 
 
-## {background-iframe="http://bbcx-investments.com" background-interactive="True"}
+## {background-iframe="https://learn-investments.rice-business.org" background-interactive="True"}
 
 
 ## Textbooks
-- My colleagues and I are writing a bespoke textbook for this and other courses we teach.  
-- A working version is available [here](http://mi.bbcx-investments.com/)
-- Recommended readings also available in the syllabus from Investments text by Bodie, Kane, and Marcus.
+
+- Recommended readings available in the syllabus from Investments text by Bodie, Kane, and Marcus.
 
 
 ## Some tools we'll develop
@@ -136,16 +135,22 @@ Why python?
 
 ## Python resources
 - I use both Jupyter notebooks (.ipynb) and the Spyder IDE to run Python files (.py), depending on what I'm working on.
-- We will use Jupyter notebooks to run Python at mybinder.org.
+- We will use Jupyter notebooks to run Python on Google Colab (or at mybinder.org).
 - Alternatively, you are welcome to install Python on your machines and run everything yourself.
   - In general, I will not be troubleshooting Python installations
 - Good python reference: [Python for Data Analysis](https://wesmckinney.com/book/)
 
+## Google Colab
+
+- In class calculations will be done through Google Colab
+- Links to notebooks for each day are available through Canvas
+- We will start out today with straight-forward finance concepts to get on the same page.
+
 
 ## Course binder
-- In class calculations will be done through mybinder.org.
+- In class calculations can also be done through mybinder.org.
 - [Course binder link](https://mybinder.org/v2/gh/kpcrotty/busi448_binder/HEAD)
-- We will start out today with straight-forward finance concepts to get on the same page.
+
 
 
 
