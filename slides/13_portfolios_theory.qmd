@@ -673,7 +673,7 @@ wgts_tangency = w / np.sum(w)
 
 $$ U(r_p)=E[r_p] - 0.5\cdot A \cdot \text{var}[r_p]\,.$$
 
-## Different risk aversions
+## Different risk aversions  {.smaller}
 
 When risk aversion is higher, a higher expected return is required to reach the utility for a given level of risk, and the extra expected return increases when risk increases.
 
@@ -715,12 +715,12 @@ fig.show()
 ```
 
 
-## Indifference Curves
+## Indifference Curves {.smaller}
 
-::: {.nonincremental}
+::: {.nonincremental} 
 - Investors are indifferent between portfolios that generate the same utility. 
 
-- Higher utility is achieved with either a higher expected return or lower risk or both.
+- Higher utility is achieved with either a higher expected return, lower risk, or both.
 :::
 
 ```{python}
