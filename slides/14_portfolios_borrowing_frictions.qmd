@@ -1270,7 +1270,7 @@ figtbl(mn_stock,mn_bond,sd_stock,sd_bond,corr,rs,extra,raver1, raver2, "Stock","
 - Method #1: Find risk aversion thresholds that represent low- and high-risk portfolios
 - Method #2: Directly maximize mean-variance utility using all assets, including risk-free savings and borrowings
 
-## Method #1: Risk aversion thresholds
+## Method #1: Risk aversion thresholds {.smaller}
 
 We can find the risk aversion thresholds for savings and borrowing by setting risky asset allocation $w^* \le 1$ (savings) or $w^* \ge 1$ (borrowing) in the capital allocation expressions and solving for risk aversion.
 
