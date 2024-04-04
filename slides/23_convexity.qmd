@@ -131,7 +131,7 @@ $$ \frac{\Delta P}{P(y)} \approx \frac{1}{P}\cdot\frac{dP}{dy} \cdot \Delta y + 
 
 $$ \text{convexity} = \frac{1}{P} \cdot \frac{d^2 P}{dy^2}$$
 
-- For coupon bonds,$$ \text{convexity} = \frac{1}{(1+y/m)^2} \left[\sum_{i=1}^T \frac{t_i(t_{i}+1)}{m^2} \cdot \frac{PV(CF_{t_i})}{P} \right]. $$
+- For coupon bonds,$$ \text{convexity} = \frac{1}{(1+y/m)^2} \left[\sum_{i=1}^T \frac{i(i+1)}{m^2} \cdot \frac{PV(CF_{t_i})}{P} \right]. $$
 
 
 ## Price and return approximations {.smaller}
