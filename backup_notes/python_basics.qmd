@@ -7,7 +7,7 @@ format:
     self-contained: true
 ---
 
-This is a brief introduction to the primary Python functionalities we will use in the course.  We will discuss these in class together, but this will be a useful reference for you as we proceed through the semester.  The examples in this document can be run interactively in the *00_python_basics.ipynb* notebook in the [Course Code Binder](https://mybinder.org/v2/gh/kpcrotty/busi448_binder/HEAD).
+This is a brief introduction to the primary Python functionalities we will use in the course.  We will discuss these in class together, but this will be a useful reference for you as we proceed through the semester.  The examples in this document can be run interactively in the *00_python_basics.ipynb* notebook on [Google Colab](https://colab.research.google.com/github/kpcrotty/busi448/blob/main/class_notebooks/00_python_basics.ipynb).
 
 # Getting Started
 ## Packages
@@ -31,25 +31,22 @@ The most commonly used packages for the course are:
 
 ## Jupyter Notebooks
 
-You can interact with Python in various ways.  In class, we will use Jupyter notebooks run through the course binder site.  Jupyter notebooks allow for an interactive experience running Python code.
+You can interact with Python in various ways.  In class, we will use Jupyter notebooks run through Google Colab.  Jupyter notebooks allow for an interactive experience running Python code.
 
 Here are some useful key commands that we will use frequently:
 
 - `ctrl` + `enter`: run current cell
+- `shift` + `enter`: run current cell and advance to next cell
 - `esc`: exit current cell
-- `esc` + `m`: make current cell a markdown cell
-- `esc` + `y`: make current cell a code cell
-- `ctrl` + `shift` + `_`: split current cell into two cells
 - `esc` + `a`: add cell above
 - `esc` + `b`: add cell below
-- `esc` + `dd`: delete current cell
 - `ctrl` + `/`: comment or uncomment current line
 
-It is good practice to provide some comments as to what code is trying to do, so that you or other users can easily see the purpose of code snippets.  Starting a line with `#` tells Python that the rest of the line is a comment.  In the course binder, you can use `ctrl` + `/` to toggle the current line between being a comment or not.
+It is good practice to provide some comments as to what code is trying to do, so that you or other users can easily see the purpose of code snippets.  Starting a line with `#` tells Python that the rest of the line is a comment.  You can use `ctrl` + `/` to toggle the current line between being a comment or not.
 
 ### Markdown basics
 
-Jupyter notebooks are useful because they allow us to switch back and forth between a text editor and code snippets.  In particular, the text editor allows for some basic mathematical typesetting.  The text editor format is called Markdown.  To make a current cell of a Jupyter notebook into a Markdown cell, type `esc` + `m`.  Here are some basic typesetting formats.
+Jupyter notebooks are useful because they allow us to switch back and forth between a text editor and code snippets.  In particular, the text editor allows for some basic mathematical typesetting.  The text editor format is called Markdown.  In Colab, you can add a markdown cell by clicking the `+Text` box at the top left.  Here are some basic typesetting formats.
 
 - `#   ` is biggest font
 - `##` is a bit smaller
