@@ -123,8 +123,14 @@ The pages demonstrate many concepts we will cover.
 
 . . . 
 
-We will use Python as our toolkit.
+We will use a mix of Excel and Python as our toolkit.
 
+## Our toolkit: Excel
+Why Excel?
+
+- An industry standard for financial modeling
+- Sometimes easier to visualize all the underlying calculations for some models
+- Relevant templates available on Canvas
 
 ## Our toolkit: Python
 Why python?
@@ -134,8 +140,8 @@ Why python?
 
 
 ## Python resources
-- I use both Jupyter notebooks (.ipynb) and the Spyder IDE to run Python files (.py), depending on what I'm working on.
-- We will use Jupyter notebooks to run Python on Google Colab (or at mybinder.org).
+- I use both Jupyter notebooks (.ipynb) and the VS Code IDE to run Python files (.py), depending on what I'm working on.
+- We will use Jupyter notebooks to run Python on Google Colab.
 - Alternatively, you are welcome to install Python on your machines and run everything yourself.
   - In general, I will not be troubleshooting Python installations
 - Good python reference: [Python for Data Analysis](https://wesmckinney.com/book/)
@@ -147,9 +153,9 @@ Why python?
 - We will start out today with straight-forward finance concepts to get on the same page.
 
 
-## Course binder
+<!-- ## Course binder
 - In class calculations can also be done through mybinder.org.
-- [Course binder link](https://mybinder.org/v2/gh/kpcrotty/busi448_binder/HEAD)
+- [Course binder link](https://mybinder.org/v2/gh/kpcrotty/busi448_binder/HEAD) -->
 
 
 
