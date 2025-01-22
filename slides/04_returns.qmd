@@ -79,7 +79,7 @@ For bonds, the value today is measured by the current price and any accrued inte
 
 $$ R_t = \frac{P_t + AI_t + C_t - (P_{t-1}+AI_{t-1})}{P_{t-1}+AI_{t-1}} $$
 
-- Prices quoted as **clean prices**, which exclude accrued interest.
+- Prices quoted as **clean prices** (exclude accrued interest).
 - Trades between coupon payments transact at **dirty price**
   - dirty price = clean price plus accrued interest [(dashboard)](https://learn-investments.rice-business.org/fixed-income/clean-dirty)
   - [sample price paths](https://learn-investments.rice-business.org/fixed-income/clean-dirty-paths)
@@ -129,13 +129,14 @@ import yfinance as yf
 
 - Yahoo provides daily data by default.
 - Adjusted closing prices are adjusted for splits and also adjusted for dividends on each ex date.
+- `yfinance` auto-adjusts closing prices
 
 <br>
 
 . . .
 
 ```{.p}
-price = yf.download('AAPL', start='2000-01-01', end='2020-12-31', progress=False)['Adj Close']
+price = yf.download('AAPL', start='2000-01-01', end='2024-12-31', progress=False)['Close']
 ret_daily = price.pct_change()
 ```
 
@@ -151,7 +152,7 @@ ret_daily = price.pct_change()
 <br>
 
 ```{.p code-line-numbers="1-3|5-7"}
-price = yf.download('AAPL', start='2000-01-01', end='2020-12-31', progress=False)['Adj Close']
+price = yf.download('AAPL', start='2000-01-01', end='2024-12-31', progress=False)['Close']
 ret_monthly = price.resample('M').last().pct_change()
 ret_annual  = price.resample('Y').last().pct_change()
 
