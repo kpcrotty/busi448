@@ -12,10 +12,7 @@ format:
         show-slide-number: print
         menu: 
             width: wide
-            numbers: true
-        menu: 
-            width: wide
-            numbers: true                 
+            numbers: true              
 execute:
     echo: true
     freeze: auto
@@ -45,7 +42,7 @@ jupyter: python3
 
 ## Set-up
 - I need volunteers: four "buyers" and one "seller".
-- Market for an asset with true value between $0 and $10
+- Market for an asset with true value between $0 and $1000
 - The value is written inside each seller's envelope.
 - Buyers: write an offer for some amount (your choice!) to bid on the seller's envelope
 
@@ -313,11 +310,11 @@ Examples include secondary trading in:
 
 Examples:
 
-- Gov't bond auctions
+- Gov't bond [auctions](https://www.treasurydirect.gov/auctions/announcements-data-results/)
 - open/close for equity markets
 - intraday for low-activity equities (sporadic call auctions)
 
-## {background-iframe="https://www.treasurydirect.gov/auctions/announcements-data-results/" background-interactive="True"}
+<!-- ## {background-iframe="https://www.treasurydirect.gov/auctions/announcements-data-results/" background-interactive="True"} -->
 
 
 # Brokers vs. Dealers
