@@ -170,7 +170,7 @@ Some IPO facts
 
 ## Secondary markets: equities
 
-- Trading is starts and finishes each day with opening and closing auctions
+- Trading starts and finishes each day with opening and closing auctions
 - Intraday trading is primarily a continous, limit-order-book market
 
 ## Primary markets: Treasuries
