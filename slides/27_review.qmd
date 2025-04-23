@@ -25,10 +25,10 @@ jupyter: python3
 - You may use:
   - the canvas site and notes
   - Google Colab
-  - the binder site
   - Jupyter notebook with Python
   - Excel
   - the Learn Investments website
+  - the textbook
 
 ## What to expect
 
@@ -37,7 +37,7 @@ jupyter: python3
 - Please study beforehand!
   - Looking up and learning concepts in real-time is not a recipe for success.
 
-
+<!-- 
 # Shameless Plug
 
 ## Data-Driven Investments Lab Course
@@ -46,7 +46,7 @@ jupyter: python3
 - Jointly offered to MBAs and Master's of Data Science students
 - Develop, backtest, and implement equity trading strategies
 - Will be offered in spring semester
-- Research-based approach to portfolio management
+- Research-based approach to portfolio management -->
 
 # Some Review
 
