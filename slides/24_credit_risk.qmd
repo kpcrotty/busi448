@@ -179,13 +179,14 @@ E[r] =& (1-p_{\text{default}})\cdot YTM \\
 
 $$ \text{Spread} = YTM_{\text{risky}} - YTM_{\text{maturity-matched risk-free}}  $$
 
-. . . 
-
 - Spread is related to the default probability times the expected loss given default (in risk-neutral terms).
   - $\uparrow$ in probability of default increases spread
   - $\uparrow$ in expected loss given default increases spread
 
-## {background-iframe="http://bbcx-investments.com/fixed-income/creditspreads" background-interactive="True"}
+
+- Let's look at an example on the [dashboard](http://bbcx-investments.com/fixed-income/creditspreads)
+
+<!-- ## {background-iframe="http://bbcx-investments.com/fixed-income/creditspreads" background-interactive="True"} -->
 
 
 # CDS
