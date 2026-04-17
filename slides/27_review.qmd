@@ -21,21 +21,12 @@ jupyter: python3
 
 ## Exam Information
 
-- Open notes and book
-- You may use:
-  - the canvas site and notes
-  - Google Colab
-  - Jupyter notebook with Python
-  - Excel
-  - the Learn Investments website
-  - the textbook
+- Closed notes and book
+- You may **not** use (and will not need) Excel, Python, or calculator
+- Questions will be a mix of true/false, multiple choice, and short answer
+- Practice problems available on Canvas.
+- Please study beforehand and then use the practice problems to gauge understanding.
 
-## What to expect
-
-- The exam will be administered through Canvas, like the midterm and problem sets
-- Questions will be a mix of true/false, multiple choice, numerical and short answer
-- Please study beforehand!
-  - Looking up and learning concepts in real-time is not a recipe for success.
 
 <!-- 
 # Shameless Plug

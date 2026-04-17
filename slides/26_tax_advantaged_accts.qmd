@@ -49,17 +49,18 @@ jupyter: python3
 
 - **Marginal** tax rate refers to the tax rate owed on next dollar you earn.
 
-## Tax Brackets
+## Tax Brackets 
+<!-- Image is pulled https://taxfoundation.org/data/all/federal/2025-tax-brackets/ -->
 
-![](../images/taxbracket_2022.png)
+![](../images/taxbracket_2025.png)
 
 ## Deductions shield income from taxation
 
 - Some retirement savings are tax-deductible
 
 - Standard deductions vs. itemized deductions
-  - Single filer: $12,950
-  - Married filing jointly: $25,900
+  - Single filer: $15,750
+  - Married filing jointly: $31,500
 
 - Itemized deductions
   - Mortgage interest
@@ -84,10 +85,10 @@ Gross Income
 
 ## Example 
 
-- Consider a single investor earning $65,000 per year.  
-- Assume they take the standard deduction of $12,590.
-- Under the 2022 tax rates & brackets, what is the investor's tax bill if they do not have any other deductions?
-- What is the investor's tax bill if they have contributed $6,000 to a traditional IRA?
+- Consider a single investor earning $80,000 per year.  
+- Assume they take the standard deduction of $15,750.
+- Under the 2025 tax rates & brackets, what is the investor's tax bill if they do not have any other deductions?
+- What is the investor's tax bill if they have contributed $7,000 to a traditional IRA?
 
 ## Taxes and investments
 
@@ -99,9 +100,9 @@ Gross Income
   - Limits on deductibility of capital losses
   - Gain is calculated relative to your **cost basis**
 
-## 2022 LT capital gains rates
+## 2025 LT capital gains rates
 
-![](../images/capgains_rates_2022.png)
+![](../images/capgains_rates_2025.png)
 
 
 # Tax-advantaged Accounts
@@ -222,16 +223,16 @@ After-tax return (after-tax FV/after-tax contribution): $$FV_5 = \frac{(1-\tau_{
   - Deduction reduces taxable income
   - Tax savings is: $$\tau_{\text{marginal}} \cdot \text{Deductible Mortgage Interest}$$
 
-## 2022 tax year
+## 2025 tax year
 - Mortgage interest expense on principal up to $750,000 is tax deductible.
 - Taxpayer must itemize deductions rather than take the standard deduction
-  - Single filer: $12,950
-  - Married filing jointly: $25,900
+  - Single filer: $15,750
+  - Married filing jointly: $31,500
 
 ## Example
 
 - The annual interest expense for a $500,000 mortgage with a 5% interest rate is $24,832.47 in the first year.
-- For an investor with a 24% marginal tax rate and a $12,950 standard deduction, what is the incremental value of itemizing deductions?
+- For an investor with a 24% marginal tax rate and a $15,750 standard deduction, what is the incremental value of itemizing deductions?
 
 ## Municipal Bonds
 

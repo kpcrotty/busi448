@@ -184,7 +184,7 @@ $$ \text{Spread} = YTM_{\text{risky}} - YTM_{\text{maturity-matched risk-free}} 
   - $\uparrow$ in expected loss given default increases spread
 
 
-- Let's look at an example on the [dashboard](http://bbcx-investments.com/fixed-income/creditspreads)
+- Let's look at an example on the [dashboard](https://learn-investments.rice-business.org/fixed-income/creditspreads)
 
 <!-- ## {background-iframe="http://bbcx-investments.com/fixed-income/creditspreads" background-interactive="True"} -->
 
