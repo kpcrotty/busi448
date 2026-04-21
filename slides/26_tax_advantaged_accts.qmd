@@ -239,13 +239,21 @@ After-tax return (after-tax FV/after-tax contribution): $$FV_5 = \frac{(1-\tau_{
 - Municipal bonds: issued by states and municipalities
 - In an investor's home state, muni coupons and original issue discount (OID) are exempt from state income tax
   - US treasury bonds are also exempt from state and local taxes
-- Some munis qualify as exempt from federal income tax
-- Munis are tax-exempt only at issuance
+- Many munis qualify as exempt from federal income tax
+- Munis are primarily held by individuals (in the issuing state) who accept a lower yield than they would for a comparable taxable bond.
 
-## Muni yields
+## Muni yields and after-tax income
 
-- Munis are primarily held by individuals (in the issuing state)
-- These investors accept a lower yield than they would for a comparable taxable bond.
+| Marginal Federal Tax Rate | 3.2% Muni Bond | 5\% US Treasury |
+|:---|---:|---:|
+| 0%  | $320 | $500 |  . . . 
+| 24% | $320 | $380 |
+| 32% | $320 | $340 |
+| 35% | $320 | $325 |
+| 37% | $320 | $315 |
+
+: After-tax income on a $10,000 investment {.striped .hover}
+
 
 # Other tax topics
 
